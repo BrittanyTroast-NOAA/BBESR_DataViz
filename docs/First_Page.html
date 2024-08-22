@@ -40,6 +40,11 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<meta name="shinylive:serviceworker_dir" content=".">
+<script src="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/load-shinylive-sw.js" type="module"></script>
+<script src="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/run-python-blocks.js" type="module"></script>
+<link href="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/shinylive.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -148,6 +153,111 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>Do I need this page to to get it going?</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">App 1</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">App 2</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<pre class="shinylive-r" data-engine="r"><code>#| standalone: true
+#| viewerHeight: 600
+library(shiny)
+library(bslib)
+
+# Define UI for app that draws a histogram ----
+ui &lt;- page_sidebar(
+  # App title ----
+  title = "Hello Shiny!",
+  # Sidebar panel for inputs ----
+  sidebar = sidebar(
+    # Input: Slider for the number of bins ----
+    sliderInput(
+      inputId = "bins",
+      label = "Number of bins:",
+      min = 1,
+      max = 50,
+      value = 30
+    )
+  ),
+  # Output: Histogram ----
+  plotOutput(outputId = "distPlot", width="80%")
+)
+
+server &lt;- function(input, output) {
+
+  # Histogram of the Old Faithful Geyser Data ----
+  # with requested number of bins
+  # This expression that generates a histogram is wrapped in a call
+  # to renderPlot to indicate that:
+  #
+  # 1. It is "reactive" and therefore should be automatically
+  #    re-executed when inputs (input$bins) change
+  # 2. Its output type is a plot
+  output$distPlot &lt;- renderPlot({
+
+    x    &lt;- faithful$waiting
+    bins &lt;- seq(min(x), max(x), length.out = input$bins + 1)
+
+    hist(x, breaks = bins, col = "#007bc2", border = "white",
+         xlab = "Waiting time to next eruption (in mins)",
+         main = "Histogram of waiting times")
+
+    })
+
+}
+
+shinyApp(ui = ui, server = server)</code></pre>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<pre class="shinylive-r" data-engine="r"><code>#| standalone: true
+#| viewerHeight: 600
+library(shiny)
+library(bslib)
+
+# Define UI for app that draws a histogram ----
+ui &lt;- page_sidebar(
+  # App title ----
+  title = "Hello Shiny!",
+  # Sidebar panel for inputs ----
+  sidebar = sidebar(
+    # Input: Slider for the number of bins ----
+    sliderInput(
+      inputId = "bins",
+      label = "Number of bins:",
+      min = 1,
+      max = 50,
+      value = 30
+    )
+  ),
+  # Output: Histogram ----
+  plotOutput(outputId = "distPlot", width="80%")
+)
+
+server &lt;- function(input, output) {
+
+  # Histogram of the Old Faithful Geyser Data ----
+  # with requested number of bins
+  # This expression that generates a histogram is wrapped in a call
+  # to renderPlot to indicate that:
+  #
+  # 1. It is "reactive" and therefore should be automatically
+  #    re-executed when inputs (input$bins) change
+  # 2. Its output type is a plot
+  output$distPlot &lt;- renderPlot({
+
+    x    &lt;- faithful$waiting
+    bins &lt;- seq(min(x), max(x), length.out = input$bins + 1)
+
+    hist(x, breaks = bins, col = "orange", border = "blue",
+         xlab = "Waiting time to next eruption (in mins)",
+         main = "Second app on page?")
+
+    })
+
+}
+
+shinyApp(ui = ui, server = server)</code></pre>
+</div>
+</div>
+</div>
 
 
 
