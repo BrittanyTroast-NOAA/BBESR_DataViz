@@ -1,15 +1,5 @@
 [
   {
-    "objectID": "First_Page.html",
-    "href": "First_Page.html",
-    "title": "2  First_Page",
-    "section": "",
-    "text": "Do I need this page to to get it going?",
-    "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>First_Page</span>"
-    ]
-  },
-  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "BB ESR Data Viz",
@@ -17,6 +7,16 @@
     "text": "Here is the title page to the repo website.\nThings I should put here\n\nGeneral info about the BB ESR\nPictures of front of it\nLink to the ESR\nExecutive Summary?",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>BB ESR Viz Intro</span>"
+    ]
+  },
+  {
+    "objectID": "First_Page.html",
+    "href": "First_Page.html",
+    "title": "2  First_Page",
+    "section": "",
+    "text": "Do I need this page to to get it going?",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>First_Page</span>"
     ]
   }
 ]

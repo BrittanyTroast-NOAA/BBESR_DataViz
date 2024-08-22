@@ -1,0 +1,15 @@
+project: 
+  type: book
+  output-dir: docs
+  
+book: 
+  title: "BB ESR Data Viz"
+  author: "Brittany Troast"
+  chapters:
+    - index.qmd
+    - First_Page.qmd
+
+format: 
+  html:
+    theme: jekyll-theme-leap-day
+    
