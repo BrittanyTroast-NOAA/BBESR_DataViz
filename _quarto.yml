@@ -1,0 +1,14 @@
+project: 
+  type: book
+  output-dir: docs
+  
+book: 
+  title: "BB ESR Data Viz"
+  author: "Brittany Troast"
+  chapters:
+    - index.qmd
+
+format: 
+  html:
+    theme: cosmo
+    
