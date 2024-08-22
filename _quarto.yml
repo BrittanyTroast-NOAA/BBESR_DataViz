@@ -7,6 +7,7 @@ book:
   author: "Brittany Troast"
   chapters:
     - index.qmd
+    - First_Page.qmd
 
 format: 
   html:
