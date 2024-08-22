@@ -11,5 +11,5 @@ book:
 
 format: 
   html:
-    theme: jekyll-theme-leap-day
+    theme: cosmo
     
