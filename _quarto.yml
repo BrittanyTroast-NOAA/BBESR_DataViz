@@ -10,6 +10,7 @@ website:
         text: HOME
       - First_Page.qmd
       - Second_Page.qmd
+      - Sep_Doc.qmd
     tools:
       - icon: github
         href: https://github.com/BrittanyTroast-NOAA/BBESR_DataViz
