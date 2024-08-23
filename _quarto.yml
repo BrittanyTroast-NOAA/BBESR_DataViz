@@ -5,8 +5,6 @@ project:
 website: 
   title: "BB ESR Data Viz"
   navbar: 
-    logo: 'Three Logos.png'
-    logo-alt: "NOAA, GoM IEA, & UM CIMAS Logos"
     left:
       - href: index.qmd
         text: HOME
@@ -15,6 +13,10 @@ website:
     tools:
       - icon: github
         href: https://github.com/BrittanyTroast-NOAA/BBESR_DataViz
+  sidebar: 
+    logo: 'Three Logos.png'
+    logo-alt: "NOAA, GoM IEA, & UM CIMAS Logos"
+
 
 format:
   html:
