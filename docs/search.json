@@ -18,5 +18,25 @@
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>First_Page</span>"
     ]
+  },
+  {
+    "objectID": "Second_Page.html",
+    "href": "Second_Page.html",
+    "title": "3  Second_Page",
+    "section": "",
+    "text": "3.1 App 3",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Second_Page</span>"
+    ]
+  },
+  {
+    "objectID": "Second_Page.html#app-3",
+    "href": "Second_Page.html#app-3",
+    "title": "3  Second_Page",
+    "section": "",
+    "text": "#| standalone: true\n#| viewerHeight: 600\nlibrary(shiny)\nlibrary(bslib)\n\n# Define UI for app that draws a histogram ----\nui &lt;- page_sidebar(\n  # App title ----\n  title = \"Hello Shiny!\",\n  # Sidebar panel for inputs ----\n  sidebar = sidebar(\n    # Input: Slider for the number of bins ----\n    sliderInput(\n      inputId = \"bins\",\n      label = \"Number of bins:\",\n      min = 1,\n      max = 50,\n      value = 30\n    )\n  ),\n  # Output: Histogram ----\n  plotOutput(outputId = \"distPlot\", width=\"80%\")\n)\n\nserver &lt;- function(input, output) {\n\n  # Histogram of the Old Faithful Geyser Data ----\n  # with requested number of bins\n  # This expression that generates a histogram is wrapped in a call\n  # to renderPlot to indicate that:\n  #\n  # 1. It is \"reactive\" and therefore should be automatically\n  #    re-executed when inputs (input$bins) change\n  # 2. Its output type is a plot\n  output$distPlot &lt;- renderPlot({\n\n    x    &lt;- faithful$waiting\n    bins &lt;- seq(min(x), max(x), length.out = input$bins + 1)\n\n    hist(x, breaks = bins, col = \"yellow\", border = \"green\",\n         xlab = \"Waiting time to next eruption (in mins)\",\n         main = \"Second app on page?\")\n\n    })\n\n}\n\nshinyApp(ui = ui, server = server)",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Second_Page</span>"
+    ]
   }
 ]
