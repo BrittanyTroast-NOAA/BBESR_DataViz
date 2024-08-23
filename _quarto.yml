@@ -1,16 +1,17 @@
 project: 
-  type: book
+  type: website
   output-dir: docs
   
-book: 
+website: 
   title: "BB ESR Data Viz"
-  author: "Brittany Troast"
-  chapters:
-    - index.qmd
-    - First_Page.qmd
-    - Second_Page.qmd
+  navbar: 
+    left:
+      - href: index.qmd
+        text: HOME
+      - First_Page.qmd
 
-format: 
+format:
   html:
-    theme: cosmo
-    
+    theme: superhero
+    css: styles.css
+    toc: true
