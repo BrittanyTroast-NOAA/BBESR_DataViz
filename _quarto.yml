@@ -8,6 +8,7 @@ book:
   chapters:
     - index.qmd
     - First_Page.qmd
+    - Second_Page.qmd
 
 format: 
   html:
