@@ -1,21 +1,7 @@
----
-title: "Sep_Doc"
-format: 
-  html:
-    resources: 
-      - shinylive-sw.js
-    toc: false
-filters:
-  - shinylive
----
 
-## Part of old app
-
-```{shinylive-r}
-#| standalone: true
-#| viewerHeight: 600
-
-
+  
+  ## Part of old app
+  
 library(shiny)
 library(ggplot2)
 library(tidyr)
@@ -114,9 +100,8 @@ ui <- fluidPage(
                             "Vessels Fishing & Seafood Dealers"))
   ),
   # Output: Histogram ----
-  fluidRow(plotlyOutput("plot", height = "200px"))
+  fluidRow(plotlyOutput("plot", height = "500px"))
 )
-
 
 
 #####Server#####
@@ -128,10 +113,10 @@ server <- function(input, output) {
     filename <- paste0("Data_Obj/",shrt_nm, "_li.rds")
     readRDS(filename)
   })
-
-
   
-    #####Main plot#####
+  
+  
+  #####Main plot#####
   output$plot<-renderPlotly({
     df_pick <- get_data()
     plot_main<-plot_fn_obj(df_pick)
@@ -147,7 +132,7 @@ server <- function(input, output) {
 
 shinyApp(ui = ui, server = server)
 
-```
+
 
 
 

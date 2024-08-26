@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>BB ESR Data Viz - Sep_Doc</title>
+<title>BB ESR Data Viz - Scratch_Doc</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -39,11 +73,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
-<meta name="shinylive:serviceworker_dir" content=".">
-<script src="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/load-shinylive-sw.js" type="module"></script>
-<script src="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/run-python-blocks.js" type="module"></script>
-<link href="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/shinylive.css" rel="stylesheet">
-<link href="site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -76,7 +105,7 @@ ul.task-list li input[type="checkbox"] {
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar floating nav-fixed fullcontent">
+<body class="nav-sidebar floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -121,7 +150,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Sep_Doc</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Scratch_Doc</li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -139,13 +168,15 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Sep_Doc</h1>
+<h1 class="title">Scratch_Doc</h1>
 </div>
 
 
@@ -162,146 +193,25 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="part-of-old-app" class="level2">
-<h2 class="anchored" data-anchor-id="part-of-old-app">Part of old app</h2>
-<pre class="shinylive-r" data-engine="r"><code>#| standalone: true
-#| viewerHeight: 600
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">#####Data Names#####</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>dat_shrt_nms<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="fu">c</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">oilsp=</span><span class="st">"Oil Spills"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">nav=</span><span class="st">"Nuisance Aquatic Vegetation"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">rdrum=</span><span class="st">"Red Drum"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">blcrab=</span><span class="st">"Blue Crab Catch"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">brpeli=</span><span class="st">"Brown Pelican"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">oystercat=</span><span class="st">"Oyster Catch"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">persmbusi=</span><span class="st">"Percent Small Business"</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">vesfish=</span><span class="st">"Vessels Fishing &amp; Seafood Dealers"</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>dat_shrt_nms<span class="ot">&lt;-</span>tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(dat_shrt_nms)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(dat_shrt_nms)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"short"</span>, <span class="st">"long"</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>test<span class="ot">&lt;-</span>dat_shrt_nms<span class="sc">$</span>short[dat_shrt_nms<span class="sc">$</span>long<span class="sc">==</span><span class="st">"Nuisance Aquatic Vegetation"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
-library(shiny)
-library(ggplot2)
-library(tidyr)
-library(dplyr)
-library(plotly)
-# library(png)
-library(gt)
-library(shinythemes)
-library(cowplot)
-library(gtExtras)  
-library(bslib)
-
-#####FUNCTION#####
-
-plot_fn_obj&lt;-function(df_obj) {
-  
-  
-  if (ncol(df_obj$data)&lt;5.5){
-    #single plot
-    plot_main&lt;-ggplot(data=df_obj$data, aes(x=year, y=value))+
-      geom_ribbon(data=df_obj$pos, aes(group=1,ymax=max, ymin=df_obj$vals$mean),fill="#7FFF7F")+
-      geom_ribbon(data=df_obj$neg, aes(group=1,ymax=df_obj$vals$mean, ymin=min), fill="#FF7F7F")+
-      geom_rect(aes(xmin=min(df_obj$data$year),xmax=max(df_obj$data$year),ymin=df_obj$vals$mean-df_obj$vals$sd, ymax=df_obj$vals$mean+df_obj$vals$sd), fill="white")+
-      geom_hline(yintercept=df_obj$vals$mean, lty="dashed")+
-      geom_hline(yintercept=df_obj$vals$mean+df_obj$vals$sd)+
-      geom_hline(yintercept=df_obj$vals$mean-df_obj$vals$sd)+
-      geom_line(aes(group=1), lwd=1)+
-      labs(x="Year", y=df_obj$labs[2,2], title = df_obj$labs[1,2])+
-      theme_bw() + theme(title = element_text(size=14, face = "bold"))
-    
-    if (max(df_obj$data$year)-min(df_obj$data$year)&gt;20) {
-      plot_main&lt;-plot_main+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),5))
-    } else {
-      plot_main&lt;-plot_main+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),2))
-    }
-    plot_main
-    
-  } else {
-    #facet plot
-    
-    plot_sec&lt;-ggplot(data=df_obj$data, aes(x=year, y=value))+
-      facet_wrap(~subnm, ncol=1, scales = "free_y")+
-      geom_ribbon(data=df_obj$pos, aes(group=subnm,ymax=max, ymin=mean),fill="#7FFF7F")+
-      geom_ribbon(data=df_obj$neg, aes(group=subnm,ymax=mean, ymin=min), fill="#FF7F7F")+
-      geom_rect(data=merge(df_obj$data,df_obj$vals), aes(xmin=allminyear,xmax=allmaxyear,ymin=mean-sd, ymax=mean+sd), fill="white")+
-      geom_hline(aes(yintercept=mean), lty="dashed",data=df_obj$vals)+
-      geom_hline(aes(yintercept=mean+sd),data=df_obj$vals)+
-      geom_hline(aes(yintercept=mean-sd),data=df_obj$vals)+
-      geom_line(aes(group=1), lwd=0.75)+
-      labs(x="Year", y=df_obj$labs[2,2], title = df_obj$labs[1,2])+
-      theme_bw()+theme(strip.background = element_blank(),
-                       strip.text = element_text(face="bold"),
-                       title = element_text(size=14, face = "bold"))
-    
-    if (max(df_obj$data$year)-min(df_obj$data$year)&gt;20) {
-      plot_sec&lt;-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),5))
-    } else {
-      # plot_sec&lt;-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),2))
-    }
-    plot_sec
-    
-  }
-}
-
-
-#####Data Names#####
-dat_shrt_nms&lt;-data.frame(c(
-  oilsp="Oil Spills",
-  nav="Nuisance Aquatic Vegetation",
-  rdrum="Red Drum",
-  blcrab="Blue Crab Catch",
-  brpeli="Brown Pelican",
-  oystercat="Oyster Catch",
-  persmbusi="Percent Small Business",
-  vesfish="Vessels Fishing &amp; Seafood Dealers"
-))
-dat_shrt_nms&lt;-tibble::rownames_to_column(dat_shrt_nms)
-colnames(dat_shrt_nms)&lt;-c("short", "long")
-
-
-#####UI#####
-ui &lt;- fluidPage(
-  # App title ----
-  titlePanel("Redo App PieceXPiece"),
-  # Sidebar panel for inputs ----
-  fluidRow(
-    # Input: Slider for the number of bins ----
-    selectInput("data", label = h2("Choose Indicator:", style = "font-size:22px;"), 
-                choices = c("Oil Spills",
-                            "Nuisance Aquatic Vegetation",
-                            "Red Drum",
-                            "Blue Crab Catch",
-                            "Brown Pelican",
-                            "Oyster Catch",
-                            "Percent Small Business",
-                            "Vessels Fishing &amp; Seafood Dealers"))
-  ),
-  # Output: Histogram ----
-  fluidRow(plotlyOutput("plot", height = "200px"))
-)
-
-
-
-#####Server#####
-server &lt;- function(input, output) {
-  
-  #####Load Data Separately#####
-  get_data &lt;- reactive({
-    shrt_nm&lt;-dat_shrt_nms$short[dat_shrt_nms$long==input$data]
-    filename &lt;- paste0("Data_Obj/",shrt_nm, "_li.rds")
-    readRDS(filename)
-  })
-
-
-  
-    #####Main plot#####
-  output$plot&lt;-renderPlotly({
-    df_pick &lt;- get_data()
-    plot_main&lt;-plot_fn_obj(df_pick)
-    plotly_gg&lt;-ggplotly(plot_main)
-    df_cond&lt;-select(df_pick$data, -c("valence","min","max"))
-    plotly_gg %&gt;%
-      rangeslider(start = min(df_cond$year), end = max(df_cond$year))
-    
-  })
-  
-  
-}
-
-shinyApp(ui = ui, server = server)
-</code></pre>
-
-
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
