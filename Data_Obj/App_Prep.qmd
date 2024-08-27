@@ -790,5 +790,10 @@ saveRDS(persmbusi_li, "persmbusi_li.rds")
 saveRDS(rdrum_li, "rdrum_li.rds")
 saveRDS(vesfish_li, "vesfish_li.rds")
 
+
+
+test_csv<-fread("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_CSV/brown_peli.csv", header = F)
+test_dat<-data_prep_fn(as.data.frame(test_csv))
+
 ```
 

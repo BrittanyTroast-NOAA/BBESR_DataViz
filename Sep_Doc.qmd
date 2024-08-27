@@ -15,7 +15,6 @@ filters:
 #| standalone: true
 #| viewerHeight: 600
 
-
 library(shiny)
 library(ggplot2)
 library(tidyr)
@@ -103,7 +102,7 @@ ui <- fluidPage(
   # Sidebar panel for inputs ----
   fluidRow(
     # Input: Slider for the number of bins ----
-    selectInput("data", label = h2("Choose Indicator:", style = "font-size:22px;"), 
+    selectInput("data", label = h2("Choose Indicator:", style = "font-size:20px;"), 
                 choices = c("Oil Spills",
                             "Nuisance Aquatic Vegetation",
                             "Red Drum",
@@ -111,10 +110,10 @@ ui <- fluidPage(
                             "Brown Pelican",
                             "Oyster Catch",
                             "Percent Small Business",
-                            "Vessels Fishing & Seafood Dealers"))
-  ),
-  # Output: Histogram ----
-  fluidRow(plotlyOutput("plot", height = "200px"))
+                            "Vessels Fishing & Seafood Dealers")),
+  plotlyOutput("plot")
+  )
+  
 )
 
 
@@ -126,22 +125,27 @@ server <- function(input, output) {
   get_data <- reactive({
     shrt_nm<-dat_shrt_nms$short[dat_shrt_nms$long==input$data]
     filename <- paste0("Data_Obj/",shrt_nm, "_li.rds")
-    readRDS(filename)
+    dat_df<-readRDS(filename)
+    return(dat_df)
   })
 
 
   
-    #####Main plot#####
+  #   #####Main plot#####
+  # output$plot<-renderPlotly({
+  #   df_pick <- get_data()
+  #   plot_main<-plot_fn_obj(df_pick)
+  #   plotly_gg<-ggplotly(plot_main)
+  #   df_cond<-select(df_pick$data, -c("valence","min","max"))
+  #   plotly_gg 
+  #   
+  # })
   output$plot<-renderPlotly({
-    df_pick <- get_data()
-    plot_main<-plot_fn_obj(df_pick)
-    plotly_gg<-ggplotly(plot_main)
-    df_cond<-select(df_pick$data, -c("valence","min","max"))
-    plotly_gg %>%
-      rangeslider(start = min(df_cond$year), end = max(df_cond$year))
-    
+    dat<-get_data()$data
+    p2<-ggplot(dat, aes(x=year, y=value))+
+      geom_point()
+    ggplotly(p2)
   })
-  
   
 }
 

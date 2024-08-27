@@ -1,26 +1,2 @@
-project: 
-  type: website
-  output-dir: docs
-  
-website: 
-  title: "BB ESR Data Viz"
-  navbar: 
-    left:
-      - href: index.qmd
-        text: HOME
-      - First_Page.qmd
-      - Second_Page.qmd
-      - Sep_Doc.qmd
-    tools:
-      - icon: github
-        href: https://github.com/BrittanyTroast-NOAA/BBESR_DataViz
-  sidebar: 
-    logo: 'Three Logos.png'
-    logo-alt: "NOAA, GoM IEA, & UM CIMAS Logos"
-
-
-format:
-  html:
-    theme: superhero
-    css: styles.css
-    toc: true
+project:
+  title: Dash_Test

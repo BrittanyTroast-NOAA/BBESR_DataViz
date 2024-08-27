@@ -1,138 +1,22 @@
-
-  
-  ## Part of old app
-  
 library(shiny)
 library(ggplot2)
-library(tidyr)
-library(dplyr)
-library(plotly)
-# library(png)
-library(gt)
-library(shinythemes)
-library(cowplot)
-library(gtExtras)  
 library(bslib)
 
-#####FUNCTION#####
 
-plot_fn_obj<-function(df_obj) {
-  
-  
-  if (ncol(df_obj$data)<5.5){
-    #single plot
-    plot_main<-ggplot(data=df_obj$data, aes(x=year, y=value))+
-      geom_ribbon(data=df_obj$pos, aes(group=1,ymax=max, ymin=df_obj$vals$mean),fill="#7FFF7F")+
-      geom_ribbon(data=df_obj$neg, aes(group=1,ymax=df_obj$vals$mean, ymin=min), fill="#FF7F7F")+
-      geom_rect(aes(xmin=min(df_obj$data$year),xmax=max(df_obj$data$year),ymin=df_obj$vals$mean-df_obj$vals$sd, ymax=df_obj$vals$mean+df_obj$vals$sd), fill="white")+
-      geom_hline(yintercept=df_obj$vals$mean, lty="dashed")+
-      geom_hline(yintercept=df_obj$vals$mean+df_obj$vals$sd)+
-      geom_hline(yintercept=df_obj$vals$mean-df_obj$vals$sd)+
-      geom_line(aes(group=1), lwd=1)+
-      labs(x="Year", y=df_obj$labs[2,2], title = df_obj$labs[1,2])+
-      theme_bw() + theme(title = element_text(size=14, face = "bold"))
-    
-    if (max(df_obj$data$year)-min(df_obj$data$year)>20) {
-      plot_main<-plot_main+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),5))
-    } else {
-      plot_main<-plot_main+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),2))
-    }
-    plot_main
-    
-  } else {
-    #facet plot
-    
-    plot_sec<-ggplot(data=df_obj$data, aes(x=year, y=value))+
-      facet_wrap(~subnm, ncol=1, scales = "free_y")+
-      geom_ribbon(data=df_obj$pos, aes(group=subnm,ymax=max, ymin=mean),fill="#7FFF7F")+
-      geom_ribbon(data=df_obj$neg, aes(group=subnm,ymax=mean, ymin=min), fill="#FF7F7F")+
-      geom_rect(data=merge(df_obj$data,df_obj$vals), aes(xmin=allminyear,xmax=allmaxyear,ymin=mean-sd, ymax=mean+sd), fill="white")+
-      geom_hline(aes(yintercept=mean), lty="dashed",data=df_obj$vals)+
-      geom_hline(aes(yintercept=mean+sd),data=df_obj$vals)+
-      geom_hline(aes(yintercept=mean-sd),data=df_obj$vals)+
-      geom_line(aes(group=1), lwd=0.75)+
-      labs(x="Year", y=df_obj$labs[2,2], title = df_obj$labs[1,2])+
-      theme_bw()+theme(strip.background = element_blank(),
-                       strip.text = element_text(face="bold"),
-                       title = element_text(size=14, face = "bold"))
-    
-    if (max(df_obj$data$year)-min(df_obj$data$year)>20) {
-      plot_sec<-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),5))
-    } else {
-      # plot_sec<-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),2))
-    }
-    plot_sec
-    
-  }
-}
+mydat<-read.csv(url("https://github.com/BrittanyTroast-NOAA/BBESR_DataViz/blob/main/Data_Obj/Data_CSV/brown_peli.csv"))
 
-
-#####Data Names#####
-dat_shrt_nms<-data.frame(c(
-  oilsp="Oil Spills",
-  nav="Nuisance Aquatic Vegetation",
-  rdrum="Red Drum",
-  blcrab="Blue Crab Catch",
-  brpeli="Brown Pelican",
-  oystercat="Oyster Catch",
-  persmbusi="Percent Small Business",
-  vesfish="Vessels Fishing & Seafood Dealers"
-))
-dat_shrt_nms<-tibble::rownames_to_column(dat_shrt_nms)
-colnames(dat_shrt_nms)<-c("short", "long")
-
-
-#####UI#####
 ui <- fluidPage(
-  # App title ----
-  titlePanel("Redo App PieceXPiece"),
-  # Sidebar panel for inputs ----
-  fluidRow(
-    # Input: Slider for the number of bins ----
-    selectInput("data", label = h2("Choose Indicator:", style = "font-size:22px;"), 
-                choices = c("Oil Spills",
-                            "Nuisance Aquatic Vegetation",
-                            "Red Drum",
-                            "Blue Crab Catch",
-                            "Brown Pelican",
-                            "Oyster Catch",
-                            "Percent Small Business",
-                            "Vessels Fishing & Seafood Dealers"))
-  ),
-  # Output: Histogram ----
-  fluidRow(plotlyOutput("plot", height = "500px"))
+  tableOutput("view")
 )
 
+# dat<-dat$data
 
-#####Server#####
-server <- function(input, output) {
+server <- function(input, output, session) {
   
-  #####Load Data Separately#####
-  get_data <- reactive({
-    shrt_nm<-dat_shrt_nms$short[dat_shrt_nms$long==input$data]
-    filename <- paste0("Data_Obj/",shrt_nm, "_li.rds")
-    readRDS(filename)
-  })
-  
-  
-  
-  #####Main plot#####
-  output$plot<-renderPlotly({
-    df_pick <- get_data()
-    plot_main<-plot_fn_obj(df_pick)
-    plotly_gg<-ggplotly(plot_main)
-    df_cond<-select(df_pick$data, -c("valence","min","max"))
-    plotly_gg %>%
-      rangeslider(start = min(df_cond$year), end = max(df_cond$year))
-    
-  })
-  
+  output$view <- renderTable({
+    head(mydat)
+  })  
   
 }
 
 shinyApp(ui = ui, server = server)
-
-
-
-
-
