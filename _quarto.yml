@@ -1,2 +1,18 @@
 project:
-  title: Dash_Test
+  type: website
+  output-dir: docs
+  
+website:
+  title: "BB ESR Data Viz"
+  navbar: 
+    left: 
+      - href: index.qmd
+        text: "Home"
+      - First_Page.qmd
+      - Dash_Test.qmd
+      
+format:
+  html:
+    theme: superhero
+    css: styles.css
+    toc: true

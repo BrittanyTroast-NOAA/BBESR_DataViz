@@ -8,21 +8,11 @@ filters:
   - shinylive
 ---
 
-## Part of old app
-
+## App 3
 ```{shinylive-r}
 #| standalone: true
 #| viewerHeight: 600
 library(shiny)
-library(ggplot2)
-library(tidyr)
-library(dplyr)
-library(plotly)
-# library(png)
-library(gt)
-library(shinythemes)
-library(cowplot)
-library(gtExtras)  
 library(bslib)
 
 # Define UI for app that draws a histogram ----
@@ -68,6 +58,4 @@ server <- function(input, output) {
 }
 
 shinyApp(ui = ui, server = server)
-
 ```
-

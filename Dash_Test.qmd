@@ -1,16 +1,21 @@
 ---
 title: "Dash_Test"
-format: dashboard
-server: shiny
+format:
+  html:
+    resources: 
+      - shinylive-sw.js  # Required to publish the shinylive service worker
+filters: 
+  - shinylive
 ---
 
 ```{r}
-```
+#| standalone: true
+library(tidyverse)
+library(plotly)
+library(shiny)
 
-
-## {.sidebar}
-```{r}
-selectInput("data", label = h2("Choose Indicator:", style = "font-size:20px;"), 
+ui <- fluidPage(
+  selectInput("data", label = h2("Choose Indicator:", style = "font-size:20px;"), 
                 choices = c("Oil Spills",
                             "Nuisance Aquatic Vegetation",
                             "Red Drum",
@@ -18,23 +23,13 @@ selectInput("data", label = h2("Choose Indicator:", style = "font-size:20px;"),
                             "Brown Pelican",
                             "Oyster Catch",
                             "Percent Small Business",
-                            "Vessels Fishing & Seafood Dealers"))
-```
-
-## Plot 1
-```{r}
-plotly::plotlyOutput("plot", width = "100%")
-```
+                            "Vessels Fishing & Seafood Dealers")),
+  plotly::plotlyOutput("plot", width = "100%")
 
 
-## UI
-```{r}
-#| context: server
-#| width: 100%
+)
 
-library(tidyverse)
-library(shiny)
-library(plotly)
+server <- function(input, output, session) {
 
 #####FUNCTION#####
 plot_fn_obj<-function(df_obj) {
@@ -107,8 +102,8 @@ colnames(dat_shrt_nms)<-c("short", "long")
   #####Load Data Separately#####
   get_data <- reactive({
     shrt_nm<-dat_shrt_nms$short[dat_shrt_nms$long==input$data]
-    filename <- paste0("Data_Obj/",shrt_nm, "_li.rds")
-    dat_df<-readRDS(filename)
+    filename <- paste0("Data_Obj/Data_R/",shrt_nm, "_li.rds")
+    dat_df<-source(filename)
     return(dat_df)
   })
 
@@ -117,14 +112,18 @@ colnames(dat_shrt_nms)<-c("short", "long")
 
   output$plot<-renderPlotly({
     df_pick <- get_data()
-    plot_main<-plot_fn_obj(df_pick)
-    plotly_gg<-ggplotly(plot_main)
-    df_cond<-select(df_pick$data, -c("valence","min","max"))
-    plotly_gg
+    # plot_main<-plot_fn_obj(df_pick)
+    # plotly_gg<-ggplotly(plot_main)
+    # df_cond<-select(df_pick$data, -c("valence","min","max"))
+    # plotly_gg
+    plot_gg<-ggplot(df_pick$value$data, aes(year, value))+
+      geom_point()
+    ggplotly(plot_gg)
 
   })
   
-  
+}
 
+shinyApp(ui, server)
 ```
 

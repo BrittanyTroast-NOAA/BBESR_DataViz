@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.56">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>App_Prep – BB ESR Data Viz</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">BB ESR Data Viz</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../Dash_Test.html"> 
+<span class="menu-text">Dash_Test</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#reference-stuff" id="toc-reference-stuff" class="nav-link active" data-scroll-target="#reference-stuff">Reference Stuff</a></li>
+  <li><a href="#data-prep" id="toc-data-prep" class="nav-link" data-scroll-target="#data-prep">Data Prep</a>
+  <ul class="collapse">
+  <li><a href="#megafunction" id="toc-megafunction" class="nav-link" data-scroll-target="#megafunction">Megafunction</a></li>
+  <li><a href="#load-plot-fn-for-objects" id="toc-load-plot-fn-for-objects" class="nav-link" data-scroll-target="#load-plot-fn-for-objects">Load Plot Fn for Objects</a></li>
+  <li><a href="#run-on-datasets" id="toc-run-on-datasets" class="nav-link" data-scroll-target="#run-on-datasets">Run on Datasets</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">App_Prep</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'plotly' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'plotly'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:ggplot2':
+
+    last_plot</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:stats':
+
+    filter</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:graphics':
+
+    layout</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyr' was built under R version 4.2.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'dplyr' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+</div>
+<p>Load Data</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>crab<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"Data_CSV/bluecrab_cat.csv"</span>, <span class="at">header=</span>F)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>peli<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"Data_CSV/brown_peli.csv"</span>, <span class="at">header=</span>F)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>nav<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"Data_CSV/NAV.csv"</span>, <span class="at">header=</span>F)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>oilspill<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"Data_CSV/OilSpills.csv"</span>, <span class="at">header=</span>F)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>oyster<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"Data_CSV/oyster_cat.csv"</span>, <span class="at">header=</span>F)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>sml_bus<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"Data_CSV/per_small_busi.csv"</span>, <span class="at">header=</span>F)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>red_drum<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"Data_CSV/Red_Drum.csv"</span>, <span class="at">header=</span>F)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>sst<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"Data_CSV/sst_raw.csv"</span>, <span class="at">header=</span>F)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>ves_deal<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"Data_CSV/VesselsFishing_SeafoodDealers.csv"</span>, <span class="at">header=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="reference-stuff" class="level2">
+<h2 class="anchored" data-anchor-id="reference-stuff">Reference Stuff</h2>
+<p>All Functions for making data</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Data used for everything</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>df_dat_fn<span class="ot">&lt;-</span><span class="cf">function</span>(df) {</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  df_dat<span class="ot">&lt;-</span>df[<span class="dv">4</span><span class="sc">:</span><span class="fu">nrow</span>(df),<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(df))] </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">ncol</span>(df_dat)<span class="sc">&lt;</span><span class="fl">2.5</span>) {</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colnames</span>(df_dat)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"year"</span>,<span class="st">"value"</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>value<span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>valence[df_dat<span class="sc">$</span>value<span class="sc">&gt;=</span>mean]<span class="ot">&lt;-</span><span class="st">"pos"</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>valence[df_dat<span class="sc">$</span>value<span class="sc">&lt;</span> mean]<span class="ot">&lt;-</span><span class="st">"neg"</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>min <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df_dat<span class="sc">$</span>value <span class="sc">&gt;=</span> mean, mean, df_dat<span class="sc">$</span>value)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>max <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df_dat<span class="sc">$</span>value <span class="sc">&gt;=</span> mean, df_dat<span class="sc">$</span>value, mean)</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>year)</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    df_dat} <span class="cf">else</span> {</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>      sub_list<span class="ot">&lt;-</span><span class="fu">list</span>() </span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span><span class="fu">ncol</span>(df_dat)){</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="ot">&lt;-</span>df_dat[,<span class="fu">c</span>(<span class="dv">1</span>,i)]</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>        df_lab<span class="ot">&lt;-</span>df[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,] <span class="co">#For example sake cutting to only col I need</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>        ind<span class="ot">&lt;-</span>df_lab[<span class="dv">3</span>,]</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>        <span class="fu">colnames</span>(sub_df)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"year"</span>,<span class="st">"value"</span>)</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>        <span class="co"># sub_df$value&lt;- as.numeric(sub_df$value)</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(<span class="fu">lapply</span>(sub_df, as.numeric))</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>        mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>        sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>valence[sub_df<span class="sc">$</span>value<span class="sc">&gt;=</span>mean]<span class="ot">&lt;-</span><span class="st">"pos"</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>valence[sub_df<span class="sc">$</span>value<span class="sc">&lt;</span> mean]<span class="ot">&lt;-</span><span class="st">"neg"</span></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>min <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(sub_df<span class="sc">$</span>value <span class="sc">&gt;=</span> mean, mean, sub_df<span class="sc">$</span>value)</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>max <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(sub_df<span class="sc">$</span>value <span class="sc">&gt;=</span> mean, sub_df<span class="sc">$</span>value, mean)</span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>year)</span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>subnm<span class="ot">&lt;-</span>ind[,i]</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>        sub_list[[i]]<span class="ot">&lt;-</span>sub_df</span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>      df_dat<span class="ot">&lt;-</span><span class="fu">do.call</span>(<span class="st">"rbind"</span>,sub_list)</span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>  df_dat</span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a><span class="co">#Pos data set used for main plot</span></span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>pos_fn<span class="ot">&lt;-</span><span class="cf">function</span>(df_dat) {</span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">ncol</span>(df_dat)<span class="sc">&lt;</span><span class="dv">6</span>){</span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>    mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>    sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>    pos<span class="ot">&lt;-</span>df_dat</span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a>    pos<span class="sc">$</span>value<span class="ot">&lt;-</span><span class="fu">ifelse</span>(pos<span class="sc">$</span>valence <span class="sc">==</span> <span class="st">"pos"</span>,pos<span class="sc">$</span>value, mean)</span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a>    pos} <span class="cf">else</span> {</span>
+<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a>      sub_list<span class="ot">&lt;-</span><span class="fu">list</span>()</span>
+<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a>      subs<span class="ot">&lt;-</span><span class="fu">unique</span>(df_dat<span class="sc">$</span>subnm)</span>
+<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(subs)){</span>
+<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="ot">&lt;-</span>df_dat[df_dat<span class="sc">$</span>subnm<span class="sc">==</span>subs[i],]</span>
+<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a>        mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a>        sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a>        pos<span class="ot">&lt;-</span>sub_df</span>
+<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a>        pos<span class="sc">$</span>value<span class="ot">&lt;-</span><span class="fu">ifelse</span>(pos<span class="sc">$</span>valence <span class="sc">==</span> <span class="st">"pos"</span>,pos<span class="sc">$</span>value, mean)</span>
+<span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a>        pos<span class="sc">$</span>subnm<span class="ot">&lt;-</span>subs[i]</span>
+<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a>        pos<span class="sc">$</span>mean<span class="ot">&lt;-</span>mean</span>
+<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a>        pos<span class="sc">$</span>sd<span class="ot">&lt;-</span>sd</span>
+<span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a>        sub_list[[i]]<span class="ot">&lt;-</span>pos</span>
+<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a>      pos<span class="ot">&lt;-</span><span class="fu">do.call</span>(<span class="st">"rbind"</span>,sub_list)</span>
+<span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a>      pos</span>
+<span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-71"><a href="#cb17-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-72"><a href="#cb17-72" aria-hidden="true" tabindex="-1"></a><span class="co">#Neg data set used for main plot</span></span>
+<span id="cb17-73"><a href="#cb17-73" aria-hidden="true" tabindex="-1"></a>neg_fn<span class="ot">&lt;-</span><span class="cf">function</span>(df_dat) {</span>
+<span id="cb17-74"><a href="#cb17-74" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">ncol</span>(df_dat)<span class="sc">&lt;</span><span class="dv">6</span>){</span>
+<span id="cb17-75"><a href="#cb17-75" aria-hidden="true" tabindex="-1"></a>    mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb17-76"><a href="#cb17-76" aria-hidden="true" tabindex="-1"></a>    sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb17-77"><a href="#cb17-77" aria-hidden="true" tabindex="-1"></a>    neg<span class="ot">&lt;-</span>df_dat</span>
+<span id="cb17-78"><a href="#cb17-78" aria-hidden="true" tabindex="-1"></a>    neg<span class="sc">$</span>value<span class="ot">&lt;-</span><span class="fu">ifelse</span>(neg<span class="sc">$</span>valence <span class="sc">==</span> <span class="st">"neg"</span>,neg<span class="sc">$</span>value, mean)</span>
+<span id="cb17-79"><a href="#cb17-79" aria-hidden="true" tabindex="-1"></a>    neg} <span class="cf">else</span> {</span>
+<span id="cb17-80"><a href="#cb17-80" aria-hidden="true" tabindex="-1"></a>      sub_list<span class="ot">&lt;-</span><span class="fu">list</span>()</span>
+<span id="cb17-81"><a href="#cb17-81" aria-hidden="true" tabindex="-1"></a>      subs<span class="ot">&lt;-</span><span class="fu">unique</span>(df_dat<span class="sc">$</span>subnm)</span>
+<span id="cb17-82"><a href="#cb17-82" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(subs)){</span>
+<span id="cb17-83"><a href="#cb17-83" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="ot">&lt;-</span>df_dat[df_dat<span class="sc">$</span>subnm<span class="sc">==</span>subs[i],]</span>
+<span id="cb17-84"><a href="#cb17-84" aria-hidden="true" tabindex="-1"></a>        mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb17-85"><a href="#cb17-85" aria-hidden="true" tabindex="-1"></a>        sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb17-86"><a href="#cb17-86" aria-hidden="true" tabindex="-1"></a>        neg<span class="ot">&lt;-</span>sub_df</span>
+<span id="cb17-87"><a href="#cb17-87" aria-hidden="true" tabindex="-1"></a>        neg<span class="sc">$</span>value<span class="ot">&lt;-</span><span class="fu">ifelse</span>(neg<span class="sc">$</span>valence <span class="sc">==</span> <span class="st">"neg"</span>,neg<span class="sc">$</span>value, mean)</span>
+<span id="cb17-88"><a href="#cb17-88" aria-hidden="true" tabindex="-1"></a>        neg<span class="sc">$</span>subnm<span class="ot">&lt;-</span>subs[i]</span>
+<span id="cb17-89"><a href="#cb17-89" aria-hidden="true" tabindex="-1"></a>        neg<span class="sc">$</span>mean<span class="ot">&lt;-</span>mean</span>
+<span id="cb17-90"><a href="#cb17-90" aria-hidden="true" tabindex="-1"></a>        neg<span class="sc">$</span>sd<span class="ot">&lt;-</span>sd</span>
+<span id="cb17-91"><a href="#cb17-91" aria-hidden="true" tabindex="-1"></a>        sub_list[[i]]<span class="ot">&lt;-</span>neg</span>
+<span id="cb17-92"><a href="#cb17-92" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb17-93"><a href="#cb17-93" aria-hidden="true" tabindex="-1"></a>      neg<span class="ot">&lt;-</span><span class="fu">do.call</span>(<span class="st">"rbind"</span>,sub_list)</span>
+<span id="cb17-94"><a href="#cb17-94" aria-hidden="true" tabindex="-1"></a>      neg</span>
+<span id="cb17-95"><a href="#cb17-95" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb17-96"><a href="#cb17-96" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-97"><a href="#cb17-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-98"><a href="#cb17-98" aria-hidden="true" tabindex="-1"></a><span class="co">#Independent values used throughout</span></span>
+<span id="cb17-99"><a href="#cb17-99" aria-hidden="true" tabindex="-1"></a>val_fn<span class="ot">&lt;-</span><span class="cf">function</span>(df_dat) {</span>
+<span id="cb17-100"><a href="#cb17-100" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">ncol</span>(df_dat)<span class="sc">&lt;</span><span class="dv">6</span>){</span>
+<span id="cb17-101"><a href="#cb17-101" aria-hidden="true" tabindex="-1"></a>    mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb17-102"><a href="#cb17-102" aria-hidden="true" tabindex="-1"></a>    sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb17-103"><a href="#cb17-103" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-104"><a href="#cb17-104" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Trend Analysis</span></span>
+<span id="cb17-105"><a href="#cb17-105" aria-hidden="true" tabindex="-1"></a>    last5<span class="ot">&lt;-</span>df_dat[df_dat<span class="sc">$</span>year <span class="sc">&gt;</span> <span class="fu">max</span>(df_dat<span class="sc">$</span>year)<span class="sc">-</span><span class="dv">5</span>,]</span>
+<span id="cb17-106"><a href="#cb17-106" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Mean Trend</span></span>
+<span id="cb17-107"><a href="#cb17-107" aria-hidden="true" tabindex="-1"></a>    last5_mean<span class="ot">&lt;-</span><span class="fu">mean</span>(last5<span class="sc">$</span>value) <span class="co"># mean value last 5 years</span></span>
+<span id="cb17-108"><a href="#cb17-108" aria-hidden="true" tabindex="-1"></a>    mean_tr<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"ptPlus"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"ptMinus"</span>,<span class="st">"ptSolid"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb17-109"><a href="#cb17-109" aria-hidden="true" tabindex="-1"></a>    mean_sym<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"+"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"-"</span>,<span class="st">"●"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb17-110"><a href="#cb17-110" aria-hidden="true" tabindex="-1"></a>    mean_word<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"greater"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"below"</span>,<span class="st">"within"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb17-111"><a href="#cb17-111" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-112"><a href="#cb17-112" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Slope Trend</span></span>
+<span id="cb17-113"><a href="#cb17-113" aria-hidden="true" tabindex="-1"></a>    lmout<span class="ot">&lt;-</span><span class="fu">summary</span>(<span class="fu">lm</span>(last5<span class="sc">$</span>value<span class="sc">~</span>last5<span class="sc">$</span>year))</span>
+<span id="cb17-114"><a href="#cb17-114" aria-hidden="true" tabindex="-1"></a>    last5_slope<span class="ot">&lt;-</span><span class="fu">coef</span>(lmout)[<span class="dv">2</span>,<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">5</span> <span class="co">#multiply by years in the trend (slope per year * number of years=rise over 5 years)</span></span>
+<span id="cb17-115"><a href="#cb17-115" aria-hidden="true" tabindex="-1"></a>    slope_tr<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"arrowUp"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"arrowDown"</span>,<span class="st">"arrowRight"</span>))</span>
+<span id="cb17-116"><a href="#cb17-116" aria-hidden="true" tabindex="-1"></a>    slope_sym<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"↑"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"↓"</span>,<span class="st">"→"</span>))</span>
+<span id="cb17-117"><a href="#cb17-117" aria-hidden="true" tabindex="-1"></a>    slope_word<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"an increasing"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"a decreasing"</span>,<span class="st">"a stable"</span>))</span>
+<span id="cb17-118"><a href="#cb17-118" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-119"><a href="#cb17-119" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Dataframe</span></span>
+<span id="cb17-120"><a href="#cb17-120" aria-hidden="true" tabindex="-1"></a>    vals<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">mean=</span>mean,</span>
+<span id="cb17-121"><a href="#cb17-121" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sd=</span>sd,</span>
+<span id="cb17-122"><a href="#cb17-122" aria-hidden="true" tabindex="-1"></a>                     <span class="at">mean_tr=</span>mean_tr,</span>
+<span id="cb17-123"><a href="#cb17-123" aria-hidden="true" tabindex="-1"></a>                     <span class="at">slope_tr=</span>slope_tr,</span>
+<span id="cb17-124"><a href="#cb17-124" aria-hidden="true" tabindex="-1"></a>                     <span class="at">mean_sym=</span>mean_sym,</span>
+<span id="cb17-125"><a href="#cb17-125" aria-hidden="true" tabindex="-1"></a>                     <span class="at">slope_sym=</span>slope_sym,</span>
+<span id="cb17-126"><a href="#cb17-126" aria-hidden="true" tabindex="-1"></a>                     <span class="at">mean_word=</span>mean_word,</span>
+<span id="cb17-127"><a href="#cb17-127" aria-hidden="true" tabindex="-1"></a>                     <span class="at">slope_word=</span>slope_word)</span>
+<span id="cb17-128"><a href="#cb17-128" aria-hidden="true" tabindex="-1"></a>    vals} <span class="cf">else</span> {</span>
+<span id="cb17-129"><a href="#cb17-129" aria-hidden="true" tabindex="-1"></a>      sub_list<span class="ot">&lt;-</span><span class="fu">list</span>()</span>
+<span id="cb17-130"><a href="#cb17-130" aria-hidden="true" tabindex="-1"></a>      subs<span class="ot">&lt;-</span><span class="fu">unique</span>(df_dat<span class="sc">$</span>subnm)</span>
+<span id="cb17-131"><a href="#cb17-131" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(subs)){</span>
+<span id="cb17-132"><a href="#cb17-132" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="ot">&lt;-</span>df_dat[df_dat<span class="sc">$</span>subnm<span class="sc">==</span>subs[i],]</span>
+<span id="cb17-133"><a href="#cb17-133" aria-hidden="true" tabindex="-1"></a>        minyear<span class="ot">&lt;-</span><span class="fu">min</span>(<span class="fu">na.omit</span>(sub_df)<span class="sc">$</span>year)</span>
+<span id="cb17-134"><a href="#cb17-134" aria-hidden="true" tabindex="-1"></a>        maxyear<span class="ot">&lt;-</span><span class="fu">max</span>(<span class="fu">na.omit</span>(sub_df)<span class="sc">$</span>year)</span>
+<span id="cb17-135"><a href="#cb17-135" aria-hidden="true" tabindex="-1"></a>        allminyear<span class="ot">&lt;-</span><span class="fu">min</span>(df_dat<span class="sc">$</span>year)</span>
+<span id="cb17-136"><a href="#cb17-136" aria-hidden="true" tabindex="-1"></a>        allmaxyear<span class="ot">&lt;-</span><span class="fu">max</span>(df_dat<span class="sc">$</span>year)</span>
+<span id="cb17-137"><a href="#cb17-137" aria-hidden="true" tabindex="-1"></a>        mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb17-138"><a href="#cb17-138" aria-hidden="true" tabindex="-1"></a>        sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb17-139"><a href="#cb17-139" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-140"><a href="#cb17-140" aria-hidden="true" tabindex="-1"></a>        <span class="co">#Trend Analysis</span></span>
+<span id="cb17-141"><a href="#cb17-141" aria-hidden="true" tabindex="-1"></a>        last5<span class="ot">&lt;-</span>sub_df[sub_df<span class="sc">$</span>year <span class="sc">&gt;</span> <span class="fu">max</span>(sub_df<span class="sc">$</span>year)<span class="sc">-</span><span class="dv">5</span>,]</span>
+<span id="cb17-142"><a href="#cb17-142" aria-hidden="true" tabindex="-1"></a>        <span class="co">#Mean Trend</span></span>
+<span id="cb17-143"><a href="#cb17-143" aria-hidden="true" tabindex="-1"></a>        last5_mean<span class="ot">&lt;-</span><span class="fu">mean</span>(last5<span class="sc">$</span>value) <span class="co"># mean value last 5 years</span></span>
+<span id="cb17-144"><a href="#cb17-144" aria-hidden="true" tabindex="-1"></a>        mean_tr<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"ptPlus"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"ptMinus"</span>,<span class="st">"ptSolid"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb17-145"><a href="#cb17-145" aria-hidden="true" tabindex="-1"></a>        mean_sym<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"+"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"-"</span>,<span class="st">"●"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb17-146"><a href="#cb17-146" aria-hidden="true" tabindex="-1"></a>        mean_word<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"greater"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"below"</span>,<span class="st">"within"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb17-147"><a href="#cb17-147" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-148"><a href="#cb17-148" aria-hidden="true" tabindex="-1"></a>        <span class="co">#Slope Trend</span></span>
+<span id="cb17-149"><a href="#cb17-149" aria-hidden="true" tabindex="-1"></a>        lmout<span class="ot">&lt;-</span><span class="fu">summary</span>(<span class="fu">lm</span>(last5<span class="sc">$</span>value<span class="sc">~</span>last5<span class="sc">$</span>year))</span>
+<span id="cb17-150"><a href="#cb17-150" aria-hidden="true" tabindex="-1"></a>        last5_slope<span class="ot">&lt;-</span><span class="fu">coef</span>(lmout)[<span class="dv">2</span>,<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">5</span> <span class="co">#multiply by years in the trend (slope per year * number of years=rise over 5 years)</span></span>
+<span id="cb17-151"><a href="#cb17-151" aria-hidden="true" tabindex="-1"></a>        slope_tr<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"arrowUp"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"arrowDown"</span>,<span class="st">"arrowRight"</span>))</span>
+<span id="cb17-152"><a href="#cb17-152" aria-hidden="true" tabindex="-1"></a>        slope_sym<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"↑"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"↓"</span>,<span class="st">"→"</span>))</span>
+<span id="cb17-153"><a href="#cb17-153" aria-hidden="true" tabindex="-1"></a>        slope_word<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"an increasing"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"a decreasing"</span>,<span class="st">"a stable"</span>))</span>
+<span id="cb17-154"><a href="#cb17-154" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-155"><a href="#cb17-155" aria-hidden="true" tabindex="-1"></a>        vals<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">allminyear=</span>allminyear,</span>
+<span id="cb17-156"><a href="#cb17-156" aria-hidden="true" tabindex="-1"></a>                         <span class="at">allmaxyear=</span>allmaxyear,</span>
+<span id="cb17-157"><a href="#cb17-157" aria-hidden="true" tabindex="-1"></a>                         <span class="at">minyear=</span>minyear,</span>
+<span id="cb17-158"><a href="#cb17-158" aria-hidden="true" tabindex="-1"></a>                         <span class="at">maxyear=</span>maxyear,</span>
+<span id="cb17-159"><a href="#cb17-159" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mean=</span>mean,</span>
+<span id="cb17-160"><a href="#cb17-160" aria-hidden="true" tabindex="-1"></a>                         <span class="at">sd=</span>sd,</span>
+<span id="cb17-161"><a href="#cb17-161" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mean_tr=</span>mean_tr,</span>
+<span id="cb17-162"><a href="#cb17-162" aria-hidden="true" tabindex="-1"></a>                         <span class="at">slope_tr=</span>slope_tr,</span>
+<span id="cb17-163"><a href="#cb17-163" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mean_sym=</span>mean_sym,</span>
+<span id="cb17-164"><a href="#cb17-164" aria-hidden="true" tabindex="-1"></a>                         <span class="at">slope_sym=</span>slope_sym,</span>
+<span id="cb17-165"><a href="#cb17-165" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mean_word=</span>mean_word,</span>
+<span id="cb17-166"><a href="#cb17-166" aria-hidden="true" tabindex="-1"></a>                         <span class="at">slope_word=</span>slope_word,</span>
+<span id="cb17-167"><a href="#cb17-167" aria-hidden="true" tabindex="-1"></a>                         <span class="at">subnm=</span>subs[i])</span>
+<span id="cb17-168"><a href="#cb17-168" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-169"><a href="#cb17-169" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb17-170"><a href="#cb17-170" aria-hidden="true" tabindex="-1"></a>        sub_list[[i]]<span class="ot">&lt;-</span>vals</span>
+<span id="cb17-171"><a href="#cb17-171" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb17-172"><a href="#cb17-172" aria-hidden="true" tabindex="-1"></a>      vals<span class="ot">&lt;-</span><span class="fu">do.call</span>(<span class="st">"rbind"</span>,sub_list)</span>
+<span id="cb17-173"><a href="#cb17-173" aria-hidden="true" tabindex="-1"></a>      vals</span>
+<span id="cb17-174"><a href="#cb17-174" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb17-175"><a href="#cb17-175" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-176"><a href="#cb17-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-177"><a href="#cb17-177" aria-hidden="true" tabindex="-1"></a><span class="co">#Main Plot</span></span>
+<span id="cb17-178"><a href="#cb17-178" aria-hidden="true" tabindex="-1"></a>plot_fn<span class="ot">&lt;-</span><span class="cf">function</span>(df_dat, pos, neg, df_lab, val_df) {</span>
+<span id="cb17-179"><a href="#cb17-179" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-180"><a href="#cb17-180" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-181"><a href="#cb17-181" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">ncol</span>(df_dat)<span class="sc">&lt;</span><span class="fl">5.5</span>){</span>
+<span id="cb17-182"><a href="#cb17-182" aria-hidden="true" tabindex="-1"></a>    <span class="co">#single plot</span></span>
+<span id="cb17-183"><a href="#cb17-183" aria-hidden="true" tabindex="-1"></a>    plot_main<span class="ot">&lt;-</span><span class="fu">ggplot</span>(<span class="at">data=</span>df_dat, <span class="fu">aes</span>(<span class="at">x=</span>year, <span class="at">y=</span>value))<span class="sc">+</span></span>
+<span id="cb17-184"><a href="#cb17-184" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_ribbon</span>(<span class="at">data=</span>pos, <span class="fu">aes</span>(<span class="at">group=</span><span class="dv">1</span>,<span class="at">ymax=</span>max, <span class="at">ymin=</span>val_df<span class="sc">$</span>mean),<span class="at">fill=</span><span class="st">"#7FFF7F"</span>)<span class="sc">+</span></span>
+<span id="cb17-185"><a href="#cb17-185" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_ribbon</span>(<span class="at">data=</span>neg, <span class="fu">aes</span>(<span class="at">group=</span><span class="dv">1</span>,<span class="at">ymax=</span>val_df<span class="sc">$</span>mean, <span class="at">ymin=</span>min), <span class="at">fill=</span><span class="st">"#FF7F7F"</span>)<span class="sc">+</span></span>
+<span id="cb17-186"><a href="#cb17-186" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin=</span><span class="fu">min</span>(df_dat<span class="sc">$</span>year),<span class="at">xmax=</span><span class="fu">max</span>(df_dat<span class="sc">$</span>year),<span class="at">ymin=</span>val_df<span class="sc">$</span>mean<span class="sc">-</span>val_df<span class="sc">$</span>sd, <span class="at">ymax=</span>val_df<span class="sc">$</span>mean<span class="sc">+</span>val_df<span class="sc">$</span>sd), <span class="at">fill=</span><span class="st">"white"</span>)<span class="sc">+</span></span>
+<span id="cb17-187"><a href="#cb17-187" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>val_df<span class="sc">$</span>mean, <span class="at">lty=</span><span class="st">"dashed"</span>)<span class="sc">+</span></span>
+<span id="cb17-188"><a href="#cb17-188" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>val_df<span class="sc">$</span>mean<span class="sc">+</span>val_df<span class="sc">$</span>sd)<span class="sc">+</span></span>
+<span id="cb17-189"><a href="#cb17-189" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>val_df<span class="sc">$</span>mean<span class="sc">-</span>val_df<span class="sc">$</span>sd)<span class="sc">+</span></span>
+<span id="cb17-190"><a href="#cb17-190" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group=</span><span class="dv">1</span>), <span class="at">lwd=</span><span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb17-191"><a href="#cb17-191" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Year"</span>, <span class="at">y=</span>df_lab[<span class="dv">2</span>,<span class="dv">2</span>], <span class="at">title =</span> df_lab[<span class="dv">1</span>,<span class="dv">2</span>])<span class="sc">+</span></span>
+<span id="cb17-192"><a href="#cb17-192" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span>
+<span id="cb17-193"><a href="#cb17-193" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-194"><a href="#cb17-194" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">max</span>(df_dat<span class="sc">$</span>year)<span class="sc">-</span><span class="fu">min</span>(df_dat<span class="sc">$</span>year)<span class="sc">&gt;</span><span class="dv">20</span>) {</span>
+<span id="cb17-195"><a href="#cb17-195" aria-hidden="true" tabindex="-1"></a>      plot_main<span class="ot">&lt;-</span>plot_main<span class="sc">+</span><span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fu">min</span>(df_dat<span class="sc">$</span>year),<span class="fu">max</span>(df_dat<span class="sc">$</span>year),<span class="dv">5</span>))</span>
+<span id="cb17-196"><a href="#cb17-196" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb17-197"><a href="#cb17-197" aria-hidden="true" tabindex="-1"></a>      plot_main<span class="ot">&lt;-</span>plot_main<span class="sc">+</span><span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fu">min</span>(df_dat<span class="sc">$</span>year),<span class="fu">max</span>(df_dat<span class="sc">$</span>year),<span class="dv">2</span>))</span>
+<span id="cb17-198"><a href="#cb17-198" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb17-199"><a href="#cb17-199" aria-hidden="true" tabindex="-1"></a>    plot_main</span>
+<span id="cb17-200"><a href="#cb17-200" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-201"><a href="#cb17-201" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb17-202"><a href="#cb17-202" aria-hidden="true" tabindex="-1"></a>    <span class="co">#facet plot</span></span>
+<span id="cb17-203"><a href="#cb17-203" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-204"><a href="#cb17-204" aria-hidden="true" tabindex="-1"></a>    plot_sec<span class="ot">&lt;-</span><span class="fu">ggplot</span>(<span class="at">data=</span>df_dat, <span class="fu">aes</span>(<span class="at">x=</span>year, <span class="at">y=</span>value))<span class="sc">+</span></span>
+<span id="cb17-205"><a href="#cb17-205" aria-hidden="true" tabindex="-1"></a>      <span class="fu">facet_wrap</span>(<span class="sc">~</span>subnm, <span class="at">ncol=</span><span class="dv">1</span>, <span class="at">scales =</span> <span class="st">"free_y"</span>)<span class="sc">+</span></span>
+<span id="cb17-206"><a href="#cb17-206" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_ribbon</span>(<span class="at">data=</span>pos, <span class="fu">aes</span>(<span class="at">group=</span>subnm,<span class="at">ymax=</span>max, <span class="at">ymin=</span>mean),<span class="at">fill=</span><span class="st">"#7FFF7F"</span>)<span class="sc">+</span></span>
+<span id="cb17-207"><a href="#cb17-207" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_ribbon</span>(<span class="at">data=</span>neg, <span class="fu">aes</span>(<span class="at">group=</span>subnm,<span class="at">ymax=</span>mean, <span class="at">ymin=</span>min), <span class="at">fill=</span><span class="st">"#FF7F7F"</span>)<span class="sc">+</span></span>
+<span id="cb17-208"><a href="#cb17-208" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_rect</span>(<span class="at">data=</span><span class="fu">merge</span>(df_dat,val_df), <span class="fu">aes</span>(<span class="at">xmin=</span>allminyear,<span class="at">xmax=</span>allmaxyear,<span class="at">ymin=</span>mean<span class="sc">-</span>sd, <span class="at">ymax=</span>mean<span class="sc">+</span>sd), <span class="at">fill=</span><span class="st">"white"</span>)<span class="sc">+</span></span>
+<span id="cb17-209"><a href="#cb17-209" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept=</span>mean), <span class="at">lty=</span><span class="st">"dashed"</span>,<span class="at">data=</span>val_df)<span class="sc">+</span></span>
+<span id="cb17-210"><a href="#cb17-210" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept=</span>mean<span class="sc">+</span>sd),<span class="at">data=</span>val_df)<span class="sc">+</span></span>
+<span id="cb17-211"><a href="#cb17-211" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept=</span>mean<span class="sc">-</span>sd),<span class="at">data=</span>val_df)<span class="sc">+</span></span>
+<span id="cb17-212"><a href="#cb17-212" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group=</span><span class="dv">1</span>), <span class="at">lwd=</span><span class="fl">0.75</span>)<span class="sc">+</span></span>
+<span id="cb17-213"><a href="#cb17-213" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Year"</span>, <span class="at">y=</span>df_lab[<span class="dv">2</span>,<span class="dv">2</span>], <span class="at">title =</span> df_lab[<span class="dv">1</span>,<span class="dv">2</span>])<span class="sc">+</span></span>
+<span id="cb17-214"><a href="#cb17-214" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_bw</span>()<span class="sc">+</span><span class="fu">theme</span>(<span class="at">strip.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb17-215"><a href="#cb17-215" aria-hidden="true" tabindex="-1"></a>                       <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face=</span><span class="st">"bold"</span>),</span>
+<span id="cb17-216"><a href="#cb17-216" aria-hidden="true" tabindex="-1"></a>                       <span class="at">title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span>
+<span id="cb17-217"><a href="#cb17-217" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-218"><a href="#cb17-218" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">max</span>(df_dat<span class="sc">$</span>year)<span class="sc">-</span><span class="fu">min</span>(df_dat<span class="sc">$</span>year)<span class="sc">&gt;</span><span class="dv">20</span>) {</span>
+<span id="cb17-219"><a href="#cb17-219" aria-hidden="true" tabindex="-1"></a>      plot_sec<span class="ot">&lt;-</span>plot_sec<span class="sc">+</span><span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fu">min</span>(df_dat<span class="sc">$</span>year),<span class="fu">max</span>(df_dat<span class="sc">$</span>year),<span class="dv">5</span>))</span>
+<span id="cb17-220"><a href="#cb17-220" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb17-221"><a href="#cb17-221" aria-hidden="true" tabindex="-1"></a>      <span class="co"># plot_sec&lt;-plot_sec+scale_x_continuous(breaks = seq(min(df_dat$year),max(df_dat$year),2))</span></span>
+<span id="cb17-222"><a href="#cb17-222" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb17-223"><a href="#cb17-223" aria-hidden="true" tabindex="-1"></a>    plot_sec</span>
+<span id="cb17-224"><a href="#cb17-224" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-225"><a href="#cb17-225" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb17-226"><a href="#cb17-226" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Combined functions into one</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>data_prep_fn <span class="ot">&lt;-</span><span class="cf">function</span> (df, list_nm) {</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  df_list<span class="ot">&lt;-</span><span class="fu">vector</span>(<span class="st">"list"</span>, <span class="dv">5</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(df_list)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"data"</span>, <span class="st">"pos"</span>, <span class="st">"neg"</span>, <span class="st">"labs"</span>, <span class="st">"vals"</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Data used for everything</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  df_dat<span class="ot">&lt;-</span>df[<span class="dv">4</span><span class="sc">:</span><span class="fu">nrow</span>(df),<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(df))] </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">ncol</span>(df_dat)<span class="sc">&lt;</span><span class="fl">2.5</span>) {</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colnames</span>(df_dat)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"year"</span>,<span class="st">"value"</span>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>value<span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>valence[df_dat<span class="sc">$</span>value<span class="sc">&gt;=</span>mean]<span class="ot">&lt;-</span><span class="st">"pos"</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>valence[df_dat<span class="sc">$</span>value<span class="sc">&lt;</span> mean]<span class="ot">&lt;-</span><span class="st">"neg"</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>min <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df_dat<span class="sc">$</span>value <span class="sc">&gt;=</span> mean, mean, df_dat<span class="sc">$</span>value)</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>max <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df_dat<span class="sc">$</span>value <span class="sc">&gt;=</span> mean, df_dat<span class="sc">$</span>value, mean)</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>year)</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>    df_dat} <span class="cf">else</span> {</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>      sub_list<span class="ot">&lt;-</span><span class="fu">list</span>() </span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span><span class="fu">ncol</span>(df_dat)){</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="ot">&lt;-</span>df_dat[,<span class="fu">c</span>(<span class="dv">1</span>,i)]</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>        df_lab<span class="ot">&lt;-</span>df[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,] <span class="co">#For example sake cutting to only col I need</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>        ind<span class="ot">&lt;-</span>df_lab[<span class="dv">3</span>,]</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>        <span class="fu">colnames</span>(sub_df)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"year"</span>,<span class="st">"value"</span>)</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>        <span class="co"># sub_df$value&lt;- as.numeric(sub_df$value)</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(<span class="fu">lapply</span>(sub_df, as.numeric))</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>        mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>        sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>valence[sub_df<span class="sc">$</span>value<span class="sc">&gt;=</span>mean]<span class="ot">&lt;-</span><span class="st">"pos"</span></span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>valence[sub_df<span class="sc">$</span>value<span class="sc">&lt;</span> mean]<span class="ot">&lt;-</span><span class="st">"neg"</span></span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>min <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(sub_df<span class="sc">$</span>value <span class="sc">&gt;=</span> mean, mean, sub_df<span class="sc">$</span>value)</span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>max <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(sub_df<span class="sc">$</span>value <span class="sc">&gt;=</span> mean, sub_df<span class="sc">$</span>value, mean)</span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>year)</span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>subnm<span class="ot">&lt;-</span>ind[,i]</span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>        sub_list[[i]]<span class="ot">&lt;-</span>sub_df</span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>      df_dat<span class="ot">&lt;-</span><span class="fu">do.call</span>(<span class="st">"rbind"</span>,sub_list)</span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a>  df_list<span class="sc">$</span>data<span class="ot">&lt;-</span>df_dat</span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a><span class="co">#Pos data set used for main plot</span></span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">ncol</span>(df_dat)<span class="sc">&lt;</span><span class="dv">6</span>){</span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a>    mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a>    sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a>    pos<span class="ot">&lt;-</span>df_dat</span>
+<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a>    pos<span class="sc">$</span>value<span class="ot">&lt;-</span><span class="fu">ifelse</span>(pos<span class="sc">$</span>valence <span class="sc">==</span> <span class="st">"pos"</span>,pos<span class="sc">$</span>value, mean)</span>
+<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a>    pos} <span class="cf">else</span> {</span>
+<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a>      sub_list<span class="ot">&lt;-</span><span class="fu">list</span>()</span>
+<span id="cb18-57"><a href="#cb18-57" aria-hidden="true" tabindex="-1"></a>      subs<span class="ot">&lt;-</span><span class="fu">unique</span>(df_dat<span class="sc">$</span>subnm)</span>
+<span id="cb18-58"><a href="#cb18-58" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(subs)){</span>
+<span id="cb18-59"><a href="#cb18-59" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="ot">&lt;-</span>df_dat[df_dat<span class="sc">$</span>subnm<span class="sc">==</span>subs[i],]</span>
+<span id="cb18-60"><a href="#cb18-60" aria-hidden="true" tabindex="-1"></a>        mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb18-61"><a href="#cb18-61" aria-hidden="true" tabindex="-1"></a>        sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb18-62"><a href="#cb18-62" aria-hidden="true" tabindex="-1"></a>        pos<span class="ot">&lt;-</span>sub_df</span>
+<span id="cb18-63"><a href="#cb18-63" aria-hidden="true" tabindex="-1"></a>        pos<span class="sc">$</span>value<span class="ot">&lt;-</span><span class="fu">ifelse</span>(pos<span class="sc">$</span>valence <span class="sc">==</span> <span class="st">"pos"</span>,pos<span class="sc">$</span>value, mean)</span>
+<span id="cb18-64"><a href="#cb18-64" aria-hidden="true" tabindex="-1"></a>        pos<span class="sc">$</span>subnm<span class="ot">&lt;-</span>subs[i]</span>
+<span id="cb18-65"><a href="#cb18-65" aria-hidden="true" tabindex="-1"></a>        pos<span class="sc">$</span>mean<span class="ot">&lt;-</span>mean</span>
+<span id="cb18-66"><a href="#cb18-66" aria-hidden="true" tabindex="-1"></a>        pos<span class="sc">$</span>sd<span class="ot">&lt;-</span>sd</span>
+<span id="cb18-67"><a href="#cb18-67" aria-hidden="true" tabindex="-1"></a>        sub_list[[i]]<span class="ot">&lt;-</span>pos</span>
+<span id="cb18-68"><a href="#cb18-68" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb18-69"><a href="#cb18-69" aria-hidden="true" tabindex="-1"></a>      pos<span class="ot">&lt;-</span><span class="fu">do.call</span>(<span class="st">"rbind"</span>,sub_list)</span>
+<span id="cb18-70"><a href="#cb18-70" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb18-71"><a href="#cb18-71" aria-hidden="true" tabindex="-1"></a>      df_list<span class="sc">$</span>pos<span class="ot">&lt;-</span>pos</span>
+<span id="cb18-72"><a href="#cb18-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-73"><a href="#cb18-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-74"><a href="#cb18-74" aria-hidden="true" tabindex="-1"></a><span class="co">#Neg data set used for main plot</span></span>
+<span id="cb18-75"><a href="#cb18-75" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">ncol</span>(df_dat)<span class="sc">&lt;</span><span class="dv">6</span>){</span>
+<span id="cb18-76"><a href="#cb18-76" aria-hidden="true" tabindex="-1"></a>    mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb18-77"><a href="#cb18-77" aria-hidden="true" tabindex="-1"></a>    sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb18-78"><a href="#cb18-78" aria-hidden="true" tabindex="-1"></a>    neg<span class="ot">&lt;-</span>df_dat</span>
+<span id="cb18-79"><a href="#cb18-79" aria-hidden="true" tabindex="-1"></a>    neg<span class="sc">$</span>value<span class="ot">&lt;-</span><span class="fu">ifelse</span>(neg<span class="sc">$</span>valence <span class="sc">==</span> <span class="st">"neg"</span>,neg<span class="sc">$</span>value, mean)</span>
+<span id="cb18-80"><a href="#cb18-80" aria-hidden="true" tabindex="-1"></a>    neg} <span class="cf">else</span> {</span>
+<span id="cb18-81"><a href="#cb18-81" aria-hidden="true" tabindex="-1"></a>      sub_list<span class="ot">&lt;-</span><span class="fu">list</span>()</span>
+<span id="cb18-82"><a href="#cb18-82" aria-hidden="true" tabindex="-1"></a>      subs<span class="ot">&lt;-</span><span class="fu">unique</span>(df_dat<span class="sc">$</span>subnm)</span>
+<span id="cb18-83"><a href="#cb18-83" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(subs)){</span>
+<span id="cb18-84"><a href="#cb18-84" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="ot">&lt;-</span>df_dat[df_dat<span class="sc">$</span>subnm<span class="sc">==</span>subs[i],]</span>
+<span id="cb18-85"><a href="#cb18-85" aria-hidden="true" tabindex="-1"></a>        mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb18-86"><a href="#cb18-86" aria-hidden="true" tabindex="-1"></a>        sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb18-87"><a href="#cb18-87" aria-hidden="true" tabindex="-1"></a>        neg<span class="ot">&lt;-</span>sub_df</span>
+<span id="cb18-88"><a href="#cb18-88" aria-hidden="true" tabindex="-1"></a>        neg<span class="sc">$</span>value<span class="ot">&lt;-</span><span class="fu">ifelse</span>(neg<span class="sc">$</span>valence <span class="sc">==</span> <span class="st">"neg"</span>,neg<span class="sc">$</span>value, mean)</span>
+<span id="cb18-89"><a href="#cb18-89" aria-hidden="true" tabindex="-1"></a>        neg<span class="sc">$</span>subnm<span class="ot">&lt;-</span>subs[i]</span>
+<span id="cb18-90"><a href="#cb18-90" aria-hidden="true" tabindex="-1"></a>        neg<span class="sc">$</span>mean<span class="ot">&lt;-</span>mean</span>
+<span id="cb18-91"><a href="#cb18-91" aria-hidden="true" tabindex="-1"></a>        neg<span class="sc">$</span>sd<span class="ot">&lt;-</span>sd</span>
+<span id="cb18-92"><a href="#cb18-92" aria-hidden="true" tabindex="-1"></a>        sub_list[[i]]<span class="ot">&lt;-</span>neg</span>
+<span id="cb18-93"><a href="#cb18-93" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb18-94"><a href="#cb18-94" aria-hidden="true" tabindex="-1"></a>      neg<span class="ot">&lt;-</span><span class="fu">do.call</span>(<span class="st">"rbind"</span>,sub_list)</span>
+<span id="cb18-95"><a href="#cb18-95" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb18-96"><a href="#cb18-96" aria-hidden="true" tabindex="-1"></a>      df_list<span class="sc">$</span>neg<span class="ot">&lt;-</span>neg</span>
+<span id="cb18-97"><a href="#cb18-97" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb18-98"><a href="#cb18-98" aria-hidden="true" tabindex="-1"></a>df_list<span class="sc">$</span>labs<span class="ot">&lt;-</span>df[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(df))]</span>
+<span id="cb18-99"><a href="#cb18-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-100"><a href="#cb18-100" aria-hidden="true" tabindex="-1"></a><span class="co">#Independent values used throughout</span></span>
+<span id="cb18-101"><a href="#cb18-101" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">ncol</span>(df_dat)<span class="sc">&lt;</span><span class="dv">6</span>){</span>
+<span id="cb18-102"><a href="#cb18-102" aria-hidden="true" tabindex="-1"></a>    mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb18-103"><a href="#cb18-103" aria-hidden="true" tabindex="-1"></a>    sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb18-104"><a href="#cb18-104" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-105"><a href="#cb18-105" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Trend Analysis</span></span>
+<span id="cb18-106"><a href="#cb18-106" aria-hidden="true" tabindex="-1"></a>    last5<span class="ot">&lt;-</span>df_dat[df_dat<span class="sc">$</span>year <span class="sc">&gt;</span> <span class="fu">max</span>(df_dat<span class="sc">$</span>year)<span class="sc">-</span><span class="dv">5</span>,]</span>
+<span id="cb18-107"><a href="#cb18-107" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Mean Trend</span></span>
+<span id="cb18-108"><a href="#cb18-108" aria-hidden="true" tabindex="-1"></a>    last5_mean<span class="ot">&lt;-</span><span class="fu">mean</span>(last5<span class="sc">$</span>value) <span class="co"># mean value last 5 years</span></span>
+<span id="cb18-109"><a href="#cb18-109" aria-hidden="true" tabindex="-1"></a>    mean_tr<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"ptPlus"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"ptMinus"</span>,<span class="st">"ptSolid"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb18-110"><a href="#cb18-110" aria-hidden="true" tabindex="-1"></a>    mean_sym<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"+"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"-"</span>,<span class="st">"●"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb18-111"><a href="#cb18-111" aria-hidden="true" tabindex="-1"></a>    mean_word<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"greater"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"below"</span>,<span class="st">"within"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb18-112"><a href="#cb18-112" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-113"><a href="#cb18-113" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Slope Trend</span></span>
+<span id="cb18-114"><a href="#cb18-114" aria-hidden="true" tabindex="-1"></a>    lmout<span class="ot">&lt;-</span><span class="fu">summary</span>(<span class="fu">lm</span>(last5<span class="sc">$</span>value<span class="sc">~</span>last5<span class="sc">$</span>year))</span>
+<span id="cb18-115"><a href="#cb18-115" aria-hidden="true" tabindex="-1"></a>    last5_slope<span class="ot">&lt;-</span><span class="fu">coef</span>(lmout)[<span class="dv">2</span>,<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">5</span> <span class="co">#multiply by years in the trend (slope per year * number of years=rise over 5 years)</span></span>
+<span id="cb18-116"><a href="#cb18-116" aria-hidden="true" tabindex="-1"></a>    slope_tr<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"arrowUp"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"arrowDown"</span>,<span class="st">"arrowRight"</span>))</span>
+<span id="cb18-117"><a href="#cb18-117" aria-hidden="true" tabindex="-1"></a>    slope_sym<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"↑"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"↓"</span>,<span class="st">"→"</span>))</span>
+<span id="cb18-118"><a href="#cb18-118" aria-hidden="true" tabindex="-1"></a>    slope_word<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"an increasing"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"a decreasing"</span>,<span class="st">"a stable"</span>))</span>
+<span id="cb18-119"><a href="#cb18-119" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-120"><a href="#cb18-120" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Dataframe</span></span>
+<span id="cb18-121"><a href="#cb18-121" aria-hidden="true" tabindex="-1"></a>    vals<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">mean=</span>mean,</span>
+<span id="cb18-122"><a href="#cb18-122" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sd=</span>sd,</span>
+<span id="cb18-123"><a href="#cb18-123" aria-hidden="true" tabindex="-1"></a>                     <span class="at">mean_tr=</span>mean_tr,</span>
+<span id="cb18-124"><a href="#cb18-124" aria-hidden="true" tabindex="-1"></a>                     <span class="at">slope_tr=</span>slope_tr,</span>
+<span id="cb18-125"><a href="#cb18-125" aria-hidden="true" tabindex="-1"></a>                     <span class="at">mean_sym=</span>mean_sym,</span>
+<span id="cb18-126"><a href="#cb18-126" aria-hidden="true" tabindex="-1"></a>                     <span class="at">slope_sym=</span>slope_sym,</span>
+<span id="cb18-127"><a href="#cb18-127" aria-hidden="true" tabindex="-1"></a>                     <span class="at">mean_word=</span>mean_word,</span>
+<span id="cb18-128"><a href="#cb18-128" aria-hidden="true" tabindex="-1"></a>                     <span class="at">slope_word=</span>slope_word)</span>
+<span id="cb18-129"><a href="#cb18-129" aria-hidden="true" tabindex="-1"></a>    vals} <span class="cf">else</span> {</span>
+<span id="cb18-130"><a href="#cb18-130" aria-hidden="true" tabindex="-1"></a>      sub_list<span class="ot">&lt;-</span><span class="fu">list</span>()</span>
+<span id="cb18-131"><a href="#cb18-131" aria-hidden="true" tabindex="-1"></a>      subs<span class="ot">&lt;-</span><span class="fu">unique</span>(df_dat<span class="sc">$</span>subnm)</span>
+<span id="cb18-132"><a href="#cb18-132" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(subs)){</span>
+<span id="cb18-133"><a href="#cb18-133" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="ot">&lt;-</span>df_dat[df_dat<span class="sc">$</span>subnm<span class="sc">==</span>subs[i],]</span>
+<span id="cb18-134"><a href="#cb18-134" aria-hidden="true" tabindex="-1"></a>        minyear<span class="ot">&lt;-</span><span class="fu">min</span>(<span class="fu">na.omit</span>(sub_df)<span class="sc">$</span>year)</span>
+<span id="cb18-135"><a href="#cb18-135" aria-hidden="true" tabindex="-1"></a>        maxyear<span class="ot">&lt;-</span><span class="fu">max</span>(<span class="fu">na.omit</span>(sub_df)<span class="sc">$</span>year)</span>
+<span id="cb18-136"><a href="#cb18-136" aria-hidden="true" tabindex="-1"></a>        allminyear<span class="ot">&lt;-</span><span class="fu">min</span>(df_dat<span class="sc">$</span>year)</span>
+<span id="cb18-137"><a href="#cb18-137" aria-hidden="true" tabindex="-1"></a>        allmaxyear<span class="ot">&lt;-</span><span class="fu">max</span>(df_dat<span class="sc">$</span>year)</span>
+<span id="cb18-138"><a href="#cb18-138" aria-hidden="true" tabindex="-1"></a>        mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb18-139"><a href="#cb18-139" aria-hidden="true" tabindex="-1"></a>        sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb18-140"><a href="#cb18-140" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb18-141"><a href="#cb18-141" aria-hidden="true" tabindex="-1"></a>        <span class="co">#Trend Analysis</span></span>
+<span id="cb18-142"><a href="#cb18-142" aria-hidden="true" tabindex="-1"></a>        last5<span class="ot">&lt;-</span>sub_df[sub_df<span class="sc">$</span>year <span class="sc">&gt;</span> <span class="fu">max</span>(sub_df<span class="sc">$</span>year)<span class="sc">-</span><span class="dv">5</span>,]</span>
+<span id="cb18-143"><a href="#cb18-143" aria-hidden="true" tabindex="-1"></a>        <span class="co">#Mean Trend</span></span>
+<span id="cb18-144"><a href="#cb18-144" aria-hidden="true" tabindex="-1"></a>        last5_mean<span class="ot">&lt;-</span><span class="fu">mean</span>(last5<span class="sc">$</span>value) <span class="co"># mean value last 5 years</span></span>
+<span id="cb18-145"><a href="#cb18-145" aria-hidden="true" tabindex="-1"></a>        mean_tr<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"ptPlus"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"ptMinus"</span>,<span class="st">"ptSolid"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb18-146"><a href="#cb18-146" aria-hidden="true" tabindex="-1"></a>        mean_sym<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"+"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"-"</span>,<span class="st">"●"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb18-147"><a href="#cb18-147" aria-hidden="true" tabindex="-1"></a>        mean_word<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"greater"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"below"</span>,<span class="st">"within"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb18-148"><a href="#cb18-148" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb18-149"><a href="#cb18-149" aria-hidden="true" tabindex="-1"></a>        <span class="co">#Slope Trend</span></span>
+<span id="cb18-150"><a href="#cb18-150" aria-hidden="true" tabindex="-1"></a>        lmout<span class="ot">&lt;-</span><span class="fu">summary</span>(<span class="fu">lm</span>(last5<span class="sc">$</span>value<span class="sc">~</span>last5<span class="sc">$</span>year))</span>
+<span id="cb18-151"><a href="#cb18-151" aria-hidden="true" tabindex="-1"></a>        last5_slope<span class="ot">&lt;-</span><span class="fu">coef</span>(lmout)[<span class="dv">2</span>,<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">5</span> <span class="co">#multiply by years in the trend (slope per year * number of years=rise over 5 years)</span></span>
+<span id="cb18-152"><a href="#cb18-152" aria-hidden="true" tabindex="-1"></a>        slope_tr<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"arrowUp"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"arrowDown"</span>,<span class="st">"arrowRight"</span>))</span>
+<span id="cb18-153"><a href="#cb18-153" aria-hidden="true" tabindex="-1"></a>        slope_sym<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"↑"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"↓"</span>,<span class="st">"→"</span>))</span>
+<span id="cb18-154"><a href="#cb18-154" aria-hidden="true" tabindex="-1"></a>        slope_word<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"an increasing"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"a decreasing"</span>,<span class="st">"a stable"</span>))</span>
+<span id="cb18-155"><a href="#cb18-155" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb18-156"><a href="#cb18-156" aria-hidden="true" tabindex="-1"></a>        vals<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">allminyear=</span>allminyear,</span>
+<span id="cb18-157"><a href="#cb18-157" aria-hidden="true" tabindex="-1"></a>                         <span class="at">allmaxyear=</span>allmaxyear,</span>
+<span id="cb18-158"><a href="#cb18-158" aria-hidden="true" tabindex="-1"></a>                         <span class="at">minyear=</span>minyear,</span>
+<span id="cb18-159"><a href="#cb18-159" aria-hidden="true" tabindex="-1"></a>                         <span class="at">maxyear=</span>maxyear,</span>
+<span id="cb18-160"><a href="#cb18-160" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mean=</span>mean,</span>
+<span id="cb18-161"><a href="#cb18-161" aria-hidden="true" tabindex="-1"></a>                         <span class="at">sd=</span>sd,</span>
+<span id="cb18-162"><a href="#cb18-162" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mean_tr=</span>mean_tr,</span>
+<span id="cb18-163"><a href="#cb18-163" aria-hidden="true" tabindex="-1"></a>                         <span class="at">slope_tr=</span>slope_tr,</span>
+<span id="cb18-164"><a href="#cb18-164" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mean_sym=</span>mean_sym,</span>
+<span id="cb18-165"><a href="#cb18-165" aria-hidden="true" tabindex="-1"></a>                         <span class="at">slope_sym=</span>slope_sym,</span>
+<span id="cb18-166"><a href="#cb18-166" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mean_word=</span>mean_word,</span>
+<span id="cb18-167"><a href="#cb18-167" aria-hidden="true" tabindex="-1"></a>                         <span class="at">slope_word=</span>slope_word,</span>
+<span id="cb18-168"><a href="#cb18-168" aria-hidden="true" tabindex="-1"></a>                         <span class="at">subnm=</span>subs[i])</span>
+<span id="cb18-169"><a href="#cb18-169" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb18-170"><a href="#cb18-170" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb18-171"><a href="#cb18-171" aria-hidden="true" tabindex="-1"></a>        sub_list[[i]]<span class="ot">&lt;-</span>vals</span>
+<span id="cb18-172"><a href="#cb18-172" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb18-173"><a href="#cb18-173" aria-hidden="true" tabindex="-1"></a>      vals<span class="ot">&lt;-</span><span class="fu">do.call</span>(<span class="st">"rbind"</span>,sub_list)</span>
+<span id="cb18-174"><a href="#cb18-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-175"><a href="#cb18-175" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb18-176"><a href="#cb18-176" aria-hidden="true" tabindex="-1"></a>  df_list<span class="sc">$</span>vals<span class="ot">&lt;-</span>vals</span>
+<span id="cb18-177"><a href="#cb18-177" aria-hidden="true" tabindex="-1"></a>  df_list</span>
+<span id="cb18-178"><a href="#cb18-178" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Test Functions on Data</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>peli_df<span class="ot">&lt;-</span><span class="fu">df_dat_fn</span>(peli)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>peli_pos<span class="ot">&lt;-</span><span class="fu">pos_fn</span>(peli_df)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>peli_neg<span class="ot">&lt;-</span><span class="fu">neg_fn</span>(peli_df)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>peli_lab<span class="ot">&lt;-</span>peli[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(peli))] <span class="co">#For example sake cutting to only col I need</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>peli_val<span class="ot">&lt;-</span><span class="fu">val_fn</span>(peli_df)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>test<span class="ot">&lt;-</span><span class="fu">plot_fn</span>(peli_df, peli_pos, peli_neg, peli_lab, peli_val)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(test)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Put different parts of the plot data into a list</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>peli_list<span class="ot">&lt;-</span><span class="fu">list</span>(peli_df, peli_pos, peli_neg, peli_lab, peli_val)</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(peli_list)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"data"</span>, <span class="st">"pos"</span>, <span class="st">"neg"</span>, <span class="st">"labs"</span>, <span class="st">"vals"</span>)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(peli_list)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(peli_list, <span class="st">"Peli_Obj.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data-prep" class="level2">
+<h2 class="anchored" data-anchor-id="data-prep">Data Prep</h2>
+<section id="megafunction" class="level3">
+<h3 class="anchored" data-anchor-id="megafunction">Megafunction</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>data_prep_fn <span class="ot">&lt;-</span><span class="cf">function</span> (df, list_nm) {</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  df_list<span class="ot">&lt;-</span><span class="fu">vector</span>(<span class="st">"list"</span>, <span class="dv">5</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(df_list)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"data"</span>, <span class="st">"pos"</span>, <span class="st">"neg"</span>, <span class="st">"labs"</span>, <span class="st">"vals"</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Data used for everything</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  df_dat<span class="ot">&lt;-</span>df[<span class="dv">4</span><span class="sc">:</span><span class="fu">nrow</span>(df),<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(df))] </span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">ncol</span>(df_dat)<span class="sc">&lt;</span><span class="fl">2.5</span>) {</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colnames</span>(df_dat)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"year"</span>,<span class="st">"value"</span>)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>value<span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value)</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>valence[df_dat<span class="sc">$</span>value<span class="sc">&gt;=</span>mean]<span class="ot">&lt;-</span><span class="st">"pos"</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>valence[df_dat<span class="sc">$</span>value<span class="sc">&lt;</span> mean]<span class="ot">&lt;-</span><span class="st">"neg"</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>min <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df_dat<span class="sc">$</span>value <span class="sc">&gt;=</span> mean, mean, df_dat<span class="sc">$</span>value)</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>max <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df_dat<span class="sc">$</span>value <span class="sc">&gt;=</span> mean, df_dat<span class="sc">$</span>value, mean)</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>    df_dat<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>year)</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>    df_dat} <span class="cf">else</span> {</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>      sub_list<span class="ot">&lt;-</span><span class="fu">list</span>() </span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span><span class="fu">ncol</span>(df_dat)){</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="ot">&lt;-</span>df_dat[,<span class="fu">c</span>(<span class="dv">1</span>,i)]</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>        df_lab<span class="ot">&lt;-</span>df[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,] <span class="co">#For example sake cutting to only col I need</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>        ind<span class="ot">&lt;-</span>df_lab[<span class="dv">3</span>,]</span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>        <span class="fu">colnames</span>(sub_df)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"year"</span>,<span class="st">"value"</span>)</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>        <span class="co"># sub_df$value&lt;- as.numeric(sub_df$value)</span></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(<span class="fu">lapply</span>(sub_df, as.numeric))</span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>        mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>        sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>valence[sub_df<span class="sc">$</span>value<span class="sc">&gt;=</span>mean]<span class="ot">&lt;-</span><span class="st">"pos"</span></span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>valence[sub_df<span class="sc">$</span>value<span class="sc">&lt;</span> mean]<span class="ot">&lt;-</span><span class="st">"neg"</span></span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>min <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(sub_df<span class="sc">$</span>value <span class="sc">&gt;=</span> mean, mean, sub_df<span class="sc">$</span>value)</span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>max <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(sub_df<span class="sc">$</span>value <span class="sc">&gt;=</span> mean, sub_df<span class="sc">$</span>value, mean)</span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>year <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>year)</span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="sc">$</span>subnm<span class="ot">&lt;-</span>ind[,i]</span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a>        sub_list[[i]]<span class="ot">&lt;-</span>sub_df</span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>      df_dat<span class="ot">&lt;-</span><span class="fu">do.call</span>(<span class="st">"rbind"</span>,sub_list)</span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a>  df_list<span class="sc">$</span>data<span class="ot">&lt;-</span>df_dat</span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a><span class="co">#Pos data set used for main plot</span></span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">ncol</span>(df_dat)<span class="sc">&lt;</span><span class="dv">6</span>){</span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a>    mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a>    sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a>    pos<span class="ot">&lt;-</span>df_dat</span>
+<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a>    pos<span class="sc">$</span>value<span class="ot">&lt;-</span><span class="fu">ifelse</span>(pos<span class="sc">$</span>valence <span class="sc">==</span> <span class="st">"pos"</span>,pos<span class="sc">$</span>value, mean)</span>
+<span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a>    pos} <span class="cf">else</span> {</span>
+<span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a>      sub_list<span class="ot">&lt;-</span><span class="fu">list</span>()</span>
+<span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a>      subs<span class="ot">&lt;-</span><span class="fu">unique</span>(df_dat<span class="sc">$</span>subnm)</span>
+<span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(subs)){</span>
+<span id="cb20-59"><a href="#cb20-59" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="ot">&lt;-</span>df_dat[df_dat<span class="sc">$</span>subnm<span class="sc">==</span>subs[i],]</span>
+<span id="cb20-60"><a href="#cb20-60" aria-hidden="true" tabindex="-1"></a>        mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb20-61"><a href="#cb20-61" aria-hidden="true" tabindex="-1"></a>        sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb20-62"><a href="#cb20-62" aria-hidden="true" tabindex="-1"></a>        pos<span class="ot">&lt;-</span>sub_df</span>
+<span id="cb20-63"><a href="#cb20-63" aria-hidden="true" tabindex="-1"></a>        pos<span class="sc">$</span>value<span class="ot">&lt;-</span><span class="fu">ifelse</span>(pos<span class="sc">$</span>valence <span class="sc">==</span> <span class="st">"pos"</span>,pos<span class="sc">$</span>value, mean)</span>
+<span id="cb20-64"><a href="#cb20-64" aria-hidden="true" tabindex="-1"></a>        pos<span class="sc">$</span>subnm<span class="ot">&lt;-</span>subs[i]</span>
+<span id="cb20-65"><a href="#cb20-65" aria-hidden="true" tabindex="-1"></a>        pos<span class="sc">$</span>mean<span class="ot">&lt;-</span>mean</span>
+<span id="cb20-66"><a href="#cb20-66" aria-hidden="true" tabindex="-1"></a>        pos<span class="sc">$</span>sd<span class="ot">&lt;-</span>sd</span>
+<span id="cb20-67"><a href="#cb20-67" aria-hidden="true" tabindex="-1"></a>        sub_list[[i]]<span class="ot">&lt;-</span>pos</span>
+<span id="cb20-68"><a href="#cb20-68" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb20-69"><a href="#cb20-69" aria-hidden="true" tabindex="-1"></a>      pos<span class="ot">&lt;-</span><span class="fu">do.call</span>(<span class="st">"rbind"</span>,sub_list)</span>
+<span id="cb20-70"><a href="#cb20-70" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb20-71"><a href="#cb20-71" aria-hidden="true" tabindex="-1"></a>      df_list<span class="sc">$</span>pos<span class="ot">&lt;-</span>pos</span>
+<span id="cb20-72"><a href="#cb20-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-73"><a href="#cb20-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-74"><a href="#cb20-74" aria-hidden="true" tabindex="-1"></a><span class="co">#Neg data set used for main plot</span></span>
+<span id="cb20-75"><a href="#cb20-75" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">ncol</span>(df_dat)<span class="sc">&lt;</span><span class="dv">6</span>){</span>
+<span id="cb20-76"><a href="#cb20-76" aria-hidden="true" tabindex="-1"></a>    mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb20-77"><a href="#cb20-77" aria-hidden="true" tabindex="-1"></a>    sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb20-78"><a href="#cb20-78" aria-hidden="true" tabindex="-1"></a>    neg<span class="ot">&lt;-</span>df_dat</span>
+<span id="cb20-79"><a href="#cb20-79" aria-hidden="true" tabindex="-1"></a>    neg<span class="sc">$</span>value<span class="ot">&lt;-</span><span class="fu">ifelse</span>(neg<span class="sc">$</span>valence <span class="sc">==</span> <span class="st">"neg"</span>,neg<span class="sc">$</span>value, mean)</span>
+<span id="cb20-80"><a href="#cb20-80" aria-hidden="true" tabindex="-1"></a>    neg} <span class="cf">else</span> {</span>
+<span id="cb20-81"><a href="#cb20-81" aria-hidden="true" tabindex="-1"></a>      sub_list<span class="ot">&lt;-</span><span class="fu">list</span>()</span>
+<span id="cb20-82"><a href="#cb20-82" aria-hidden="true" tabindex="-1"></a>      subs<span class="ot">&lt;-</span><span class="fu">unique</span>(df_dat<span class="sc">$</span>subnm)</span>
+<span id="cb20-83"><a href="#cb20-83" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(subs)){</span>
+<span id="cb20-84"><a href="#cb20-84" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="ot">&lt;-</span>df_dat[df_dat<span class="sc">$</span>subnm<span class="sc">==</span>subs[i],]</span>
+<span id="cb20-85"><a href="#cb20-85" aria-hidden="true" tabindex="-1"></a>        mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb20-86"><a href="#cb20-86" aria-hidden="true" tabindex="-1"></a>        sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb20-87"><a href="#cb20-87" aria-hidden="true" tabindex="-1"></a>        neg<span class="ot">&lt;-</span>sub_df</span>
+<span id="cb20-88"><a href="#cb20-88" aria-hidden="true" tabindex="-1"></a>        neg<span class="sc">$</span>value<span class="ot">&lt;-</span><span class="fu">ifelse</span>(neg<span class="sc">$</span>valence <span class="sc">==</span> <span class="st">"neg"</span>,neg<span class="sc">$</span>value, mean)</span>
+<span id="cb20-89"><a href="#cb20-89" aria-hidden="true" tabindex="-1"></a>        neg<span class="sc">$</span>subnm<span class="ot">&lt;-</span>subs[i]</span>
+<span id="cb20-90"><a href="#cb20-90" aria-hidden="true" tabindex="-1"></a>        neg<span class="sc">$</span>mean<span class="ot">&lt;-</span>mean</span>
+<span id="cb20-91"><a href="#cb20-91" aria-hidden="true" tabindex="-1"></a>        neg<span class="sc">$</span>sd<span class="ot">&lt;-</span>sd</span>
+<span id="cb20-92"><a href="#cb20-92" aria-hidden="true" tabindex="-1"></a>        sub_list[[i]]<span class="ot">&lt;-</span>neg</span>
+<span id="cb20-93"><a href="#cb20-93" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb20-94"><a href="#cb20-94" aria-hidden="true" tabindex="-1"></a>      neg<span class="ot">&lt;-</span><span class="fu">do.call</span>(<span class="st">"rbind"</span>,sub_list)</span>
+<span id="cb20-95"><a href="#cb20-95" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb20-96"><a href="#cb20-96" aria-hidden="true" tabindex="-1"></a>      df_list<span class="sc">$</span>neg<span class="ot">&lt;-</span>neg</span>
+<span id="cb20-97"><a href="#cb20-97" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb20-98"><a href="#cb20-98" aria-hidden="true" tabindex="-1"></a>df_list<span class="sc">$</span>labs<span class="ot">&lt;-</span>df[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(df))]</span>
+<span id="cb20-99"><a href="#cb20-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-100"><a href="#cb20-100" aria-hidden="true" tabindex="-1"></a><span class="co">#Independent values used throughout</span></span>
+<span id="cb20-101"><a href="#cb20-101" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">ncol</span>(df_dat)<span class="sc">&lt;</span><span class="dv">6</span>){</span>
+<span id="cb20-102"><a href="#cb20-102" aria-hidden="true" tabindex="-1"></a>    mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb20-103"><a href="#cb20-103" aria-hidden="true" tabindex="-1"></a>    sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(df_dat<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb20-104"><a href="#cb20-104" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb20-105"><a href="#cb20-105" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Trend Analysis</span></span>
+<span id="cb20-106"><a href="#cb20-106" aria-hidden="true" tabindex="-1"></a>    last5<span class="ot">&lt;-</span>df_dat[df_dat<span class="sc">$</span>year <span class="sc">&gt;</span> <span class="fu">max</span>(df_dat<span class="sc">$</span>year)<span class="sc">-</span><span class="dv">5</span>,]</span>
+<span id="cb20-107"><a href="#cb20-107" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Mean Trend</span></span>
+<span id="cb20-108"><a href="#cb20-108" aria-hidden="true" tabindex="-1"></a>    last5_mean<span class="ot">&lt;-</span><span class="fu">mean</span>(last5<span class="sc">$</span>value) <span class="co"># mean value last 5 years</span></span>
+<span id="cb20-109"><a href="#cb20-109" aria-hidden="true" tabindex="-1"></a>    mean_tr<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"ptPlus"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"ptMinus"</span>,<span class="st">"ptSolid"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb20-110"><a href="#cb20-110" aria-hidden="true" tabindex="-1"></a>    mean_sym<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"+"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"-"</span>,<span class="st">"●"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb20-111"><a href="#cb20-111" aria-hidden="true" tabindex="-1"></a>    mean_word<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"greater"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"below"</span>,<span class="st">"within"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb20-112"><a href="#cb20-112" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb20-113"><a href="#cb20-113" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Slope Trend</span></span>
+<span id="cb20-114"><a href="#cb20-114" aria-hidden="true" tabindex="-1"></a>    lmout<span class="ot">&lt;-</span><span class="fu">summary</span>(<span class="fu">lm</span>(last5<span class="sc">$</span>value<span class="sc">~</span>last5<span class="sc">$</span>year))</span>
+<span id="cb20-115"><a href="#cb20-115" aria-hidden="true" tabindex="-1"></a>    last5_slope<span class="ot">&lt;-</span><span class="fu">coef</span>(lmout)[<span class="dv">2</span>,<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">5</span> <span class="co">#multiply by years in the trend (slope per year * number of years=rise over 5 years)</span></span>
+<span id="cb20-116"><a href="#cb20-116" aria-hidden="true" tabindex="-1"></a>    slope_tr<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"arrowUp"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"arrowDown"</span>,<span class="st">"arrowRight"</span>))</span>
+<span id="cb20-117"><a href="#cb20-117" aria-hidden="true" tabindex="-1"></a>    slope_sym<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"↑"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"↓"</span>,<span class="st">"→"</span>))</span>
+<span id="cb20-118"><a href="#cb20-118" aria-hidden="true" tabindex="-1"></a>    slope_word<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"an increasing"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"a decreasing"</span>,<span class="st">"a stable"</span>))</span>
+<span id="cb20-119"><a href="#cb20-119" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb20-120"><a href="#cb20-120" aria-hidden="true" tabindex="-1"></a>    <span class="co">#Dataframe</span></span>
+<span id="cb20-121"><a href="#cb20-121" aria-hidden="true" tabindex="-1"></a>    vals<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">mean=</span>mean,</span>
+<span id="cb20-122"><a href="#cb20-122" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sd=</span>sd,</span>
+<span id="cb20-123"><a href="#cb20-123" aria-hidden="true" tabindex="-1"></a>                     <span class="at">mean_tr=</span>mean_tr,</span>
+<span id="cb20-124"><a href="#cb20-124" aria-hidden="true" tabindex="-1"></a>                     <span class="at">slope_tr=</span>slope_tr,</span>
+<span id="cb20-125"><a href="#cb20-125" aria-hidden="true" tabindex="-1"></a>                     <span class="at">mean_sym=</span>mean_sym,</span>
+<span id="cb20-126"><a href="#cb20-126" aria-hidden="true" tabindex="-1"></a>                     <span class="at">slope_sym=</span>slope_sym,</span>
+<span id="cb20-127"><a href="#cb20-127" aria-hidden="true" tabindex="-1"></a>                     <span class="at">mean_word=</span>mean_word,</span>
+<span id="cb20-128"><a href="#cb20-128" aria-hidden="true" tabindex="-1"></a>                     <span class="at">slope_word=</span>slope_word)</span>
+<span id="cb20-129"><a href="#cb20-129" aria-hidden="true" tabindex="-1"></a>    vals} <span class="cf">else</span> {</span>
+<span id="cb20-130"><a href="#cb20-130" aria-hidden="true" tabindex="-1"></a>      sub_list<span class="ot">&lt;-</span><span class="fu">list</span>()</span>
+<span id="cb20-131"><a href="#cb20-131" aria-hidden="true" tabindex="-1"></a>      subs<span class="ot">&lt;-</span><span class="fu">unique</span>(df_dat<span class="sc">$</span>subnm)</span>
+<span id="cb20-132"><a href="#cb20-132" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(subs)){</span>
+<span id="cb20-133"><a href="#cb20-133" aria-hidden="true" tabindex="-1"></a>        sub_df<span class="ot">&lt;-</span>df_dat[df_dat<span class="sc">$</span>subnm<span class="sc">==</span>subs[i],]</span>
+<span id="cb20-134"><a href="#cb20-134" aria-hidden="true" tabindex="-1"></a>        minyear<span class="ot">&lt;-</span><span class="fu">min</span>(<span class="fu">na.omit</span>(sub_df)<span class="sc">$</span>year)</span>
+<span id="cb20-135"><a href="#cb20-135" aria-hidden="true" tabindex="-1"></a>        maxyear<span class="ot">&lt;-</span><span class="fu">max</span>(<span class="fu">na.omit</span>(sub_df)<span class="sc">$</span>year)</span>
+<span id="cb20-136"><a href="#cb20-136" aria-hidden="true" tabindex="-1"></a>        allminyear<span class="ot">&lt;-</span><span class="fu">min</span>(df_dat<span class="sc">$</span>year)</span>
+<span id="cb20-137"><a href="#cb20-137" aria-hidden="true" tabindex="-1"></a>        allmaxyear<span class="ot">&lt;-</span><span class="fu">max</span>(df_dat<span class="sc">$</span>year)</span>
+<span id="cb20-138"><a href="#cb20-138" aria-hidden="true" tabindex="-1"></a>        mean<span class="ot">&lt;-</span><span class="fu">mean</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb20-139"><a href="#cb20-139" aria-hidden="true" tabindex="-1"></a>        sd<span class="ot">&lt;-</span><span class="fu">sd</span>(<span class="fu">as.numeric</span>(sub_df<span class="sc">$</span>value), <span class="at">na.rm =</span> T)</span>
+<span id="cb20-140"><a href="#cb20-140" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb20-141"><a href="#cb20-141" aria-hidden="true" tabindex="-1"></a>        <span class="co">#Trend Analysis</span></span>
+<span id="cb20-142"><a href="#cb20-142" aria-hidden="true" tabindex="-1"></a>        last5<span class="ot">&lt;-</span>sub_df[sub_df<span class="sc">$</span>year <span class="sc">&gt;</span> <span class="fu">max</span>(sub_df<span class="sc">$</span>year)<span class="sc">-</span><span class="dv">5</span>,]</span>
+<span id="cb20-143"><a href="#cb20-143" aria-hidden="true" tabindex="-1"></a>        <span class="co">#Mean Trend</span></span>
+<span id="cb20-144"><a href="#cb20-144" aria-hidden="true" tabindex="-1"></a>        last5_mean<span class="ot">&lt;-</span><span class="fu">mean</span>(last5<span class="sc">$</span>value) <span class="co"># mean value last 5 years</span></span>
+<span id="cb20-145"><a href="#cb20-145" aria-hidden="true" tabindex="-1"></a>        mean_tr<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"ptPlus"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"ptMinus"</span>,<span class="st">"ptSolid"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb20-146"><a href="#cb20-146" aria-hidden="true" tabindex="-1"></a>        mean_sym<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"+"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"-"</span>,<span class="st">"●"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb20-147"><a href="#cb20-147" aria-hidden="true" tabindex="-1"></a>        mean_word<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_mean<span class="sc">&gt;</span>mean<span class="sc">+</span>sd, <span class="st">"greater"</span>, <span class="fu">if_else</span>(last5_mean<span class="sc">&lt;</span>mean<span class="sc">-</span>sd, <span class="st">"below"</span>,<span class="st">"within"</span>)) <span class="co">#qualify mean trend</span></span>
+<span id="cb20-148"><a href="#cb20-148" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb20-149"><a href="#cb20-149" aria-hidden="true" tabindex="-1"></a>        <span class="co">#Slope Trend</span></span>
+<span id="cb20-150"><a href="#cb20-150" aria-hidden="true" tabindex="-1"></a>        lmout<span class="ot">&lt;-</span><span class="fu">summary</span>(<span class="fu">lm</span>(last5<span class="sc">$</span>value<span class="sc">~</span>last5<span class="sc">$</span>year))</span>
+<span id="cb20-151"><a href="#cb20-151" aria-hidden="true" tabindex="-1"></a>        last5_slope<span class="ot">&lt;-</span><span class="fu">coef</span>(lmout)[<span class="dv">2</span>,<span class="dv">1</span>] <span class="sc">*</span> <span class="dv">5</span> <span class="co">#multiply by years in the trend (slope per year * number of years=rise over 5 years)</span></span>
+<span id="cb20-152"><a href="#cb20-152" aria-hidden="true" tabindex="-1"></a>        slope_tr<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"arrowUp"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"arrowDown"</span>,<span class="st">"arrowRight"</span>))</span>
+<span id="cb20-153"><a href="#cb20-153" aria-hidden="true" tabindex="-1"></a>        slope_sym<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"↑"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"↓"</span>,<span class="st">"→"</span>))</span>
+<span id="cb20-154"><a href="#cb20-154" aria-hidden="true" tabindex="-1"></a>        slope_word<span class="ot">&lt;-</span><span class="fu">if_else</span>(last5_slope<span class="sc">&gt;</span>sd, <span class="st">"an increasing"</span>, <span class="fu">if_else</span>(last5_slope<span class="sc">&lt;</span> <span class="fu">c</span>(<span class="sc">-</span>sd), <span class="st">"a decreasing"</span>,<span class="st">"a stable"</span>))</span>
+<span id="cb20-155"><a href="#cb20-155" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb20-156"><a href="#cb20-156" aria-hidden="true" tabindex="-1"></a>        vals<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">allminyear=</span>allminyear,</span>
+<span id="cb20-157"><a href="#cb20-157" aria-hidden="true" tabindex="-1"></a>                         <span class="at">allmaxyear=</span>allmaxyear,</span>
+<span id="cb20-158"><a href="#cb20-158" aria-hidden="true" tabindex="-1"></a>                         <span class="at">minyear=</span>minyear,</span>
+<span id="cb20-159"><a href="#cb20-159" aria-hidden="true" tabindex="-1"></a>                         <span class="at">maxyear=</span>maxyear,</span>
+<span id="cb20-160"><a href="#cb20-160" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mean=</span>mean,</span>
+<span id="cb20-161"><a href="#cb20-161" aria-hidden="true" tabindex="-1"></a>                         <span class="at">sd=</span>sd,</span>
+<span id="cb20-162"><a href="#cb20-162" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mean_tr=</span>mean_tr,</span>
+<span id="cb20-163"><a href="#cb20-163" aria-hidden="true" tabindex="-1"></a>                         <span class="at">slope_tr=</span>slope_tr,</span>
+<span id="cb20-164"><a href="#cb20-164" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mean_sym=</span>mean_sym,</span>
+<span id="cb20-165"><a href="#cb20-165" aria-hidden="true" tabindex="-1"></a>                         <span class="at">slope_sym=</span>slope_sym,</span>
+<span id="cb20-166"><a href="#cb20-166" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mean_word=</span>mean_word,</span>
+<span id="cb20-167"><a href="#cb20-167" aria-hidden="true" tabindex="-1"></a>                         <span class="at">slope_word=</span>slope_word,</span>
+<span id="cb20-168"><a href="#cb20-168" aria-hidden="true" tabindex="-1"></a>                         <span class="at">subnm=</span>subs[i])</span>
+<span id="cb20-169"><a href="#cb20-169" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb20-170"><a href="#cb20-170" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb20-171"><a href="#cb20-171" aria-hidden="true" tabindex="-1"></a>        sub_list[[i]]<span class="ot">&lt;-</span>vals</span>
+<span id="cb20-172"><a href="#cb20-172" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb20-173"><a href="#cb20-173" aria-hidden="true" tabindex="-1"></a>      vals<span class="ot">&lt;-</span><span class="fu">do.call</span>(<span class="st">"rbind"</span>,sub_list)</span>
+<span id="cb20-174"><a href="#cb20-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-175"><a href="#cb20-175" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb20-176"><a href="#cb20-176" aria-hidden="true" tabindex="-1"></a>  df_list<span class="sc">$</span>vals<span class="ot">&lt;-</span>vals</span>
+<span id="cb20-177"><a href="#cb20-177" aria-hidden="true" tabindex="-1"></a>  df_list</span>
+<span id="cb20-178"><a href="#cb20-178" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="load-plot-fn-for-objects" class="level3">
+<h3 class="anchored" data-anchor-id="load-plot-fn-for-objects">Load Plot Fn for Objects</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>plot_fn_obj<span class="ot">&lt;-</span><span class="cf">function</span>(df_obj) {</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">ncol</span>(df_obj<span class="sc">$</span>data)<span class="sc">&lt;</span><span class="fl">5.5</span>){</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">#single plot</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    plot_main<span class="ot">&lt;-</span><span class="fu">ggplot</span>(<span class="at">data=</span>df_obj<span class="sc">$</span>data, <span class="fu">aes</span>(<span class="at">x=</span>year, <span class="at">y=</span>value))<span class="sc">+</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_ribbon</span>(<span class="at">data=</span>df_obj<span class="sc">$</span>pos, <span class="fu">aes</span>(<span class="at">group=</span><span class="dv">1</span>,<span class="at">ymax=</span>max, <span class="at">ymin=</span>df_obj<span class="sc">$</span>vals<span class="sc">$</span>mean),<span class="at">fill=</span><span class="st">"#7FFF7F"</span>)<span class="sc">+</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_ribbon</span>(<span class="at">data=</span>df_obj<span class="sc">$</span>neg, <span class="fu">aes</span>(<span class="at">group=</span><span class="dv">1</span>,<span class="at">ymax=</span>df_obj<span class="sc">$</span>vals<span class="sc">$</span>mean, <span class="at">ymin=</span>min), <span class="at">fill=</span><span class="st">"#FF7F7F"</span>)<span class="sc">+</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_rect</span>(<span class="fu">aes</span>(<span class="at">xmin=</span><span class="fu">min</span>(df_obj<span class="sc">$</span>data<span class="sc">$</span>year),<span class="at">xmax=</span><span class="fu">max</span>(df_obj<span class="sc">$</span>data<span class="sc">$</span>year),<span class="at">ymin=</span>df_obj<span class="sc">$</span>vals<span class="sc">$</span>mean<span class="sc">-</span>df_obj<span class="sc">$</span>vals<span class="sc">$</span>sd, <span class="at">ymax=</span>df_obj<span class="sc">$</span>vals<span class="sc">$</span>mean<span class="sc">+</span>df_obj<span class="sc">$</span>vals<span class="sc">$</span>sd), <span class="at">fill=</span><span class="st">"white"</span>)<span class="sc">+</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>df_obj<span class="sc">$</span>vals<span class="sc">$</span>mean, <span class="at">lty=</span><span class="st">"dashed"</span>)<span class="sc">+</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>df_obj<span class="sc">$</span>vals<span class="sc">$</span>mean<span class="sc">+</span>df_obj<span class="sc">$</span>vals<span class="sc">$</span>sd)<span class="sc">+</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>df_obj<span class="sc">$</span>vals<span class="sc">$</span>mean<span class="sc">-</span>df_obj<span class="sc">$</span>vals<span class="sc">$</span>sd)<span class="sc">+</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group=</span><span class="dv">1</span>), <span class="at">lwd=</span><span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Year"</span>, <span class="at">y=</span>df_obj<span class="sc">$</span>labs[<span class="dv">2</span>,<span class="dv">2</span>], <span class="at">title =</span> df_obj<span class="sc">$</span>labs[<span class="dv">1</span>,<span class="dv">2</span>])<span class="sc">+</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">max</span>(df_obj<span class="sc">$</span>data<span class="sc">$</span>year)<span class="sc">-</span><span class="fu">min</span>(df_obj<span class="sc">$</span>data<span class="sc">$</span>year)<span class="sc">&gt;</span><span class="dv">20</span>) {</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>      plot_main<span class="ot">&lt;-</span>plot_main<span class="sc">+</span><span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fu">min</span>(df_obj<span class="sc">$</span>data<span class="sc">$</span>year),<span class="fu">max</span>(df_obj<span class="sc">$</span>data<span class="sc">$</span>year),<span class="dv">5</span>))</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>      plot_main<span class="ot">&lt;-</span>plot_main<span class="sc">+</span><span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fu">min</span>(df_obj<span class="sc">$</span>data<span class="sc">$</span>year),<span class="fu">max</span>(df_obj<span class="sc">$</span>data<span class="sc">$</span>year),<span class="dv">2</span>))</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>    plot_main</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">#facet plot</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>    plot_sec<span class="ot">&lt;-</span><span class="fu">ggplot</span>(<span class="at">data=</span>df_obj<span class="sc">$</span>data, <span class="fu">aes</span>(<span class="at">x=</span>year, <span class="at">y=</span>value))<span class="sc">+</span></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">facet_wrap</span>(<span class="sc">~</span>subnm, <span class="at">ncol=</span><span class="dv">1</span>, <span class="at">scales =</span> <span class="st">"free_y"</span>)<span class="sc">+</span></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_ribbon</span>(<span class="at">data=</span>df_obj<span class="sc">$</span>pos, <span class="fu">aes</span>(<span class="at">group=</span>subnm,<span class="at">ymax=</span>max, <span class="at">ymin=</span>mean),<span class="at">fill=</span><span class="st">"#7FFF7F"</span>)<span class="sc">+</span></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_ribbon</span>(<span class="at">data=</span>df_obj<span class="sc">$</span>neg, <span class="fu">aes</span>(<span class="at">group=</span>subnm,<span class="at">ymax=</span>mean, <span class="at">ymin=</span>min), <span class="at">fill=</span><span class="st">"#FF7F7F"</span>)<span class="sc">+</span></span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_rect</span>(<span class="at">data=</span><span class="fu">merge</span>(df_obj<span class="sc">$</span>data,df_obj<span class="sc">$</span>vals), <span class="fu">aes</span>(<span class="at">xmin=</span>allminyear,<span class="at">xmax=</span>allmaxyear,<span class="at">ymin=</span>mean<span class="sc">-</span>sd, <span class="at">ymax=</span>mean<span class="sc">+</span>sd), <span class="at">fill=</span><span class="st">"white"</span>)<span class="sc">+</span></span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept=</span>mean), <span class="at">lty=</span><span class="st">"dashed"</span>,<span class="at">data=</span>df_obj<span class="sc">$</span>vals)<span class="sc">+</span></span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept=</span>mean<span class="sc">+</span>sd),<span class="at">data=</span>df_obj<span class="sc">$</span>vals)<span class="sc">+</span></span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_hline</span>(<span class="fu">aes</span>(<span class="at">yintercept=</span>mean<span class="sc">-</span>sd),<span class="at">data=</span>df_obj<span class="sc">$</span>vals)<span class="sc">+</span></span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group=</span><span class="dv">1</span>), <span class="at">lwd=</span><span class="fl">0.75</span>)<span class="sc">+</span></span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Year"</span>, <span class="at">y=</span>df_obj<span class="sc">$</span>labs[<span class="dv">2</span>,<span class="dv">2</span>], <span class="at">title =</span> df_obj<span class="sc">$</span>labs[<span class="dv">1</span>,<span class="dv">2</span>])<span class="sc">+</span></span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_bw</span>()<span class="sc">+</span><span class="fu">theme</span>(<span class="at">strip.background =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a>                       <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face=</span><span class="st">"bold"</span>),</span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>                       <span class="at">title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">max</span>(df_obj<span class="sc">$</span>data<span class="sc">$</span>year)<span class="sc">-</span><span class="fu">min</span>(df_obj<span class="sc">$</span>data<span class="sc">$</span>year)<span class="sc">&gt;</span><span class="dv">20</span>) {</span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a>      plot_sec<span class="ot">&lt;-</span>plot_sec<span class="sc">+</span><span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fu">min</span>(df_obj<span class="sc">$</span>data<span class="sc">$</span>year),<span class="fu">max</span>(df_obj<span class="sc">$</span>data<span class="sc">$</span>year),<span class="dv">5</span>))</span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a>      <span class="co"># plot_sec&lt;-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),2))</span></span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a>    plot_sec</span>
+<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="run-on-datasets" class="level3">
+<h3 class="anchored" data-anchor-id="run-on-datasets">Run on Datasets</h3>
+<ul>
+<li>Eventually add a save.as argument to save as .rds or .r</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>blcrab_li<span class="ot">&lt;-</span><span class="fu">data_prep_fn</span>(crab)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>brpeli_li<span class="ot">&lt;-</span><span class="fu">data_prep_fn</span>(peli)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>nav_li<span class="ot">&lt;-</span><span class="fu">data_prep_fn</span>(nav)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>oilsp_li<span class="ot">&lt;-</span><span class="fu">data_prep_fn</span>(oilspill)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>oystercat_li<span class="ot">&lt;-</span><span class="fu">data_prep_fn</span>(oyster)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>persmbusi_li<span class="ot">&lt;-</span><span class="fu">data_prep_fn</span>(sml_bus)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>rdrum_li<span class="ot">&lt;-</span><span class="fu">data_prep_fn</span>(red_drum)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>vesfish_li<span class="ot">&lt;-</span><span class="fu">data_prep_fn</span>(ves_deal)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co">#save files as RDS</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(blcrab_li, <span class="st">"blcrab_li.rds"</span>)</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(brpeli_li, <span class="st">"brpeli_li.rds"</span>)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(nav_li, <span class="st">"nav_li.rds"</span>)</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(oilsp_li, <span class="st">"oilsp_li.rds"</span>)</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(oystercat_li, <span class="st">"oystercat_li.rds"</span>)</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(persmbusi_li, <span class="st">"persmbusi_li.rds"</span>)</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(rdrum_li, <span class="st">"rdrum_li.rds"</span>)</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(vesfish_li, <span class="st">"vesfish_li.rds"</span>)</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="co">#save files as R</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="fu">dput</span>(blcrab_li, <span class="st">"Data_R/blcrab_li.r"</span>)</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a><span class="fu">dput</span>(brpeli_li, <span class="st">"Data_R/brpeli_li.r"</span>)</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a><span class="fu">dput</span>(nav_li, <span class="st">"Data_R/nav_li.r"</span>)</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a><span class="fu">dput</span>(oilsp_li, <span class="st">"Data_R/oilsp_li.r"</span>)</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a><span class="fu">dput</span>(oystercat_li, <span class="st">"Data_R/oystercat_li.r"</span>)</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a><span class="fu">dput</span>(persmbusi_li, <span class="st">"Data_R/persmbusi_li.r"</span>)</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a><span class="fu">dput</span>(rdrum_li, <span class="st">"Data_R/rdrum_li.r"</span>)</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a><span class="fu">dput</span>(vesfish_li, <span class="st">"Data_R/vesfish_li.r"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
