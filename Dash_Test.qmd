@@ -102,8 +102,8 @@ colnames(dat_shrt_nms)<-c("short", "long")
   #####Load Data Separately#####
   get_data <- reactive({
     shrt_nm<-dat_shrt_nms$short[dat_shrt_nms$long==input$data]
-    filename <- paste0("Data_Obj/Data_R/",shrt_nm, "_li.rds")
-    dat_df<-source(filename)
+    filename <- paste0("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/",shrt_nm, "_li.r")
+    dat_df<-source(url(filename))
     return(dat_df)
   })
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>First_Page – BB ESR Data Viz</title>
+<title>Mini_Dash – BB ESR Data Viz</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -98,7 +132,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./First_Page.html" aria-current="page"> 
+    <a class="nav-link" href="./First_Page.html"> 
 <span class="menu-text">First_Page</span></a>
   </li>  
   <li class="nav-item">
@@ -116,21 +150,15 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#app-3" id="toc-app-3" class="nav-link active" data-scroll-target="#app-3">App 3</a></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">First_Page</h1>
+<h1 class="title">Mini_Dash</h1>
 </div>
 
 
@@ -147,59 +175,67 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="app-3" class="level2">
-<h2 class="anchored" data-anchor-id="app-3">App 3</h2>
+<p>THIS IS A TEST</p>
+<div class="cell" data-knit="false">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data_url <span class="ot">&lt;-</span> <span class="st">"https://github.com/BrittanyTroast-NOAA/BBESR_DataViz/raw/main/Data_Obj/brpeli_li.rds"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">download.file</span>(data_url, <span class="st">"brpeli_li.rds"</span>, <span class="at">mode =</span> )</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    dat<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">"brpeli_li.rds"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dput</span>(<span class="fu">readRDS</span>(<span class="st">'brpeli_li.rds'</span>), <span class="at">file=</span><span class="st">'hello.r'</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">readRDS</span>(<span class="fu">url</span>(data_url))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">dput</span>(<span class="fu">readRDS</span>(<span class="fu">url</span>(data_url), <span class="st">"rb"</span>), <span class="at">file=</span><span class="st">"pel2.r"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>test<span class="ot">&lt;-</span><span class="fu">source</span>(<span class="st">"pel2.r"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>test<span class="sc">$</span>value<span class="sc">$</span>data</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    test<span class="ot">&lt;-</span><span class="fu">source</span>(<span class="fu">url</span>(<span class="st">"https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/pel2.r"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
 #| viewerHeight: 600
+## file: app.R
 library(shiny)
-library(bslib)
 
-# Define UI for app that draws a histogram ----
-ui &lt;- page_sidebar(
-  # App title ----
-  title = "Hello Shiny!",
-  # Sidebar panel for inputs ----
-  sidebar = sidebar(
-    # Input: Slider for the number of bins ----
-    sliderInput(
-      inputId = "bins",
-      label = "Number of bins:",
-      min = 1,
-      max = 50,
-      value = 30
-    )
-  ),
-  # Output: Histogram ----
-  plotOutput(outputId = "distPlot", width="80%")
+ui &lt;- fluidPage(
+  titlePanel("Hello Shiny!"),
+  # h3("Data URL"),
+  # verbatimTextOutput("urlText"),
+  # h3("Working Directory"),
+  # verbatimTextOutput("workingDirectory"),
+  # h3("File System Information"),
+  # verbatimTextOutput("fileSystem"),
+  h3("Downloaded Data by Relative URL"),
+  verbatimTextOutput("retrievedData")
 )
 
-server &lt;- function(input, output) {
+server &lt;- function(input, output, session) {
+  
+  # data_url &lt;- "https://github.com/BrittanyTroast-NOAA/BBESR_DataViz/blob/main/Data_Obj/Data_CSV/brown_peli.csv"
+  # 
+  # output$urlText &lt;- renderText({
+  #   data_url
+  # })
+  # 
+  # output$fileSystem &lt;- renderPrint({
+  #   list.files()
+  # })
+  # 
+  # output$workingDirectory &lt;- renderPrint({
+  #   getwd()
+  # })
 
-  # Histogram of the Old Faithful Geyser Data ----
-  # with requested number of bins
-  # This expression that generates a histogram is wrapped in a call
-  # to renderPlot to indicate that:
-  #
-  # 1. It is "reactive" and therefore should be automatically
-  #    re-executed when inputs (input$bins) change
-  # 2. Its output type is a plot
-  output$distPlot &lt;- renderPlot({
-
-    x    &lt;- faithful$waiting
-    bins &lt;- seq(min(x), max(x), length.out = input$bins + 1)
-
-    hist(x, breaks = bins, col = "yellow", border = "green",
-         xlab = "Waiting time to next eruption (in mins)",
-         main = "Second app on page?")
-
-    })
-
+  output$retrievedData &lt;- renderPrint({
+    test&lt;-source(url("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/pel2.r"))
+    test$value$data
+  })
+  
 }
 
+# Create Shiny app ----
 shinyApp(ui = ui, server = server)</code></pre>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

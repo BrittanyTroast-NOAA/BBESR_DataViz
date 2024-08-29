@@ -321,8 +321,8 @@ The following object is masked from 'package:graphics':
 <span id="cb15-88"><a href="#cb15-88" aria-hidden="true" tabindex="-1"></a>  <span class="do">#####Load Data Separately#####</span></span>
 <span id="cb15-89"><a href="#cb15-89" aria-hidden="true" tabindex="-1"></a>  get_data <span class="ot">&lt;-</span> <span class="fu">reactive</span>({</span>
 <span id="cb15-90"><a href="#cb15-90" aria-hidden="true" tabindex="-1"></a>    shrt_nm<span class="ot">&lt;-</span>dat_shrt_nms<span class="sc">$</span>short[dat_shrt_nms<span class="sc">$</span>long<span class="sc">==</span>input<span class="sc">$</span>data]</span>
-<span id="cb15-91"><a href="#cb15-91" aria-hidden="true" tabindex="-1"></a>    filename <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"Data_Obj/Data_R/"</span>,shrt_nm, <span class="st">"_li.rds"</span>)</span>
-<span id="cb15-92"><a href="#cb15-92" aria-hidden="true" tabindex="-1"></a>    dat_df<span class="ot">&lt;-</span><span class="fu">source</span>(filename)</span>
+<span id="cb15-91"><a href="#cb15-91" aria-hidden="true" tabindex="-1"></a>    filename <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/"</span>,shrt_nm, <span class="st">"_li.r"</span>)</span>
+<span id="cb15-92"><a href="#cb15-92" aria-hidden="true" tabindex="-1"></a>    dat_df<span class="ot">&lt;-</span><span class="fu">source</span>(<span class="fu">url</span>(filename))</span>
 <span id="cb15-93"><a href="#cb15-93" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(dat_df)</span>
 <span id="cb15-94"><a href="#cb15-94" aria-hidden="true" tabindex="-1"></a>  })</span>
 <span id="cb15-95"><a href="#cb15-95" aria-hidden="true" tabindex="-1"></a></span>
@@ -347,14 +347,7 @@ The following object is masked from 'package:graphics':
 <div class="cell-output cell-output-stderr">
 <pre><code>PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.
 
-Listening on http://127.0.0.1:6851</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in file(filename, "r", encoding = encoding): cannot open file
-'Data_Obj/Data_R/oilsp_li.rds': No such file or directory</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Error in file: cannot open the connection</code></pre>
+Listening on http://127.0.0.1:4326</code></pre>
 </div>
 <div class="cell-output-display">
 <div>
