@@ -8,11 +8,14 @@ filters:
   - shinylive
 ---
 
-```{r}
+```{shinylive-r}
 #| standalone: true
-library(tidyverse)
+#| viewerHeight: 600
+
+library(ggplot2)
 library(plotly)
 library(shiny)
+library(bslib)
 
 ui <- fluidPage(
   selectInput("data", label = h2("Choose Indicator:", style = "font-size:20px;"), 

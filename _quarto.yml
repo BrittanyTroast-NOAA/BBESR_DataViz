@@ -1,18 +1,19 @@
 project:
   type: website
-  output-dir: docs
-  
+  output-dir: _site
+
 website:
-  title: "BB ESR Data Viz"
-  navbar: 
-    left: 
+  title: "Data inclusion TUTORIAL"
+  sidebar:
+    style: "floating"
+    contents:
       - href: index.qmd
-        text: "Home"
-      - First_Page.qmd
-      - Dash_Test.qmd
-      
-format:
-  html:
-    theme: superhero
-    css: styles.css
-    toc: true
+        text: Home
+      - href: Copy_Tut.qmd
+        text: Replicate Tutorial
+      - href: Test_App.qmd
+        text: Plot Data
+
+# Attach shinylive to every page
+filters:
+  - shinylive

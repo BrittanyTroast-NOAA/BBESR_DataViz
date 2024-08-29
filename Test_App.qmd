@@ -1,0 +1,40 @@
+---
+title: "Test_App"
+format:
+  html:
+    resources: 
+      - shinylive-sw.js  # Required to publish the shinylive service worker
+filters:
+  - shinylive
+---
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 600
+library(shiny)
+library(ggplot2)
+
+ui <- fluidPage(
+  plotOutput("plot1")
+)
+
+server <- function(input, output, session) {
+  
+    data_url <- "https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/brpeli_li.r"
+
+  output$plot1<- renderPlot({
+    
+    dat<-source(url(data_url))
+    dat_df<-dat$value$data
+    
+    
+    ggplot(dat_df, aes(x=year, y=value))+
+      geom_point(color="darkturquoise")
+  })
+  
+}
+
+shinyApp(ui, server)
+
+```
+
