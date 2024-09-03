@@ -157,31 +157,39 @@ ul.task-list li input[type="checkbox"] {
 
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
 #| viewerHeight: 600
+#| 
 library(shiny)
 library(ggplot2)
+library(plotly)
 
 ui &lt;- fluidPage(
-  plotOutput("plot1")
+  selectInput("data", label="Choose Data", choices=c("brpeli", "blcrab")),
+  plotlyOutput("plot1"),
+  textOutput("testing")
 )
 
 server &lt;- function(input, output, session) {
-  
-    data_url &lt;- "https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/brpeli_li.r"
 
-  output$plot1&lt;- renderPlot({
-    
-    dat&lt;-source(url(data_url))
-    dat_df&lt;-dat$value$data
-    
-    
-    ggplot(dat_df, aes(x=year, y=value))+
-      geom_point(color="darkturquoise")
-  })
-  
+  # test_input&lt;- reactive({input$data})
+  # data_url &lt;- "https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/blcrab_li.r"
+  data_url &lt;-reactive({paste0("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/",input$data,"_li.r")})
+  dat&lt;-reactive({source(url(data_url()))})
+
+  # crab&lt;-"https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/blcrab_li.r"
+  # peli&lt;-"https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/brpeli_li.r"
+
+output$plot1&lt;- renderPlotly({
+  test_dat&lt;-dat()$value$data
+
+  toplot&lt;-ggplot(test_dat, aes(x=year, y=value))+
+    geom_point(color="darkturquoise")
+    ly_plot&lt;-ggplotly(toplot)
+    ly_plot
+
+    })
 }
 
-shinyApp(ui, server)
-</code></pre>
+shinyApp(ui, server)</code></pre>
 
 
 
