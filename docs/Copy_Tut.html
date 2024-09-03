@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -196,6 +230,60 @@ server &lt;- function(input, output, session) {
 
 # Create Shiny app ----
 shinyApp(ui = ui, server = server)</code></pre>
+<p>Scratch Pad</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  peli<span class="ot">&lt;-</span><span class="st">"https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/brpeli_li.r"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>test<span class="ot">&lt;-</span><span class="fu">source</span>(<span class="fu">url</span>(peli))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>test<span class="sc">$</span>value<span class="sc">$</span>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   year value valence      min      max
+4  1971    11     neg   11.000 1072.487
+5  1972    23     neg   23.000 1072.487
+6  1973    42     neg   42.000 1072.487
+7  1974    90     neg   90.000 1072.487
+8  1975    82     neg   82.000 1072.487
+9  1976    49     neg   49.000 1072.487
+10 1977    83     neg   83.000 1072.487
+11 1978   140     neg  140.000 1072.487
+12 1979   179     neg  179.000 1072.487
+13 1980   158     neg  158.000 1072.487
+14 1981   214     neg  214.000 1072.487
+15 1982   237     neg  237.000 1072.487
+16 1983   467     neg  467.000 1072.487
+17 1984   455     neg  455.000 1072.487
+18 1985   427     neg  427.000 1072.487
+19 1986   400     neg  400.000 1072.487
+20 1987   225     neg  225.000 1072.487
+21 1988   500     neg  500.000 1072.487
+22 1989   600     neg  600.000 1072.487
+23 1990   400     neg  400.000 1072.487
+24 1991    NA    &lt;NA&gt;       NA       NA
+25 1992    80     neg   80.000 1072.487
+26 1993   435     neg  435.000 1072.487
+27 1994   375     neg  375.000 1072.487
+28 1995   800     neg  800.000 1072.487
+29 1996   900     neg  900.000 1072.487
+30 1997  1200     pos 1072.487 1200.000
+31 1998  1400     pos 1072.487 1400.000
+32 1999  2150     pos 1072.487 2150.000
+33 2000   850     neg  850.000 1072.487
+34 2001  2250     pos 1072.487 2250.000
+35 2002  2220     pos 1072.487 2220.000
+36 2003  2300     pos 1072.487 2300.000
+37 2004  3000     pos 1072.487 3000.000
+38 2005  2800     pos 1072.487 2800.000
+39 2006  2025     pos 1072.487 2025.000
+40 2007  5075     pos 1072.487 5075.000
+41 2008  3975     pos 1072.487 3975.000
+42 2009  2185     pos 1072.487 2185.000
+43 2010  3025     pos 1072.487 3025.000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>test<span class="sc">$</span>data<span class="ot">&lt;-</span>test<span class="sc">$</span>value<span class="sc">$</span>data</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>newli<span class="ot">&lt;-</span>test<span class="sc">$</span>value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
 

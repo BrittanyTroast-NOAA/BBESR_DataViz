@@ -163,30 +163,52 @@ library(ggplot2)
 library(plotly)
 
 ui &lt;- fluidPage(
-  selectInput("data", label="Choose Data", choices=c("brpeli", "blcrab")),
-  plotlyOutput("plot1"),
-  textOutput("testing")
+  selectInput("data", label = h2("Choose Indicator:", style = "font-size:20px;"),
+              choices = c("Oil Spills",
+                          "Nuisance Aquatic Vegetation",
+                          "Red Drum",
+                          "Blue Crab Catch",
+                          "Brown Pelican",
+                          "Oyster Catch",
+                          "Percent Small Business",
+                          "Vessels Fishing &amp; Seafood Dealers")),
+  plotlyOutput("plot1")
 )
 
 server &lt;- function(input, output, session) {
-
-  # test_input&lt;- reactive({input$data})
-  # data_url &lt;- "https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/blcrab_li.r"
-  data_url &lt;-reactive({paste0("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/",input$data,"_li.r")})
-  dat&lt;-reactive({source(url(data_url()))})
+  #####Data Names#####
+  dat_shrt_nms&lt;-data.frame(c(
+    oilsp="Oil Spills",
+    nav="Nuisance Aquatic Vegetation",
+    rdrum="Red Drum",
+    blcrab="Blue Crab Catch",
+    brpeli="Brown Pelican",
+    oystercat="Oyster Catch",
+    persmbusi="Percent Small Business",
+    vesfish="Vessels Fishing &amp; Seafood Dealers"
+  ))
+  dat_shrt_nms&lt;-tibble::rownames_to_column(dat_shrt_nms)
+  colnames(dat_shrt_nms)&lt;-c("short", "long")
+  
+  shrt_nm&lt;-reactive({dat_shrt_nms$short[dat_shrt_nms$long==input$data]})
+  data_url &lt;-reactive({paste0("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/",shrt_nm(),"_li.r")})
+  dat_vl&lt;-reactive({source(url(data_url()))})
+  dat&lt;-reactive({dat_vl()$value})
 
   # crab&lt;-"https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/blcrab_li.r"
   # peli&lt;-"https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/brpeli_li.r"
 
-output$plot1&lt;- renderPlotly({
-  test_dat&lt;-dat()$value$data
 
-  toplot&lt;-ggplot(test_dat, aes(x=year, y=value))+
-    geom_point(color="darkturquoise")
-    ly_plot&lt;-ggplotly(toplot)
-    ly_plot
+  output$plot&lt;-renderPlotly({
+    df_pick &lt;- dat()$data
+    plot_gg&lt;-plot_fn_obj(df_pick)
+    plotly_gg&lt;-ggplotly(plot_gg)
+    df_cond&lt;-select(df_pick$data, -c("valence","min","max"))
+    plotly_gg %&gt;%
+      rangeslider(start = min(df_cond$year), end = max(df_cond$year))
+    
+  })
 
-    })
 }
 
 shinyApp(ui, server)</code></pre>

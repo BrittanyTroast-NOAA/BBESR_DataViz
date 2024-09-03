@@ -1,19 +1,3 @@
----
-title: "Test_App"
-format:
-  html:
-    resources: 
-      - shinylive-sw.js  # Required to publish the shinylive service worker
-filters:
-  - shinylive
----
-
-
-
-```{shinylive-r}
-#| standalone: true
-#| viewerHeight: 600
-
 library(shiny)
 library(ggplot2)
 library(plotly)
@@ -318,5 +302,3 @@ server <- function(input, output, session) {
   }
 
 shinyApp(ui, server)
-
-```
