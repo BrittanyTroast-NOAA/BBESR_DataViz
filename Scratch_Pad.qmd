@@ -1,0 +1,38 @@
+---
+title: "Scratch_Pad"
+format: html
+---
+
+
+All years min/max
+```{r}
+crab<-readRDS("Data_Obj/blcrab_li.rds")
+peli<-readRDS("Data_Obj/brpeli_li.rds")
+nav<-readRDS("Data_Obj/nav_li.rds")
+oilspill<-readRDS("Data_Obj/oilsp_li.rds")
+oyster<-readRDS("Data_Obj/oystercat_li.rds")
+sml_bus<-readRDS("Data_Obj/persmbusi_li.rds")
+red_drum<-readRDS("Data_Obj/rdrum_li.rds")
+ves_deal<-readRDS("Data_Obj/vesfish_li.rds")
+
+
+dfs<-list(crab, peli, nav, oilspill, oyster, sml_bus, red_drum, ves_deal)
+dfs_nms<-c("crab", "peli", "nav", "oilspill", "oyster", "sml_bus", "red_drum", "ves_deal")
+i=1
+minmax_li<-list()
+
+for (i in 1:length(dfs)) {
+  df_dat<-dfs[[i]]$data
+  minmax<-data.frame(data=dfs_nms[i],min=min(df_dat$year), max=max(df_dat$year))
+  minmax_li[[i]]<-minmax
+}
+full_minmax<-do.call("rbind", minmax_li)
+
+final_minmax<-data.frame(min=min(full_minmax$min), max=max(full_minmax$max))
+
+```
+Between Years
+```{r}
+crab$vals
+```
+

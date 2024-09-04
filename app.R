@@ -15,21 +15,23 @@ ui <- fluidPage(
                           "Oyster Catch",
                           "Percent Small Business",
                           "Vessels Fishing & Seafood Dealers")),
+  sliderInput("yearSlider", "Year Range:", min = 1971, max = 2022, value= c(1971, 2022)),
+  actionButton("goButton", "Go"),
+  actionButton("reset", "Reset"),
   plotlyOutput("plot"),
-  htmlOutput("time_range"),
-  tags$style("#time_range {font-size: 20px;
-                                            margin-bottom: 0px;
-                                            margin-top: -5px;}"),
-  gt_output("gt_table"),
+  tableOutput("gt_table")
 )
 
 server <- function(input, output, session) {
   
-  ####FUNCTIONS####
+  ###FUNCTIONS####
   # Plot from RDS object
   plot_fn_obj<-function(df_obj) {
-    
-    
+    df_obj$data <- subset(df_obj$data, df_obj$data$year>= isolate(input$yearSlider[1]) & df_obj$data$year<= isolate(input$yearSlider[2]))
+    df_obj$pos <- subset(df_obj$pos, df_obj$pos$year>= isolate(input$yearSlider[1]) & df_obj$pos$year<= isolate(input$yearSlider[2]))
+    df_obj$neg <- subset(df_obj$neg, df_obj$neg$year>= isolate(input$yearSlider[1]) & df_obj$neg$year<= isolate(input$yearSlider[2]))
+
+
     if (ncol(df_obj$data)<5.5){
       #single plot
       plot_main<-ggplot(data=df_obj$data, aes(x=year, y=value))+
@@ -42,22 +44,22 @@ server <- function(input, output, session) {
         geom_line(aes(group=1), lwd=1)+
         labs(x="Year", y=df_obj$labs[2,2], title = df_obj$labs[1,2])+
         theme_bw() + theme(title = element_text(size=14, face = "bold"))
-      
+
       if (max(df_obj$data$year)-min(df_obj$data$year)>20) {
         plot_main<-plot_main+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),5))
       } else {
         plot_main<-plot_main+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),2))
       }
       plot_main
-      
+
     } else {
       #facet plot
-      
+
       plot_sec<-ggplot(data=df_obj$data, aes(x=year, y=value))+
         facet_wrap(~subnm, ncol=1, scales = "free_y")+
         geom_ribbon(data=df_obj$pos, aes(group=subnm,ymax=max, ymin=mean),fill="#7FFF7F")+
         geom_ribbon(data=df_obj$neg, aes(group=subnm,ymax=mean, ymin=min), fill="#FF7F7F")+
-        geom_rect(data=merge(df_obj$data,df_obj$vals), aes(xmin=allminyear,xmax=allmaxyear,ymin=mean-sd, ymax=mean+sd), fill="white")+
+        geom_rect(data=merge(df_obj$data,df_obj$vals), aes(xmin=min(df_obj$data$year),xmax=max(df_obj$data$year),ymin=mean-sd, ymax=mean+sd), fill="white")+
         geom_hline(aes(yintercept=mean), lty="dashed",data=df_obj$vals)+
         geom_hline(aes(yintercept=mean+sd),data=df_obj$vals)+
         geom_hline(aes(yintercept=mean-sd),data=df_obj$vals)+
@@ -66,17 +68,17 @@ server <- function(input, output, session) {
         theme_bw()+theme(strip.background = element_blank(),
                          strip.text = element_text(face="bold"),
                          title = element_text(size=14, face = "bold"))
-      
+
       if (max(df_obj$data$year)-min(df_obj$data$year)>20) {
         plot_sec<-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),5))
       } else {
         # plot_sec<-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),2))
       }
       plot_sec
-      
+
     }
   }
-  
+
   ####GET DATA####
   dat_shrt_nms<-data.frame(c(
     oilsp="Oil Spills",
@@ -96,17 +98,223 @@ server <- function(input, output, session) {
   dat_vl<-reactive({source(url(data_url()))})
   dat<-reactive({dat_vl()$value})
 
-  ####MAIN PLOT####
-  output$plot<-renderPlotly({
-    df_pick <- dat()
-    plot_gg<-plot_fn_obj(df_pick)
-    plotly_gg<-ggplotly(plot_gg)
-    df_cond<-select(df_pick$data, -c("valence","min","max"))
-    plotly_gg %>%
-      rangeslider(start = min(df_cond$year), end = max(df_cond$year))
+  
+  ####CUSTOM SLIDER####
+  observeEvent(input$data, {
+    selected_data<- dat()$data
+    updateSliderInput(session, "yearSlider",
+                      min = min(selected_data$year),
+                      max= max(selected_data$year),
+                      value=c(min(selected_data$year), max(selected_data$year)))
+  })
+  
+  observeEvent(input$reset,{
+    selected_data<- dat()$data
+    updateSliderInput(session,'yearSlider',value = c(min(selected_data$year), max(selected_data$year)))
+
+  })
+
+  
+  
+  observeEvent(input$goButton, {
+    
+    ####MAIN PLOT####
+    output$plot<-renderPlotly({
+      df_pick <- dat()
+      plot_gg<-plot_fn_obj(df_pick)
+      plotly_gg<-ggplotly(plot_gg)
+      plotly_gg
+      
+    })
+    
+    ####Table#####
+    output$gt_table<- render_gt({
+      df_pick <- dat()
+      df_dat<-df_pick$data
+      val_df<-df_pick$vals
+      
+      sel_dat<-df_dat[df_dat$year>= isolate(input$yearSlider[1]) & df_dat$year<= isolate(input$yearSlider[2]),]
+      
+      if (nrow(sel_dat)>3) {
+        if (ncol(df_dat)<5.5) {
+          #Mean Trend
+          sel_dat_mean<-mean(sel_dat$value) # mean value last 5 years
+          mean_sel<-if_else(sel_dat_mean>val_df$mean+val_df$sd, "+", if_else(sel_dat_mean<val_df$mean-val_df$sd, "-","●")) #qualify mean trend
+          
+          #Slope Trend
+          lmout<-summary(lm(sel_dat$value~sel_dat$year))
+          sel_slope<-coef(lmout)[2,1] * length(unique(sel_dat$year)) #multiply by years in the trend (slope per year * number of years=rise over 5 years)
+          slope_sel<-if_else(sel_slope>val_df$sd, "↑", if_else(sel_slope< c(-val_df$sd), "↓","→"))
+          
+          ###Table stuff
+          new_table<-data.frame(val=c(round(val_df$mean,2), round(val_df$sd,2), val_df$mean_sym, val_df$slope_sym, mean_sel, slope_sel),
+                                metric=c("Historical_Mean","Historical_SD","Last 5_Mean", "Last 5_Slope","Selected_Mean", "Selected_Slope"))
+          
+          new_table <- new_table %>% pivot_wider(names_from = metric, values_from = val)
+          
+          gt(new_table) %>%
+            tab_spanner_delim(delim = "_") %>%
+            tab_stubhead(label = "Sub Indicator") %>%
+            tab_header(title = "Trends in Mean & Slope") %>%
+            tab_options(table.border.top.color = "#3498db",
+                        table.border.bottom.color = "#3498db",
+                        table.border.left.color = "#3498db",
+                        table.border.right.color = "#3498db",
+                        table.border.top.width = 5,
+                        table.border.bottom.width = 5,
+                        table.border.left.width = 5,
+                        table.border.right.width = 5,
+                        table.border.left.style = "solid",
+                        table.border.right.style = "solid",) %>%
+            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %>%
+            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %>%
+            tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %>%
+            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %>%
+            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %>%
+            tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
+        } else {
+          #Selected Multi Sub
+          
+          sub_list<-list()
+          subs<-unique(df_dat$subnm)
+          for (i in 1:length(subs)){
+            sub_df<-sel_dat[sel_dat$subnm==subs[i],]
+            vals<-val_df[val_df$subnm==subs[i],]
+            sub_dat_mean<-mean(sub_df$value) # mean value last 5 years
+            mean_sub<-if_else(sub_dat_mean>vals$mean+vals$sd, "+", if_else(sub_dat_mean<vals$mean-vals$sd, "-","●")) #qualify mean trend
+            
+            #Slope Trend
+            lmout<-summary(lm(sub_df$value~sub_df$year))
+            sub_slope<-coef(lmout)[2,1] * length(unique(sub_df$year)) #multiply by years in the trend (slope per year * number of years=rise over 5 years)
+            slope_sub<-if_else(sub_slope>vals$sd, "↑", if_else(sub_slope< c(-vals$sd), "↓","→"))
+            
+            add_sub<-data.frame(mean_sel=mean_sub,
+                                slope_sel=slope_sub)
+            sub_list[[i]]<-add_sub
+            
+          }
+          
+          add_sel_df<-do.call("rbind",sub_list)
+          val_df<-cbind(val_df, add_sel_df)
+          
+          val_df$mean<-as.character(val_df$mean)
+          val_df$sd<-as.character(val_df$sd)
+          
+          new_table<-val_df %>% select("Sub_Indicator"=subnm,"Historical_Mean"=mean, "Historical_SD"=sd, "Last 5_Mean"=mean_sym, "Last 5_Slope"=slope_sym, "Selected_Mean"=mean_sel, "Selected_Slope"=slope_sel) %>%
+            group_by(Sub_Indicator) %>% pivot_longer(cols = -c("Sub_Indicator"))
+          
+          
+          new_table <- new_table %>% pivot_wider(names_from = name, values_from = value)
+          new_table[,2:3]<-lapply(new_table[,2:3], function(x) {round(as.numeric(x),2)})
+          rownames(new_table)<-new_table$Sub_Indicator
+          
+          gt(new_table, rowname_col = "Sub_Indicator", groupname_col = NA) %>%
+            tab_spanner_delim(delim = "_") %>%
+            tab_stubhead(label = "Sub Indicator") %>%
+            tab_header(title = "Trends in Mean & Slope") %>%
+            tab_options(table.border.top.color = "#3498db",
+                        table.border.bottom.color = "#3498db",
+                        table.border.left.color = "#3498db",
+                        table.border.right.color = "#3498db",
+                        table.border.top.width = 5,
+                        table.border.bottom.width = 5,
+                        table.border.left.width = 5,
+                        table.border.right.width = 5,
+                        table.border.left.style = "solid",
+                        table.border.right.style = "solid",) %>%
+            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %>%
+            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %>%
+            tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %>%
+            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %>%
+            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %>%
+            tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
+        }
+        
+        
+      } else {
+        
+        ###Table stuff
+        if (ncol(df_dat)<5.5) {
+          new_table<-data.frame(val=c(round(val_df$mean,2), round(val_df$sd,2), val_df$mean_sym, val_df$slope_sym),
+                                metric=c("Historical_Mean","Historical_SD","Last 5_Mean", "Last 5_Slope"))
+          
+          new_table <- new_table %>% pivot_wider(names_from = metric, values_from = val)
+          
+          gt(new_table) %>%
+            tab_spanner_delim(delim = "_") %>%
+            tab_stubhead(label = "Sub Indicator") %>%
+            tab_header(title = "Trends in Mean & Slope") %>%
+            tab_options(table.border.top.color = "#3498db",
+                        table.border.bottom.color = "#3498db",
+                        table.border.left.color = "#3498db",
+                        table.border.right.color = "#3498db",
+                        table.border.top.width = 5,
+                        table.border.bottom.width = 5,
+                        table.border.left.width = 5,
+                        table.border.right.width = 5,
+                        table.border.left.style = "solid",
+                        table.border.right.style = "solid",) %>%
+            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %>%
+            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %>%
+            tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %>%
+            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %>%
+            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %>%
+            tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
+          
+        } else {
+          val_df$mean<-as.character(val_df$mean)
+          val_df$sd<-as.character(val_df$sd)
+          
+          new_table<-val_df %>% select("Sub_Indicator"=subnm,"Historical_Mean"=mean, "Historical_SD"=sd, "Last 5_Mean"=mean_sym, "Last 5_Slope"=slope_sym) %>%
+            group_by(Sub_Indicator) %>% pivot_longer(cols = -c("Sub_Indicator"))
+          
+          
+          new_table <- new_table %>% pivot_wider(names_from = name, values_from = value)
+          new_table[,2:3]<-lapply(new_table[,2:3], function(x) {round(as.numeric(x),2)})
+          rownames(new_table)<-new_table$Sub_Indicator
+          
+          gt(new_table, rowname_col = "Sub_Indicator", groupname_col = NA) %>%
+            tab_spanner_delim(delim = "_") %>%
+            tab_stubhead(label = "Sub Indicator") %>%
+            tab_header(title = "Trends in Mean & Slope") %>%
+            tab_options(table.border.top.color = "#3498db",
+                        table.border.bottom.color = "#3498db",
+                        table.border.left.color = "#3498db",
+                        table.border.right.color = "#3498db",
+                        table.border.top.width = 5,
+                        table.border.bottom.width = 5,
+                        table.border.left.width = 5,
+                        table.border.right.width = 5,
+                        table.border.left.style = "solid",
+                        table.border.right.style = "solid",) %>%
+            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %>%
+            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %>%
+            tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %>%
+            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %>%
+            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %>%
+            tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
+          
+        }
+        
+      }
+    })
+    
+    
+    
     
   })
   
+
+
+  # ####Test Plot###
+  output$testplot<-renderPlot({
+    df_pick <-dat()$data
+    df_cond <- subset(df_pick, df_pick$year>= input$yearSlider[1] & df_pick$year<= input$yearSlider[2])
+    ggplot(df_cond, aes(x=year, y=value))+
+      geom_point()
+
+  })
+
   #####Text Time Selected#####
   output$time_range<- renderText({
     df_pick <- dat()
@@ -125,180 +333,6 @@ server <- function(input, output, session) {
     
   })
   
-  ####Table#####
-  output$gt_table<- render_gt({
-    df_pick <- dat()
-    selected_data <- event_data("plotly_relayout")
-    df_dat<-df_pick$data
-    val_df<-df_pick$vals
-
-    sel_dat<-df_dat[df_dat$year>selected_data$xaxis.range[1] & df_dat$year< selected_data$xaxis.range[2],]
-
-    if (nrow(sel_dat)>3) {
-      if (ncol(df_dat)<5.5) {
-        #Mean Trend
-        sel_dat_mean<-mean(sel_dat$value) # mean value last 5 years
-        mean_sel<-if_else(sel_dat_mean>val_df$mean+val_df$sd, "+", if_else(sel_dat_mean<val_df$mean-val_df$sd, "-","●")) #qualify mean trend
-
-        #Slope Trend
-        lmout<-summary(lm(sel_dat$value~sel_dat$year))
-        sel_slope<-coef(lmout)[2,1] * length(unique(sel_dat$year)) #multiply by years in the trend (slope per year * number of years=rise over 5 years)
-        slope_sel<-if_else(sel_slope>val_df$sd, "↑", if_else(sel_slope< c(-val_df$sd), "↓","→"))
-
-        ###Table stuff
-        new_table<-data.frame(val=c(round(val_df$mean,2), round(val_df$sd,2), val_df$mean_sym, val_df$slope_sym, mean_sel, slope_sel),
-                              metric=c("Historical_Mean","Historical_SD","Last 5_Mean", "Last 5_Slope","Selected_Mean", "Selected_Slope"))
-
-        new_table <- new_table %>% pivot_wider(names_from = metric, values_from = val)
-
-        gt(new_table) %>%
-          tab_spanner_delim(delim = "_") %>%
-          tab_stubhead(label = "Sub Indicator") %>%
-          tab_header(title = "Trends in Mean & Slope") %>%
-          tab_options(table.border.top.color = "#3498db",
-                      table.border.bottom.color = "#3498db",
-                      table.border.left.color = "#3498db",
-                      table.border.right.color = "#3498db",
-                      table.border.top.width = 5,
-                      table.border.bottom.width = 5,
-                      table.border.left.width = 5,
-                      table.border.right.width = 5,
-                      table.border.left.style = "solid",
-                      table.border.right.style = "solid",) %>%
-          tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %>%
-          tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %>%
-          tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %>%
-          tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %>%
-          tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %>%
-          tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
-      } else {
-        #Selected Multi Sub
-
-        sub_list<-list()
-        subs<-unique(df_dat$subnm)
-        for (i in 1:length(subs)){
-          sub_df<-sel_dat[sel_dat$subnm==subs[i],]
-          vals<-val_df[val_df$subnm==subs[i],]
-          sub_dat_mean<-mean(sub_df$value) # mean value last 5 years
-          mean_sub<-if_else(sub_dat_mean>vals$mean+vals$sd, "+", if_else(sub_dat_mean<vals$mean-vals$sd, "-","●")) #qualify mean trend
-
-          #Slope Trend
-          lmout<-summary(lm(sub_df$value~sub_df$year))
-          sub_slope<-coef(lmout)[2,1] * length(unique(sub_df$year)) #multiply by years in the trend (slope per year * number of years=rise over 5 years)
-          slope_sub<-if_else(sub_slope>vals$sd, "↑", if_else(sub_slope< c(-vals$sd), "↓","→"))
-
-          add_sub<-data.frame(mean_sel=mean_sub,
-                              slope_sel=slope_sub)
-          sub_list[[i]]<-add_sub
-
-        }
-
-        add_sel_df<-do.call("rbind",sub_list)
-        val_df<-cbind(val_df, add_sel_df)
-
-        val_df$mean<-as.character(val_df$mean)
-        val_df$sd<-as.character(val_df$sd)
-
-        new_table<-val_df %>% select("Sub_Indicator"=subnm,"Historical_Mean"=mean, "Historical_SD"=sd, "Last 5_Mean"=mean_sym, "Last 5_Slope"=slope_sym, "Selected_Mean"=mean_sel, "Selected_Slope"=slope_sel) %>%
-          group_by(Sub_Indicator) %>% pivot_longer(cols = -c("Sub_Indicator"))
-
-
-        new_table <- new_table %>% pivot_wider(names_from = name, values_from = value)
-        new_table[,2:3]<-lapply(new_table[,2:3], function(x) {round(as.numeric(x),2)})
-        rownames(new_table)<-new_table$Sub_Indicator
-
-        gt(new_table, rowname_col = "Sub_Indicator", groupname_col = NA) %>%
-          tab_spanner_delim(delim = "_") %>%
-          tab_stubhead(label = "Sub Indicator") %>%
-          tab_header(title = "Trends in Mean & Slope") %>%
-          tab_options(table.border.top.color = "#3498db",
-                      table.border.bottom.color = "#3498db",
-                      table.border.left.color = "#3498db",
-                      table.border.right.color = "#3498db",
-                      table.border.top.width = 5,
-                      table.border.bottom.width = 5,
-                      table.border.left.width = 5,
-                      table.border.right.width = 5,
-                      table.border.left.style = "solid",
-                      table.border.right.style = "solid",) %>%
-          tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %>%
-          tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %>%
-          tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %>%
-          tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %>%
-          tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %>%
-          tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
-      }
-
-
-    } else {
-
-      ###Table stuff
-      if (ncol(df_dat)<5.5) {
-        new_table<-data.frame(val=c(round(val_df$mean,2), round(val_df$sd,2), val_df$mean_sym, val_df$slope_sym),
-                              metric=c("Historical_Mean","Historical_SD","Last 5_Mean", "Last 5_Slope"))
-
-        new_table <- new_table %>% pivot_wider(names_from = metric, values_from = val)
-
-        gt(new_table) %>%
-          tab_spanner_delim(delim = "_") %>%
-          tab_stubhead(label = "Sub Indicator") %>%
-          tab_header(title = "Trends in Mean & Slope") %>%
-          tab_options(table.border.top.color = "#3498db",
-                      table.border.bottom.color = "#3498db",
-                      table.border.left.color = "#3498db",
-                      table.border.right.color = "#3498db",
-                      table.border.top.width = 5,
-                      table.border.bottom.width = 5,
-                      table.border.left.width = 5,
-                      table.border.right.width = 5,
-                      table.border.left.style = "solid",
-                      table.border.right.style = "solid",) %>%
-          tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %>%
-          tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %>%
-          tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %>%
-          tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %>%
-          tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %>%
-          tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
-
-      } else {
-        val_df$mean<-as.character(val_df$mean)
-        val_df$sd<-as.character(val_df$sd)
-
-        new_table<-val_df %>% select("Sub_Indicator"=subnm,"Historical_Mean"=mean, "Historical_SD"=sd, "Last 5_Mean"=mean_sym, "Last 5_Slope"=slope_sym) %>%
-          group_by(Sub_Indicator) %>% pivot_longer(cols = -c("Sub_Indicator"))
-
-
-        new_table <- new_table %>% pivot_wider(names_from = name, values_from = value)
-        new_table[,2:3]<-lapply(new_table[,2:3], function(x) {round(as.numeric(x),2)})
-        rownames(new_table)<-new_table$Sub_Indicator
-
-        gt(new_table, rowname_col = "Sub_Indicator", groupname_col = NA) %>%
-          tab_spanner_delim(delim = "_") %>%
-          tab_stubhead(label = "Sub Indicator") %>%
-          tab_header(title = "Trends in Mean & Slope") %>%
-          tab_options(table.border.top.color = "#3498db",
-                      table.border.bottom.color = "#3498db",
-                      table.border.left.color = "#3498db",
-                      table.border.right.color = "#3498db",
-                      table.border.top.width = 5,
-                      table.border.bottom.width = 5,
-                      table.border.left.width = 5,
-                      table.border.right.width = 5,
-                      table.border.left.style = "solid",
-                      table.border.right.style = "solid",) %>%
-          tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %>%
-          tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %>%
-          tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %>%
-          tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %>%
-          tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %>%
-          tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
-
-      }
-
-    }
-  })
-
-
   }
 
 shinyApp(ui, server)

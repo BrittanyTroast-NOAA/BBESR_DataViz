@@ -21,6 +21,7 @@ sml_bus<-read.csv("Data_CSV/per_small_busi.csv", header=F)
 red_drum<-read.csv("Data_CSV/Red_Drum.csv", header=F)
 sst<-read.csv("Data_CSV/sst_raw.csv", header=F)
 ves_deal<-read.csv("Data_CSV/VesselsFishing_SeafoodDealers.csv", header=F)
+
 ```
 
 ## Reference Stuff
