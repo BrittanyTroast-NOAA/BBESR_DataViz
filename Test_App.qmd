@@ -2,6 +2,7 @@
 title: "Indicator"
 format:
   html:
+    page-layout: full
     resources: 
       - shinylive-sw.js  # Required to publish the shinylive service worker
     toc: false
