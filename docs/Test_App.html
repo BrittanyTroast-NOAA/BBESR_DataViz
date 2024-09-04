@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Test_App – BB ESR Visualization</title>
+<title>Indicator – BB ESR Visualization</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -118,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Test_App</h1>
+<h1 class="title">Indicator</h1>
 </div>
 
 
@@ -136,7 +136,11 @@ ul.task-list li input[type="checkbox"] {
 
 
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
-#| viewerHeight: 600
+#| viewerHeight: 1000
+#| viewerWidth: 1500
+
+
+######START APP######
 
 library(shiny)
 library(ggplot2)
@@ -146,7 +150,9 @@ library(tidyr)
 library(dplyr)
 
 ui &lt;- fluidPage(
-  selectInput("data", label = h2("Choose Indicator:", style = "font-size:20px;"),
+  fluidRow(
+    column(4,
+           selectInput("data", label = h2("Choose Indicator:", style = "font-size:20px;"),
               choices = c("Oil Spills",
                           "Nuisance Aquatic Vegetation",
                           "Red Drum",
@@ -154,10 +160,14 @@ ui &lt;- fluidPage(
                           "Brown Pelican",
                           "Oyster Catch",
                           "Percent Small Business",
-                          "Vessels Fishing &amp; Seafood Dealers")),
-  sliderInput("yearSlider", "Year Range:", min = 1971, max = 2022, value= c(1971, 2022), sep=""),
-  actionButton("goButton", "Go"),
-  actionButton("reset", "Reset"),
+                          "Vessels Fishing &amp; Seafood Dealers"))),
+    column(4,
+           sliderInput("yearSlider", "Year Range:", min = 1971, max = 2022, value= c(1971, 2022), sep="")),
+    column(2,
+           br(),actionButton("goButton", HTML("&lt;b&gt;Go&lt;/b&gt;"), style='font-size:150%')),
+    column(2,
+           br(),actionButton("reset", HTML("&lt;b&gt;Reset&lt;/b&gt;"), style='font-size:150%'))),
+  
   plotlyOutput("plot"),
   tableOutput("gt_table")
 )
@@ -441,16 +451,16 @@ server &lt;- function(input, output, session) {
     
     
     
+    
   })
   
+
+
 
   
   }
 
-shinyApp(ui, server)
-
-
-</code></pre>
+shinyApp(ui, server)</code></pre>
 
 
 

@@ -1,3 +1,5 @@
+######START APP######
+
 library(shiny)
 library(ggplot2)
 library(plotly)
@@ -6,7 +8,9 @@ library(tidyr)
 library(dplyr)
 
 ui <- fluidPage(
-  selectInput("data", label = h2("Choose Indicator:", style = "font-size:20px;"),
+  fluidRow(
+    column(4,
+           selectInput("data", label = h2("Choose Indicator:", style = "font-size:20px;"),
               choices = c("Oil Spills",
                           "Nuisance Aquatic Vegetation",
                           "Red Drum",
@@ -14,10 +18,14 @@ ui <- fluidPage(
                           "Brown Pelican",
                           "Oyster Catch",
                           "Percent Small Business",
-                          "Vessels Fishing & Seafood Dealers")),
-  sliderInput("yearSlider", "Year Range:", min = 1971, max = 2022, value= c(1971, 2022), sep=""),
-  actionButton("goButton", "Go"),
-  actionButton("reset", "Reset"),
+                          "Vessels Fishing & Seafood Dealers"))),
+    column(4,
+           sliderInput("yearSlider", "Year Range:", min = 1971, max = 2022, value= c(1971, 2022), sep="")),
+    column(2,
+           br(),actionButton("goButton", HTML("<b>Go</b>"), style='font-size:150%')),
+    column(2,
+           br(),actionButton("reset", HTML("<b>Reset</b>"), style='font-size:150%'))),
+  
   plotlyOutput("plot"),
   tableOutput("gt_table")
 )
