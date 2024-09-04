@@ -3,7 +3,7 @@ title: "BB ESR Viz Intro"
 format: html
 ---
 
-Renv shinylive install
+Update renv 
 
 Things I should put here
 
