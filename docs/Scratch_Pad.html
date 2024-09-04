@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Test_App – Data inclusion TUTORIAL</title>
+<title>Scratch_Pad – Data inclusion TUTORIAL</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -39,11 +73,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<meta name="shinylive:serviceworker_dir" content=".">
-<script src="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/load-shinylive-sw.js" type="module"></script>
-<script src="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/run-python-blocks.js" type="module"></script>
-<link href="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/shinylive.css" rel="stylesheet">
-<link href="site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -84,7 +113,9 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Test_App.html">Plot Data</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">
+      Data inclusion TUTORIAL
+      </li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -123,7 +154,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Test_App.html" class="sidebar-item-text sidebar-link active">
+  <a href="./Test_App.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Plot Data</span></a>
   </div>
 </li>
@@ -138,7 +169,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Test_App</h1>
+<h1 class="title">Scratch_Pad</h1>
 </div>
 
 
@@ -155,348 +186,44 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<pre class="shinylive-r" data-engine="r"><code>#| standalone: true
-#| viewerHeight: 600
-
-library(shiny)
-library(ggplot2)
-library(plotly)
-library(gt)
-library(tidyr)
-library(dplyr)
-
-ui &lt;- fluidPage(
-  selectInput("data", label = h2("Choose Indicator:", style = "font-size:20px;"),
-              choices = c("Oil Spills",
-                          "Nuisance Aquatic Vegetation",
-                          "Red Drum",
-                          "Blue Crab Catch",
-                          "Brown Pelican",
-                          "Oyster Catch",
-                          "Percent Small Business",
-                          "Vessels Fishing &amp; Seafood Dealers")),
-  sliderInput("yearSlider", "Year Range:", min = 1971, max = 2022, value= c(1971, 2022)),
-  actionButton("goButton", "Go"),
-  actionButton("reset", "Reset"),
-  plotlyOutput("plot"),
-  tableOutput("gt_table")
-)
-
-server &lt;- function(input, output, session) {
-  
-  ###FUNCTIONS####
-  # Plot from RDS object
-  plot_fn_obj&lt;-function(df_obj) {
-    df_obj$data &lt;- subset(df_obj$data, df_obj$data$year&gt;= isolate(input$yearSlider[1]) &amp; df_obj$data$year&lt;= isolate(input$yearSlider[2]))
-    df_obj$pos &lt;- subset(df_obj$pos, df_obj$pos$year&gt;= isolate(input$yearSlider[1]) &amp; df_obj$pos$year&lt;= isolate(input$yearSlider[2]))
-    df_obj$neg &lt;- subset(df_obj$neg, df_obj$neg$year&gt;= isolate(input$yearSlider[1]) &amp; df_obj$neg$year&lt;= isolate(input$yearSlider[2]))
-
-
-    if (ncol(df_obj$data)&lt;5.5){
-      #single plot
-      plot_main&lt;-ggplot(data=df_obj$data, aes(x=year, y=value))+
-        geom_ribbon(data=df_obj$pos, aes(group=1,ymax=max, ymin=df_obj$vals$mean),fill="#7FFF7F")+
-        geom_ribbon(data=df_obj$neg, aes(group=1,ymax=df_obj$vals$mean, ymin=min), fill="#FF7F7F")+
-        geom_rect(aes(xmin=min(df_obj$data$year),xmax=max(df_obj$data$year),ymin=df_obj$vals$mean-df_obj$vals$sd, ymax=df_obj$vals$mean+df_obj$vals$sd), fill="white")+
-        geom_hline(yintercept=df_obj$vals$mean, lty="dashed")+
-        geom_hline(yintercept=df_obj$vals$mean+df_obj$vals$sd)+
-        geom_hline(yintercept=df_obj$vals$mean-df_obj$vals$sd)+
-        geom_line(aes(group=1), lwd=1)+
-        labs(x="Year", y=df_obj$labs[2,2], title = df_obj$labs[1,2])+
-        theme_bw() + theme(title = element_text(size=14, face = "bold"))
-
-      if (max(df_obj$data$year)-min(df_obj$data$year)&gt;20) {
-        plot_main&lt;-plot_main+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),5))
-      } else {
-        plot_main&lt;-plot_main+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),2))
-      }
-      plot_main
-
-    } else {
-      #facet plot
-
-      plot_sec&lt;-ggplot(data=df_obj$data, aes(x=year, y=value))+
-        facet_wrap(~subnm, ncol=1, scales = "free_y")+
-        geom_ribbon(data=df_obj$pos, aes(group=subnm,ymax=max, ymin=mean),fill="#7FFF7F")+
-        geom_ribbon(data=df_obj$neg, aes(group=subnm,ymax=mean, ymin=min), fill="#FF7F7F")+
-        geom_rect(data=merge(df_obj$data,df_obj$vals), aes(xmin=min(df_obj$data$year),xmax=max(df_obj$data$year),ymin=mean-sd, ymax=mean+sd), fill="white")+
-        geom_hline(aes(yintercept=mean), lty="dashed",data=df_obj$vals)+
-        geom_hline(aes(yintercept=mean+sd),data=df_obj$vals)+
-        geom_hline(aes(yintercept=mean-sd),data=df_obj$vals)+
-        geom_line(aes(group=1), lwd=0.75)+
-        labs(x="Year", y=df_obj$labs[2,2], title = df_obj$labs[1,2])+
-        theme_bw()+theme(strip.background = element_blank(),
-                         strip.text = element_text(face="bold"),
-                         title = element_text(size=14, face = "bold"))
-
-      if (max(df_obj$data$year)-min(df_obj$data$year)&gt;20) {
-        plot_sec&lt;-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),5))
-      } else {
-        # plot_sec&lt;-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),2))
-      }
-      plot_sec
-
-    }
-  }
-
-  ####GET DATA####
-  dat_shrt_nms&lt;-data.frame(c(
-    oilsp="Oil Spills",
-    nav="Nuisance Aquatic Vegetation",
-    rdrum="Red Drum",
-    blcrab="Blue Crab Catch",
-    brpeli="Brown Pelican",
-    oystercat="Oyster Catch",
-    persmbusi="Percent Small Business",
-    vesfish="Vessels Fishing &amp; Seafood Dealers"
-  ))
-  dat_shrt_nms&lt;-tibble::rownames_to_column(dat_shrt_nms)
-  colnames(dat_shrt_nms)&lt;-c("short", "long")
-  
-  shrt_nm&lt;-reactive({dat_shrt_nms$short[dat_shrt_nms$long==input$data]})
-  data_url &lt;-reactive({paste0("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/",shrt_nm(),"_li.r")})
-  dat_vl&lt;-reactive({source(url(data_url()))})
-  dat&lt;-reactive({dat_vl()$value})
-
-  
-  ####CUSTOM SLIDER####
-  observeEvent(input$data, {
-    selected_data&lt;- dat()$data
-    updateSliderInput(session, "yearSlider",
-                      min = min(selected_data$year),
-                      max= max(selected_data$year),
-                      value=c(min(selected_data$year), max(selected_data$year)))
-  })
-  
-  observeEvent(input$reset,{
-    selected_data&lt;- dat()$data
-    updateSliderInput(session,'yearSlider',value = c(min(selected_data$year), max(selected_data$year)))
-
-  })
-
-  
-  
-  observeEvent(input$goButton, {
-    
-    ####MAIN PLOT####
-    output$plot&lt;-renderPlotly({
-      df_pick &lt;- dat()
-      plot_gg&lt;-plot_fn_obj(df_pick)
-      plotly_gg&lt;-ggplotly(plot_gg)
-      plotly_gg
-      
-    })
-    
-    ####Table#####
-    output$gt_table&lt;- render_gt({
-      df_pick &lt;- dat()
-      df_dat&lt;-df_pick$data
-      val_df&lt;-df_pick$vals
-      
-      sel_dat&lt;-df_dat[df_dat$year&gt;= isolate(input$yearSlider[1]) &amp; df_dat$year&lt;= isolate(input$yearSlider[2]),]
-      
-      if (nrow(sel_dat)&gt;3) {
-        if (ncol(df_dat)&lt;5.5) {
-          #Mean Trend
-          sel_dat_mean&lt;-mean(sel_dat$value) # mean value last 5 years
-          mean_sel&lt;-if_else(sel_dat_mean&gt;val_df$mean+val_df$sd, "+", if_else(sel_dat_mean&lt;val_df$mean-val_df$sd, "-","●")) #qualify mean trend
-          
-          #Slope Trend
-          lmout&lt;-summary(lm(sel_dat$value~sel_dat$year))
-          sel_slope&lt;-coef(lmout)[2,1] * length(unique(sel_dat$year)) #multiply by years in the trend (slope per year * number of years=rise over 5 years)
-          slope_sel&lt;-if_else(sel_slope&gt;val_df$sd, "↑", if_else(sel_slope&lt; c(-val_df$sd), "↓","→"))
-          
-          ###Table stuff
-          new_table&lt;-data.frame(val=c(round(val_df$mean,2), round(val_df$sd,2), val_df$mean_sym, val_df$slope_sym, mean_sel, slope_sel),
-                                metric=c("Historical_Mean","Historical_SD","Last 5_Mean", "Last 5_Slope","Selected_Mean", "Selected_Slope"))
-          
-          new_table &lt;- new_table %&gt;% pivot_wider(names_from = metric, values_from = val)
-          
-          gt(new_table) %&gt;%
-            tab_spanner_delim(delim = "_") %&gt;%
-            tab_stubhead(label = "Sub Indicator") %&gt;%
-            tab_header(title = "Trends in Mean &amp; Slope") %&gt;%
-            tab_options(table.border.top.color = "#3498db",
-                        table.border.bottom.color = "#3498db",
-                        table.border.left.color = "#3498db",
-                        table.border.right.color = "#3498db",
-                        table.border.top.width = 5,
-                        table.border.bottom.width = 5,
-                        table.border.left.width = 5,
-                        table.border.right.width = 5,
-                        table.border.left.style = "solid",
-                        table.border.right.style = "solid",) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
-        } else {
-          #Selected Multi Sub
-          
-          sub_list&lt;-list()
-          subs&lt;-unique(df_dat$subnm)
-          for (i in 1:length(subs)){
-            sub_df&lt;-sel_dat[sel_dat$subnm==subs[i],]
-            vals&lt;-val_df[val_df$subnm==subs[i],]
-            sub_dat_mean&lt;-mean(sub_df$value) # mean value last 5 years
-            mean_sub&lt;-if_else(sub_dat_mean&gt;vals$mean+vals$sd, "+", if_else(sub_dat_mean&lt;vals$mean-vals$sd, "-","●")) #qualify mean trend
-            
-            #Slope Trend
-            lmout&lt;-summary(lm(sub_df$value~sub_df$year))
-            sub_slope&lt;-coef(lmout)[2,1] * length(unique(sub_df$year)) #multiply by years in the trend (slope per year * number of years=rise over 5 years)
-            slope_sub&lt;-if_else(sub_slope&gt;vals$sd, "↑", if_else(sub_slope&lt; c(-vals$sd), "↓","→"))
-            
-            add_sub&lt;-data.frame(mean_sel=mean_sub,
-                                slope_sel=slope_sub)
-            sub_list[[i]]&lt;-add_sub
-            
-          }
-          
-          add_sel_df&lt;-do.call("rbind",sub_list)
-          val_df&lt;-cbind(val_df, add_sel_df)
-          
-          val_df$mean&lt;-as.character(val_df$mean)
-          val_df$sd&lt;-as.character(val_df$sd)
-          
-          new_table&lt;-val_df %&gt;% select("Sub_Indicator"=subnm,"Historical_Mean"=mean, "Historical_SD"=sd, "Last 5_Mean"=mean_sym, "Last 5_Slope"=slope_sym, "Selected_Mean"=mean_sel, "Selected_Slope"=slope_sel) %&gt;%
-            group_by(Sub_Indicator) %&gt;% pivot_longer(cols = -c("Sub_Indicator"))
-          
-          
-          new_table &lt;- new_table %&gt;% pivot_wider(names_from = name, values_from = value)
-          new_table[,2:3]&lt;-lapply(new_table[,2:3], function(x) {round(as.numeric(x),2)})
-          rownames(new_table)&lt;-new_table$Sub_Indicator
-          
-          gt(new_table, rowname_col = "Sub_Indicator", groupname_col = NA) %&gt;%
-            tab_spanner_delim(delim = "_") %&gt;%
-            tab_stubhead(label = "Sub Indicator") %&gt;%
-            tab_header(title = "Trends in Mean &amp; Slope") %&gt;%
-            tab_options(table.border.top.color = "#3498db",
-                        table.border.bottom.color = "#3498db",
-                        table.border.left.color = "#3498db",
-                        table.border.right.color = "#3498db",
-                        table.border.top.width = 5,
-                        table.border.bottom.width = 5,
-                        table.border.left.width = 5,
-                        table.border.right.width = 5,
-                        table.border.left.style = "solid",
-                        table.border.right.style = "solid",) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
-        }
-        
-        
-      } else {
-        
-        ###Table stuff
-        if (ncol(df_dat)&lt;5.5) {
-          new_table&lt;-data.frame(val=c(round(val_df$mean,2), round(val_df$sd,2), val_df$mean_sym, val_df$slope_sym),
-                                metric=c("Historical_Mean","Historical_SD","Last 5_Mean", "Last 5_Slope"))
-          
-          new_table &lt;- new_table %&gt;% pivot_wider(names_from = metric, values_from = val)
-          
-          gt(new_table) %&gt;%
-            tab_spanner_delim(delim = "_") %&gt;%
-            tab_stubhead(label = "Sub Indicator") %&gt;%
-            tab_header(title = "Trends in Mean &amp; Slope") %&gt;%
-            tab_options(table.border.top.color = "#3498db",
-                        table.border.bottom.color = "#3498db",
-                        table.border.left.color = "#3498db",
-                        table.border.right.color = "#3498db",
-                        table.border.top.width = 5,
-                        table.border.bottom.width = 5,
-                        table.border.left.width = 5,
-                        table.border.right.width = 5,
-                        table.border.left.style = "solid",
-                        table.border.right.style = "solid",) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
-          
-        } else {
-          val_df$mean&lt;-as.character(val_df$mean)
-          val_df$sd&lt;-as.character(val_df$sd)
-          
-          new_table&lt;-val_df %&gt;% select("Sub_Indicator"=subnm,"Historical_Mean"=mean, "Historical_SD"=sd, "Last 5_Mean"=mean_sym, "Last 5_Slope"=slope_sym) %&gt;%
-            group_by(Sub_Indicator) %&gt;% pivot_longer(cols = -c("Sub_Indicator"))
-          
-          
-          new_table &lt;- new_table %&gt;% pivot_wider(names_from = name, values_from = value)
-          new_table[,2:3]&lt;-lapply(new_table[,2:3], function(x) {round(as.numeric(x),2)})
-          rownames(new_table)&lt;-new_table$Sub_Indicator
-          
-          gt(new_table, rowname_col = "Sub_Indicator", groupname_col = NA) %&gt;%
-            tab_spanner_delim(delim = "_") %&gt;%
-            tab_stubhead(label = "Sub Indicator") %&gt;%
-            tab_header(title = "Trends in Mean &amp; Slope") %&gt;%
-            tab_options(table.border.top.color = "#3498db",
-                        table.border.bottom.color = "#3498db",
-                        table.border.left.color = "#3498db",
-                        table.border.right.color = "#3498db",
-                        table.border.top.width = 5,
-                        table.border.bottom.width = 5,
-                        table.border.left.width = 5,
-                        table.border.right.width = 5,
-                        table.border.left.style = "solid",
-                        table.border.right.style = "solid",) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
-          
-        }
-        
-      }
-    })
-    
-    
-    
-    
-  })
-  
-
-
-  # ####Test Plot###
-  output$testplot&lt;-renderPlot({
-    df_pick &lt;-dat()$data
-    df_cond &lt;- subset(df_pick, df_pick$year&gt;= input$yearSlider[1] &amp; df_pick$year&lt;= input$yearSlider[2])
-    ggplot(df_cond, aes(x=year, y=value))+
-      geom_point()
-
-  })
-
-  #####Text Time Selected#####
-  output$time_range&lt;- renderText({
-    df_pick &lt;- dat()
-    selected_data &lt;- event_data("plotly_relayout")
-    df_dat&lt;-df_pick$data
-    sel_dat&lt;-df_dat[df_dat$year&gt;selected_data$xaxis.range[1] &amp; df_dat$year&lt; selected_data$xaxis.range[2],]
-    
-    if (nrow(sel_dat)&gt;0) {
-      range&lt;-range(sel_dat$year)
-      paste0("&lt;b&gt;Time Frame=",range[1],"-",range[2],"&lt;/b&gt;")
-    } else  {
-      range&lt;-range(df_dat$year)
-      paste0("&lt;b&gt;Time Frame=",range[1],"-",range[2],"&lt;/b&gt;")
-    }
-    
-    
-  })
-  
-  }
-
-shinyApp(ui, server)
-</code></pre>
+<p>All years min/max</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>crab<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">"Data_Obj/blcrab_li.rds"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>peli<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">"Data_Obj/brpeli_li.rds"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>nav<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">"Data_Obj/nav_li.rds"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>oilspill<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">"Data_Obj/oilsp_li.rds"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>oyster<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">"Data_Obj/oystercat_li.rds"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>sml_bus<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">"Data_Obj/persmbusi_li.rds"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>red_drum<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">"Data_Obj/rdrum_li.rds"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>ves_deal<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">"Data_Obj/vesfish_li.rds"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>dfs<span class="ot">&lt;-</span><span class="fu">list</span>(crab, peli, nav, oilspill, oyster, sml_bus, red_drum, ves_deal)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>dfs_nms<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"crab"</span>, <span class="st">"peli"</span>, <span class="st">"nav"</span>, <span class="st">"oilspill"</span>, <span class="st">"oyster"</span>, <span class="st">"sml_bus"</span>, <span class="st">"red_drum"</span>, <span class="st">"ves_deal"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>i<span class="ot">=</span><span class="dv">1</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>minmax_li<span class="ot">&lt;-</span><span class="fu">list</span>()</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(dfs)) {</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  df_dat<span class="ot">&lt;-</span>dfs[[i]]<span class="sc">$</span>data</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  minmax<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">data=</span>dfs_nms[i],<span class="at">min=</span><span class="fu">min</span>(df_dat<span class="sc">$</span>year), <span class="at">max=</span><span class="fu">max</span>(df_dat<span class="sc">$</span>year))</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  minmax_li[[i]]<span class="ot">&lt;-</span>minmax</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>full_minmax<span class="ot">&lt;-</span><span class="fu">do.call</span>(<span class="st">"rbind"</span>, minmax_li)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>final_minmax<span class="ot">&lt;-</span><span class="fu">data.frame</span>(<span class="at">min=</span><span class="fu">min</span>(full_minmax<span class="sc">$</span>min), <span class="at">max=</span><span class="fu">max</span>(full_minmax<span class="sc">$</span>max))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Between Years</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>crab<span class="sc">$</span>vals</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  allminyear allmaxyear minyear maxyear     mean       sd mean_tr   slope_tr
+1       2000       2018    2000    2018 6.851676 1.494265  ptPlus arrowRight
+2       2000       2018    2000    2018 3.529636 0.762382 ptSolid arrowRight
+  mean_sym slope_sym mean_word slope_word             subnm
+1        +         →   greater   a stable Blue Crab Revenue
+2        ●         →    within   a stable   Blue Crab Catch</code></pre>
+</div>
+</div>
 
 
 
