@@ -1,7 +1,6 @@
 ---
 title: "Scratch_Pad"
 format: html
-execute: false
 ---
 
 
