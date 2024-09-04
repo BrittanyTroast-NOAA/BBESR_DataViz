@@ -3,16 +3,16 @@ project:
   output-dir: docs
 
 website:
-  title: "Data inclusion TUTORIAL"
-  sidebar:
-    style: "floating"
-    contents:
+  title: "BB ESR Visualization"
+  navbar:
+    left: 
       - href: index.qmd
         text: Home
-      - href: Copy_Tut.qmd
-        text: Replicate Tutorial
       - href: Test_App.qmd
         text: Plot Data
+    tools:
+      - icon: github
+        href: https://github.com/BrittanyTroast-NOAA/BBESR_DataViz
 
 # Attach shinylive to every page
 filters:

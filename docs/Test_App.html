@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Test_App – Data inclusion TUTORIAL</title>
+<title>Test_App – BB ESR Visualization</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -45,11 +45,11 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-contrib/shinylive-0.5.0/shinylive/shinylive.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/shinylive-quarto-css/shinylive-quarto.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
+  "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
+  "panel-placement": "end",
+  "type": "overlay",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
@@ -75,62 +75,42 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="nav-sidebar floating fullcontent">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Test_App.html">Plot Data</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-        </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
-    </div>
-  </nav>
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">BB ESR Visualization</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./Test_App.html" aria-current="page"> 
+<span class="menu-text">Plot Data</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+    <a href="https://github.com/BrittanyTroast-NOAA/BBESR_DataViz" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
-    <div class="sidebar-title mb-0 py-0">
-      <a href="./">Data inclusion TUTORIAL</a> 
-    </div>
-      </div>
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Search"></div>
-        </div>
-        </div>
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Home</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Copy_Tut.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Replicate Tutorial</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Test_App.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Plot Data</span></a>
-  </div>
-</li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     
 <!-- main -->
@@ -175,7 +155,7 @@ ui &lt;- fluidPage(
                           "Oyster Catch",
                           "Percent Small Business",
                           "Vessels Fishing &amp; Seafood Dealers")),
-  sliderInput("yearSlider", "Year Range:", min = 1971, max = 2022, value= c(1971, 2022)),
+  sliderInput("yearSlider", "Year Range:", min = 1971, max = 2022, value= c(1971, 2022), sep=""),
   actionButton("goButton", "Go"),
   actionButton("reset", "Reset"),
   plotlyOutput("plot"),
@@ -461,41 +441,15 @@ server &lt;- function(input, output, session) {
     
     
     
-    
   })
   
 
-
-  # ####Test Plot###
-  output$testplot&lt;-renderPlot({
-    df_pick &lt;-dat()$data
-    df_cond &lt;- subset(df_pick, df_pick$year&gt;= input$yearSlider[1] &amp; df_pick$year&lt;= input$yearSlider[2])
-    ggplot(df_cond, aes(x=year, y=value))+
-      geom_point()
-
-  })
-
-  #####Text Time Selected#####
-  output$time_range&lt;- renderText({
-    df_pick &lt;- dat()
-    selected_data &lt;- event_data("plotly_relayout")
-    df_dat&lt;-df_pick$data
-    sel_dat&lt;-df_dat[df_dat$year&gt;selected_data$xaxis.range[1] &amp; df_dat$year&lt; selected_data$xaxis.range[2],]
-    
-    if (nrow(sel_dat)&gt;0) {
-      range&lt;-range(sel_dat$year)
-      paste0("&lt;b&gt;Time Frame=",range[1],"-",range[2],"&lt;/b&gt;")
-    } else  {
-      range&lt;-range(df_dat$year)
-      paste0("&lt;b&gt;Time Frame=",range[1],"-",range[2],"&lt;/b&gt;")
-    }
-    
-    
-  })
   
   }
 
 shinyApp(ui, server)
+
+
 </code></pre>
 
 

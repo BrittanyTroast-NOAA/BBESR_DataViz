@@ -15,7 +15,7 @@ ui <- fluidPage(
                           "Oyster Catch",
                           "Percent Small Business",
                           "Vessels Fishing & Seafood Dealers")),
-  sliderInput("yearSlider", "Year Range:", min = 1971, max = 2022, value= c(1971, 2022)),
+  sliderInput("yearSlider", "Year Range:", min = 1971, max = 2022, value= c(1971, 2022), sep=""),
   actionButton("goButton", "Go"),
   actionButton("reset", "Reset"),
   plotlyOutput("plot"),
@@ -306,32 +306,7 @@ server <- function(input, output, session) {
   
 
 
-  # ####Test Plot###
-  output$testplot<-renderPlot({
-    df_pick <-dat()$data
-    df_cond <- subset(df_pick, df_pick$year>= input$yearSlider[1] & df_pick$year<= input$yearSlider[2])
-    ggplot(df_cond, aes(x=year, y=value))+
-      geom_point()
 
-  })
-
-  #####Text Time Selected#####
-  output$time_range<- renderText({
-    df_pick <- dat()
-    selected_data <- event_data("plotly_relayout")
-    df_dat<-df_pick$data
-    sel_dat<-df_dat[df_dat$year>selected_data$xaxis.range[1] & df_dat$year< selected_data$xaxis.range[2],]
-    
-    if (nrow(sel_dat)>0) {
-      range<-range(sel_dat$year)
-      paste0("<b>Time Frame=",range[1],"-",range[2],"</b>")
-    } else  {
-      range<-range(df_dat$year)
-      paste0("<b>Time Frame=",range[1],"-",range[2],"</b>")
-    }
-    
-    
-  })
   
   }
 
