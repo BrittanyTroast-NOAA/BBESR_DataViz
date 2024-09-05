@@ -8,26 +8,40 @@ library(tidyr)
 library(dplyr)
 
 ui <- fluidPage(
-  fluidRow(
-    column(6,
-           selectInput("data", label = h2("Choose Indicator:", style = "font-size:20px;"),
-                       choices = c("Oil Spills",
-                                   "Nuisance Aquatic Vegetation",
-                                   "Red Drum",
-                                   "Blue Crab Catch",
-                                   "Brown Pelican",
-                                   "Oyster Catch",
-                                   "Percent Small Business",
-                                   "Vessels Fishing & Seafood Dealers"))),
-    column(4,
-           sliderInput("yearSlider", "Year Range:", min = 1971, max = 2022, value= c(1971, 2022), sep="")),
-    column(1,
-           br(),actionButton("goButton", HTML("<b>Go</b>"), style='font-size:150%')),
-    column(1,
-           br(),actionButton("reset", HTML("<b>Reset</b>"), style='font-size:150%'))),
   
-  plotlyOutput("plot"),
-  tableOutput("gt_table")
+  sidebarLayout(
+    sidebarPanel(selectInput("data", label = h2(HTML("<b>Choose Indicator:</b>"), style = "font-size:22px;"),
+                             choices = c("Oil Spills",
+                                         "Nuisance Aquatic Vegetation",
+                                         "Red Drum",
+                                         "Blue Crab Catch",
+                                         "Brown Pelican",
+                                         "Oyster Catch",
+                                         "Percent Small Business",
+                                         "Vessels Fishing & Seafood Dealers")),
+                 sliderInput("yearSlider", "Year Range:", min = 1971, max = 2022, value= c(1971, 2022), sep=""),
+                 tags$style("#yearSlider .irs-grid-text {font-size: 25px}"),
+                 actionButton("goButton", HTML("<b>Go</b>"), style='font-size:150%'),
+                 actionButton("reset", HTML("<b>Reset</b>"), style='font-size:150%'),
+                 width = 2),
+    mainPanel(plotlyOutput("plot", height = '120%'),
+              
+              fluidRow(
+                column(4,
+                       tableOutput("gt_table")),
+                column(8,
+                       htmlOutput("plain_header"),
+                       htmlOutput("plain_text"),
+                       tags$style("#plain_text {font-size:20px;margin-bottom: 25px;margin-top: 15px;}"),
+                       tags$style("#plain_header {font-size:24px;margin-top: 25px;}")),
+                width = 10),
+    position = c("left"),
+    fluid = TRUE
+  
+ )
+ 
+  )
+ 
 )
 
 server <- function(input, output, session) {
@@ -135,7 +149,7 @@ server <- function(input, output, session) {
       
     })
     
-    ####Table#####
+    ####TABLE#####
     output$gt_table<- render_gt({
       df_pick <- dat()
       df_dat<-df_pick$data
@@ -308,13 +322,120 @@ server <- function(input, output, session) {
     })
     
     
+    #####Plain Text#####
+    output$plain_header<- renderText({
+      plain_header<-paste0("<b><u>Summary</b></u>")
+    })
+    
+    ####PLAIN TEXT####
+    output$plain_text<-renderText({
+      df_pick <- dat()
+      df_dat<-df_pick$data
+      val_df<-df_pick$vals
+      df_lab<-df_pick$labs
+      sel_dat<-df_dat[df_dat$year>= isolate(input$yearSlider[1]) & df_dat$year<= isolate(input$yearSlider[2]),]
+      
+      
+      if (nrow(sel_dat)<3) {
+        ###Not selected no subs
+        if (ncol(df_dat)<5.5) {
+          text<-paste0("The <b>",df_lab[1,2] ,"</b> indicator has a historical mean of <u><b>", round(val_df$mean[1],2),"</u></b> ±<u><b>",round(val_df$sd[1],2)  ,"</u></b> and trends for the last five years of data show mean values <b><u>",val_df$mean_word, "</b></u> 1 standard deviation from the historical mean and <u><b>",val_df$slope_word, "</u></b> trend in slope.")
+        } else {
+          ###Not slected subs
+          val_df$mean<-as.character(val_df$mean)
+          val_df$sd<-as.character(val_df$sd)
+          
+          new_table<-val_df %>% select(subnm, mean,  sd,  mean_sym,  slope_sym) %>% 
+            group_by(subnm) %>% pivot_longer(cols = -c(subnm))
+          
+          val_df$mean<-as.numeric(val_df$mean)
+          val_df$sd<-as.numeric(val_df$sd)
+          
+          
+          text<-paste0("The <b>",df_lab[1,2] ,"</b> indicator for the <u><b>", val_df$subnm[1],"</u></b> sub indicator has a historical mean of <u><b>", round(val_df$mean[1],2),"</u></b> ±<u><b>",round(val_df$sd[1],2)  ,"</u></b> and trends for the last five years of data show mean values <b><u>",val_df$mean_word[1], "</b></u> 1 standard deviation from the historical mean and <u><b>",val_df$slope_word[1], "</u></b> trend in slope.")
+          
+          text_li<-list()
+          for (i in 2:length(val_df$subnm)) {
+            subtext<-paste0("The <u><b>",val_df$subnm[i], "</u></b> sub index historical mean is <u><b>",round(val_df$mean[i],2),"</u></b>±<u><b>",round(val_df$sd[i],2),"</u></b> and trends from the last five years of data show mean values<u><b>",val_df$mean_word[i],"</u></b> 1 standard deviation from the historical mean and <u><b>",val_df$slope_word[i], "</u></b> trend in slope.") 
+            text_li[[i]]<-subtext
+          }
+          subs_text<-do.call("paste", text_li)
+          paste(text,subs_text)
+        }
+        
+        
+      } else {
+        if (ncol(df_dat)<5.5) {
+          
+          #Selected no subs
+          #Mean Trend
+          sel_dat_mean<-mean(sel_dat$value) # mean value last 5 years
+          mean_sel_word<-if_else(sel_dat_mean>val_df$mean+val_df$sd, "greater", if_else(sel_dat_mean<val_df$mean-val_df$sd, "below","within")) #qualify mean trend
+          
+          #Slope Trend
+          lmout<-summary(lm(sel_dat$value~sel_dat$year))
+          sel_slope<-coef(lmout)[2,1] * length(unique(sel_dat$year)) #multiply by years in the trend (slope per year * number of years=rise over 5 years)
+          slope_sel_word<-if_else(sel_slope>val_df$sd, "an increasing", if_else(sel_slope< c(-val_df$sd), "a decreasing","a stable"))
+          
+          range<-range(sel_dat$year)
+          
+          text<-paste0("The <b>",df_lab[1,2] ,"</b> indicator has a historical mean of <u><b>", round(val_df$mean[1],2),"</u></b> ±<u><b>",round(val_df$sd[1],2)  ,"</u></b> and trends for the last five years of data show mean values <b><u>",val_df$mean_word, "</u></b> 1 standard deviation from the historical mean and <b><u>",val_df$slope_word, "</b></u> trend in slope. The trends in the selected years of data <b>(",range[1],"-",range[2],")</b> show mean values <b><u>", mean_sel_word,"</b></u> 1 standard deviation from the historical mean and <b><u>",slope_sel_word, "</b></u> trend in slope.")
+          
+          
+        } else {
+          ###Selected w subs
+          sub_list<-list()
+          subs<-unique(df_dat$subnm)
+          for (i in 1:length(subs)){
+            sub_df<-sel_dat[sel_dat$subnm==subs[i],]
+            vals<-val_df[val_df$subnm==subs[i],]
+            sub_dat_mean<-mean(sub_df$value) # mean value last 5 years
+            mean_sub<-if_else(sub_dat_mean>vals$mean+vals$sd, "greater", if_else(sub_dat_mean<vals$mean-vals$sd, "below","within")) #qualify mean trend
+            
+            #Slope Trend
+            lmout<-summary(lm(sub_df$value~sub_df$year))
+            sub_slope<-coef(lmout)[2,1] * length(unique(sub_df$year)) #multiply by years in the trend (slope per year * number of years=rise over 5 years)
+            slope_sub<-if_else(sub_slope>vals$sd, "an increasing", if_else(sub_slope< c(-vals$sd), "a decreasing","a stable"))
+            
+            add_sub<-data.frame(mean_sel=mean_sub,
+                                slope_sel=slope_sub)
+            sub_list[[i]]<-add_sub
+            
+          }
+          add_sel_df<-do.call("rbind",sub_list)
+          val_df<-cbind(val_df, add_sel_df)
+          
+          val_df$mean<-as.character(val_df$mean)
+          val_df$sd<-as.character(val_df$sd)
+          
+          val_df<-val_df %>% select(subnm,mean, sd, mean_word, slope_word, mean_sel, slope_sel)
+          val_df$mean<-as.numeric(val_df$mean)
+          val_df$sd<-as.numeric(val_df$sd)
+          
+          range<-range(sel_dat$year)
+          
+          text<-paste0("The <b>",df_lab[1,2] ,"</b> indicator for the <u><b>", val_df$subnm[1],"</u></b> sub indicator has a historical mean of <u><b>", round(val_df$mean[1],2),"</u></b> ±<u><b>",round(val_df$sd[1],2)  ,"</u></b> and trends for the last five years of data show mean values <b><u>",val_df$mean_word[1], "</b></u> 1 standard deviation from the historical mean and <u><b>",val_df$slope_word[1], "</u></b> trend in slope. The trends in the selected years of data <b>(",range[1],"-",range[2],")</b> show mean values <b><u>", val_df$mean_sel[1],"</b></u> 1 standard deviation from the historical mean and <b><u>",val_df$slope_sel[1], "</b></u> trend in slope.")
+          
+          text_li<-list()
+          for (i in 2:length(val_df$subnm)) {
+            subtext<-paste0("The <u><b>",val_df$subnm[i], "</u></b> sub index historical mean is <u><b>",round(val_df$mean[i],2)," </u></b>±<u><b>",round(val_df$sd[i],2),"</u></b> and trends from the last five years of data show mean values <u><b>",val_df$mean_word[i],"</u></b> 1 standard deviation from the historical mean and <u><b>",val_df$slope_word[i], "</u></b> trend in slope. The trends in the selected years of data show mean values <b><u>", val_df$mean_sel[i],"</b></u> 1 standard deviation from the historical mean and <b><u>",val_df$slope_sel[i], "</b></u> trend in slope.") 
+            text_li[[i]]<-subtext
+          }
+          subs_text<-do.call("paste", text_li)
+          paste(text,subs_text)
+          
+        }
+        
+        
+      }
+    })
+    
+    
+    
+    
     
     
   })
-  
-  
-  
-  
   
 }
 
