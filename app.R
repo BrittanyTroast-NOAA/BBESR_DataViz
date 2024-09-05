@@ -9,21 +9,21 @@ library(dplyr)
 
 ui <- fluidPage(
   fluidRow(
-    column(4,
+    column(6,
            selectInput("data", label = h2("Choose Indicator:", style = "font-size:20px;"),
-              choices = c("Oil Spills",
-                          "Nuisance Aquatic Vegetation",
-                          "Red Drum",
-                          "Blue Crab Catch",
-                          "Brown Pelican",
-                          "Oyster Catch",
-                          "Percent Small Business",
-                          "Vessels Fishing & Seafood Dealers"))),
+                       choices = c("Oil Spills",
+                                   "Nuisance Aquatic Vegetation",
+                                   "Red Drum",
+                                   "Blue Crab Catch",
+                                   "Brown Pelican",
+                                   "Oyster Catch",
+                                   "Percent Small Business",
+                                   "Vessels Fishing & Seafood Dealers"))),
     column(4,
            sliderInput("yearSlider", "Year Range:", min = 1971, max = 2022, value= c(1971, 2022), sep="")),
-    column(2,
+    column(1,
            br(),actionButton("goButton", HTML("<b>Go</b>"), style='font-size:150%')),
-    column(2,
+    column(1,
            br(),actionButton("reset", HTML("<b>Reset</b>"), style='font-size:150%'))),
   
   plotlyOutput("plot"),
@@ -38,8 +38,8 @@ server <- function(input, output, session) {
     df_obj$data <- subset(df_obj$data, df_obj$data$year>= isolate(input$yearSlider[1]) & df_obj$data$year<= isolate(input$yearSlider[2]))
     df_obj$pos <- subset(df_obj$pos, df_obj$pos$year>= isolate(input$yearSlider[1]) & df_obj$pos$year<= isolate(input$yearSlider[2]))
     df_obj$neg <- subset(df_obj$neg, df_obj$neg$year>= isolate(input$yearSlider[1]) & df_obj$neg$year<= isolate(input$yearSlider[2]))
-
-
+    
+    
     if (ncol(df_obj$data)<5.5){
       #single plot
       plot_main<-ggplot(data=df_obj$data, aes(x=year, y=value))+
@@ -52,17 +52,17 @@ server <- function(input, output, session) {
         geom_line(aes(group=1), lwd=1)+
         labs(x="Year", y=df_obj$labs[2,2], title = df_obj$labs[1,2])+
         theme_bw() + theme(title = element_text(size=14, face = "bold"))
-
+      
       if (max(df_obj$data$year)-min(df_obj$data$year)>20) {
         plot_main<-plot_main+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),5))
       } else {
         plot_main<-plot_main+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),2))
       }
       plot_main
-
+      
     } else {
       #facet plot
-
+      
       plot_sec<-ggplot(data=df_obj$data, aes(x=year, y=value))+
         facet_wrap(~subnm, ncol=1, scales = "free_y")+
         geom_ribbon(data=df_obj$pos, aes(group=subnm,ymax=max, ymin=mean),fill="#7FFF7F")+
@@ -76,17 +76,17 @@ server <- function(input, output, session) {
         theme_bw()+theme(strip.background = element_blank(),
                          strip.text = element_text(face="bold"),
                          title = element_text(size=14, face = "bold"))
-
+      
       if (max(df_obj$data$year)-min(df_obj$data$year)>20) {
         plot_sec<-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),5))
       } else {
         # plot_sec<-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),2))
       }
       plot_sec
-
+      
     }
   }
-
+  
   ####GET DATA####
   dat_shrt_nms<-data.frame(c(
     oilsp="Oil Spills",
@@ -105,7 +105,7 @@ server <- function(input, output, session) {
   data_url <-reactive({paste0("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/",shrt_nm(),"_li.r")})
   dat_vl<-reactive({source(url(data_url()))})
   dat<-reactive({dat_vl()$value})
-
+  
   
   ####CUSTOM SLIDER####
   observeEvent(input$data, {
@@ -119,9 +119,9 @@ server <- function(input, output, session) {
   observeEvent(input$reset,{
     selected_data<- dat()$data
     updateSliderInput(session,'yearSlider',value = c(min(selected_data$year), max(selected_data$year)))
-
+    
   })
-
+  
   
   
   observeEvent(input$goButton, {
@@ -312,10 +312,10 @@ server <- function(input, output, session) {
     
   })
   
-
-
-
   
-  }
+  
+  
+  
+}
 
 shinyApp(ui, server)
