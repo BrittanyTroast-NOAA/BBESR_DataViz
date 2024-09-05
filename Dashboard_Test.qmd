@@ -1,0 +1,237 @@
+---
+title: "Dashboard Test"
+format: 
+  dashboard:
+    nav-buttons: 
+    - github
+    - icon: patch-question-fill
+      text: "Quarto Doc"
+      href: https://quarto.org/docs/dashboards/
+# theme: quartz
+---
+
+```{r libraries}
+library(tidyverse)
+library(plotly)
+library(leaflet)
+```
+
+<!-- Can have leading content not contained in a card above all other cards that will appear on every page. -->
+
+# Landing Page
+
+## Row
+
+### Column 1 {.tabset}
+
+```{r}
+#| title: Plot 1
+#| fig-cap: Plot for sepal length X width
+
+p1<-ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width))+
+  geom_point(aes(color=Species))+
+  theme_bw()
+
+
+ggplotly(p1)
+```
+
+```{r}
+#| title: Plot 2
+#| fig-cap: Plot for petal length X width
+
+p2<-ggplot(iris, aes(x=Petal.Length, y=Petal.Width))+
+  geom_point(aes(fill=Species), shape=21)+
+  theme_bw()+ theme(plot.background = element_blank(),
+                    panel.background = element_blank(),
+                    legend.background = element_blank())
+
+ggplotly(p2) %>%
+  layout(plot_bgcolor  = "transparent",
+           paper_bgcolor = "transparent",
+           fig_bgcolor   = "transparent")
+```
+
+### Column 2
+
+```{r}
+#| title: AOML Location
+#| padding: 0px
+leaflet() %>%
+  addTiles() %>%
+  setView(lat=25.73472, lng=-80.16229, zoom=14) %>% 
+  # addProviderTiles("Stadia.StamenTerrain") %>%
+  addMarkers(lng=-80.16229, lat=25.73472, popup="<b>NOAA</b><br>AOML")
+```
+
+# Landing Page 2
+
+## Row 1 {height="30%"}
+
+```{r}
+#| component: valuebox
+
+list(
+  title= "Graph Value",
+  value= 31,
+  color= "#4287f5",
+  icon= "clipboard-pulse",
+  size=3
+)
+```
+
+```{r}
+#| content: valuebox
+#| title: "Backpack Value"
+#| icon: backpack
+#| color: secondary
+
+list(
+  value= 464
+)
+```
+
+```{r}
+#| component: valuebox
+
+list(
+  title= "Coffee Value",
+  value= 8,
+  color= "#17d1a6",
+  icon= "cup-hot"
+)
+```
+
+<!-- ::: {.card title="Text"} -->
+<!-- Text above code chunk shows in its own card so you can position it wherever needed. -->
+
+<!-- You can **edit** this text as you *would* normally in the visual editor. -->
+
+<!-- This dashboard function is supposed to be the continuation of "flexdashboard" (and bs_lib?) in quarto. -->
+<!-- ::: -->
+
+## Row
+
+### Column 1 {.tabset}
+
+```{r}
+#| title: Plot 1
+#| fig-cap: Plot for sepal length X width
+
+p1<-ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width))+
+  geom_point(aes(color=Species))+
+  theme_bw()
+
+
+ggplotly(p1)
+```
+
+```{r}
+#| title: Plot 2
+#| fig-cap: Plot for petal length X width
+
+p2<-ggplot(iris, aes(x=Petal.Length, y=Petal.Width))+
+  geom_point(aes(fill=Species), shape=21)+
+  theme_bw()+ theme(plot.background = element_blank(),
+                    panel.background = element_blank(),
+                    legend.background = element_blank())
+
+ggplotly(p2) %>%
+  layout(plot_bgcolor  = "transparent",
+           paper_bgcolor = "transparent",
+           fig_bgcolor   = "transparent")
+```
+
+### Column 2
+
+```{r}
+#| title: AOML Location
+#| padding: 0px
+leaflet() %>%
+  addTiles() %>%
+  setView(lat=25.73472, lng=-80.16229, zoom=14) %>% 
+  # addProviderTiles("Stadia.StamenTerrain") %>%
+  addMarkers(lng=-80.16229, lat=25.73472, popup="<b>NOAA</b><br>AOML")
+```
+
+# Category Page
+
+## Same Row
+
+::: {.card title="Plot 1"}
+```{r}
+
+p3<-ggplot(cars, aes(x=speed, y=dist))+
+  geom_point(color="navy")
+
+ggplotly(p3)
+```
+
+Add text to the same card as a figure.
+:::
+
+```{r}
+#| title: Plot 2
+
+p4<-ggplot(cars, aes(x=speed, y=dist))+
+  geom_bar(fill="navy", stat="identity")
+
+ggplotly(p4)
+```
+
+## Separate Row
+
+```{r}
+#| title: Plot 3
+p5<-ggplot(cars, aes(x=speed, y=dist))+
+  geom_line(color="navy")
+
+ggplotly(p5)
+```
+
+# Other
+
+##  {.sidebar}
+
+It appears that when you add a sidebar to a page it switches the orientation to columns. Since the sidebar is a column. The opposite may be true for toolbars (untested).
+
+This sidebar is often used for putting shiny inputs (e.g. sliders, selections) into. <br> <https://quarto.org/docs/dashboards/interactivity/shiny-r.html>
+
+## Table
+
+```{r}
+
+title="Data Table Title"
+cat("title=",title)
+
+knitr::kable(iris)
+```
+
+## Figs
+
+```{r}
+#| layout-ncol: 1
+p3<-ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width))+
+  geom_point(aes(color=Species))+
+  theme_bw()
+
+ggplotly(p3)
+
+p4<-ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width))+
+  geom_bar(aes(fill=Species), stat="identity")+
+  theme_bw()
+
+ggplotly(p4)
+```
+
+# References
+
+## Text Row
+
+::: {.card title="Icons"}
+There are many places where you can add icons. Here is the link to the list of Bootstrap Icons. <br> <https://icons.getbootstrap.com/> <br> There are other packages you can load in and call icons from (e.g. favicon).
+:::
+
+::: {.card title="YouTube Walkthrough"}
+Here is the [video](https://youtu.be/_VGJIPRGTy4?si=8JwG_44h_UTontwb) from Posit of an introduction to Dashboards. <br>
+:::
