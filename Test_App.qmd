@@ -15,7 +15,6 @@ filters:
 ```{shinylive-r}
 #| standalone: true
 #| viewerHeight: 1000
-#| viewerWidth: 1500
 
 
 ######START APP######

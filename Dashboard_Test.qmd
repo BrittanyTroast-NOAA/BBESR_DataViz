@@ -10,11 +10,6 @@ format:
 # theme: quartz
 ---
 
-```{r libraries}
-library(tidyverse)
-library(plotly)
-library(leaflet)
-```
 
 <!-- Can have leading content not contained in a card above all other cards that will appear on every page. -->
 
@@ -22,216 +17,332 @@ library(leaflet)
 
 ## Row
 
-### Column 1 {.tabset}
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 1000
 
-```{r}
-#| title: Plot 1
-#| fig-cap: Plot for sepal length X width
+######START APP######
 
-p1<-ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width))+
-  geom_point(aes(color=Species))+
-  theme_bw()
+library(shiny)
+library(ggplot2)
+library(plotly)
+library(gt)
+library(tidyr)
+library(dplyr)
 
-
-ggplotly(p1)
-```
-
-```{r}
-#| title: Plot 2
-#| fig-cap: Plot for petal length X width
-
-p2<-ggplot(iris, aes(x=Petal.Length, y=Petal.Width))+
-  geom_point(aes(fill=Species), shape=21)+
-  theme_bw()+ theme(plot.background = element_blank(),
-                    panel.background = element_blank(),
-                    legend.background = element_blank())
-
-ggplotly(p2) %>%
-  layout(plot_bgcolor  = "transparent",
-           paper_bgcolor = "transparent",
-           fig_bgcolor   = "transparent")
-```
-
-### Column 2
-
-```{r}
-#| title: AOML Location
-#| padding: 0px
-leaflet() %>%
-  addTiles() %>%
-  setView(lat=25.73472, lng=-80.16229, zoom=14) %>% 
-  # addProviderTiles("Stadia.StamenTerrain") %>%
-  addMarkers(lng=-80.16229, lat=25.73472, popup="<b>NOAA</b><br>AOML")
-```
-
-# Landing Page 2
-
-## Row 1 {height="30%"}
-
-```{r}
-#| component: valuebox
-
-list(
-  title= "Graph Value",
-  value= 31,
-  color= "#4287f5",
-  icon= "clipboard-pulse",
-  size=3
+ui <- fluidPage(
+  fluidRow(
+    column(6,
+           selectInput("data", label = h2("Choose Indicator:", style = "font-size:20px;"),
+                       choices = c("Oil Spills",
+                                   "Nuisance Aquatic Vegetation",
+                                   "Red Drum",
+                                   "Blue Crab Catch",
+                                   "Brown Pelican",
+                                   "Oyster Catch",
+                                   "Percent Small Business",
+                                   "Vessels Fishing & Seafood Dealers"))),
+    column(4,
+           sliderInput("yearSlider", "Year Range:", min = 1971, max = 2022, value= c(1971, 2022), sep="")),
+    column(1,
+           br(),actionButton("goButton", HTML("<b>Go</b>"), style='font-size:150%')),
+    column(1,
+           br(),actionButton("reset", HTML("<b>Reset</b>"), style='font-size:150%'))),
+  
+  plotlyOutput("plot"),
+  tableOutput("gt_table")
 )
+
+server <- function(input, output, session) {
+  
+  ###FUNCTIONS####
+  # Plot from RDS object
+  plot_fn_obj<-function(df_obj) {
+    df_obj$data <- subset(df_obj$data, df_obj$data$year>= isolate(input$yearSlider[1]) & df_obj$data$year<= isolate(input$yearSlider[2]))
+    df_obj$pos <- subset(df_obj$pos, df_obj$pos$year>= isolate(input$yearSlider[1]) & df_obj$pos$year<= isolate(input$yearSlider[2]))
+    df_obj$neg <- subset(df_obj$neg, df_obj$neg$year>= isolate(input$yearSlider[1]) & df_obj$neg$year<= isolate(input$yearSlider[2]))
+    
+    
+    if (ncol(df_obj$data)<5.5){
+      #single plot
+      plot_main<-ggplot(data=df_obj$data, aes(x=year, y=value))+
+        geom_ribbon(data=df_obj$pos, aes(group=1,ymax=max, ymin=df_obj$vals$mean),fill="#7FFF7F")+
+        geom_ribbon(data=df_obj$neg, aes(group=1,ymax=df_obj$vals$mean, ymin=min), fill="#FF7F7F")+
+        geom_rect(aes(xmin=min(df_obj$data$year),xmax=max(df_obj$data$year),ymin=df_obj$vals$mean-df_obj$vals$sd, ymax=df_obj$vals$mean+df_obj$vals$sd), fill="white")+
+        geom_hline(yintercept=df_obj$vals$mean, lty="dashed")+
+        geom_hline(yintercept=df_obj$vals$mean+df_obj$vals$sd)+
+        geom_hline(yintercept=df_obj$vals$mean-df_obj$vals$sd)+
+        geom_line(aes(group=1), lwd=1)+
+        labs(x="Year", y=df_obj$labs[2,2], title = df_obj$labs[1,2])+
+        theme_bw() + theme(title = element_text(size=14, face = "bold"))
+      
+      if (max(df_obj$data$year)-min(df_obj$data$year)>20) {
+        plot_main<-plot_main+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),5))
+      } else {
+        plot_main<-plot_main+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),2))
+      }
+      plot_main
+      
+    } else {
+      #facet plot
+      
+      plot_sec<-ggplot(data=df_obj$data, aes(x=year, y=value))+
+        facet_wrap(~subnm, ncol=1, scales = "free_y")+
+        geom_ribbon(data=df_obj$pos, aes(group=subnm,ymax=max, ymin=mean),fill="#7FFF7F")+
+        geom_ribbon(data=df_obj$neg, aes(group=subnm,ymax=mean, ymin=min), fill="#FF7F7F")+
+        geom_rect(data=merge(df_obj$data,df_obj$vals), aes(xmin=min(df_obj$data$year),xmax=max(df_obj$data$year),ymin=mean-sd, ymax=mean+sd), fill="white")+
+        geom_hline(aes(yintercept=mean), lty="dashed",data=df_obj$vals)+
+        geom_hline(aes(yintercept=mean+sd),data=df_obj$vals)+
+        geom_hline(aes(yintercept=mean-sd),data=df_obj$vals)+
+        geom_line(aes(group=1), lwd=0.75)+
+        labs(x="Year", y=df_obj$labs[2,2], title = df_obj$labs[1,2])+
+        theme_bw()+theme(strip.background = element_blank(),
+                         strip.text = element_text(face="bold"),
+                         title = element_text(size=14, face = "bold"))
+      
+      if (max(df_obj$data$year)-min(df_obj$data$year)>20) {
+        plot_sec<-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),5))
+      } else {
+        # plot_sec<-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),2))
+      }
+      plot_sec
+      
+    }
+  }
+  
+  ####GET DATA####
+  dat_shrt_nms<-data.frame(c(
+    oilsp="Oil Spills",
+    nav="Nuisance Aquatic Vegetation",
+    rdrum="Red Drum",
+    blcrab="Blue Crab Catch",
+    brpeli="Brown Pelican",
+    oystercat="Oyster Catch",
+    persmbusi="Percent Small Business",
+    vesfish="Vessels Fishing & Seafood Dealers"
+  ))
+  dat_shrt_nms<-tibble::rownames_to_column(dat_shrt_nms)
+  colnames(dat_shrt_nms)<-c("short", "long")
+  
+  shrt_nm<-reactive({dat_shrt_nms$short[dat_shrt_nms$long==input$data]})
+  data_url <-reactive({paste0("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/",shrt_nm(),"_li.r")})
+  dat_vl<-reactive({source(url(data_url()))})
+  dat<-reactive({dat_vl()$value})
+  
+  
+  ####CUSTOM SLIDER####
+  observeEvent(input$data, {
+    selected_data<- dat()$data
+    updateSliderInput(session, "yearSlider",
+                      min = min(selected_data$year),
+                      max= max(selected_data$year),
+                      value=c(min(selected_data$year), max(selected_data$year)))
+  })
+  
+  observeEvent(input$reset,{
+    selected_data<- dat()$data
+    updateSliderInput(session,'yearSlider',value = c(min(selected_data$year), max(selected_data$year)))
+    
+  })
+  
+  
+  
+  observeEvent(input$goButton, {
+    
+    ####MAIN PLOT####
+    output$plot<-renderPlotly({
+      df_pick <- dat()
+      plot_gg<-plot_fn_obj(df_pick)
+      plotly_gg<-ggplotly(plot_gg)
+      plotly_gg
+      
+    })
+    
+    ####Table#####
+    output$gt_table<- render_gt({
+      df_pick <- dat()
+      df_dat<-df_pick$data
+      val_df<-df_pick$vals
+      
+      sel_dat<-df_dat[df_dat$year>= isolate(input$yearSlider[1]) & df_dat$year<= isolate(input$yearSlider[2]),]
+      
+      if (nrow(sel_dat)>3) {
+        if (ncol(df_dat)<5.5) {
+          #Mean Trend
+          sel_dat_mean<-mean(sel_dat$value) # mean value last 5 years
+          mean_sel<-if_else(sel_dat_mean>val_df$mean+val_df$sd, "+", if_else(sel_dat_mean<val_df$mean-val_df$sd, "-","●")) #qualify mean trend
+          
+          #Slope Trend
+          lmout<-summary(lm(sel_dat$value~sel_dat$year))
+          sel_slope<-coef(lmout)[2,1] * length(unique(sel_dat$year)) #multiply by years in the trend (slope per year * number of years=rise over 5 years)
+          slope_sel<-if_else(sel_slope>val_df$sd, "↑", if_else(sel_slope< c(-val_df$sd), "↓","→"))
+          
+          ###Table stuff
+          new_table<-data.frame(val=c(round(val_df$mean,2), round(val_df$sd,2), val_df$mean_sym, val_df$slope_sym, mean_sel, slope_sel),
+                                metric=c("Historical_Mean","Historical_SD","Last 5_Mean", "Last 5_Slope","Selected_Mean", "Selected_Slope"))
+          
+          new_table <- new_table %>% pivot_wider(names_from = metric, values_from = val)
+          
+          gt(new_table) %>%
+            tab_spanner_delim(delim = "_") %>%
+            tab_stubhead(label = "Sub Indicator") %>%
+            tab_header(title = "Trends in Mean & Slope") %>%
+            tab_options(table.border.top.color = "#3498db",
+                        table.border.bottom.color = "#3498db",
+                        table.border.left.color = "#3498db",
+                        table.border.right.color = "#3498db",
+                        table.border.top.width = 5,
+                        table.border.bottom.width = 5,
+                        table.border.left.width = 5,
+                        table.border.right.width = 5,
+                        table.border.left.style = "solid",
+                        table.border.right.style = "solid",) %>%
+            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %>%
+            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %>%
+            tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %>%
+            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %>%
+            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %>%
+            tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
+        } else {
+          #Selected Multi Sub
+          
+          sub_list<-list()
+          subs<-unique(df_dat$subnm)
+          for (i in 1:length(subs)){
+            sub_df<-sel_dat[sel_dat$subnm==subs[i],]
+            vals<-val_df[val_df$subnm==subs[i],]
+            sub_dat_mean<-mean(sub_df$value) # mean value last 5 years
+            mean_sub<-if_else(sub_dat_mean>vals$mean+vals$sd, "+", if_else(sub_dat_mean<vals$mean-vals$sd, "-","●")) #qualify mean trend
+            
+            #Slope Trend
+            lmout<-summary(lm(sub_df$value~sub_df$year))
+            sub_slope<-coef(lmout)[2,1] * length(unique(sub_df$year)) #multiply by years in the trend (slope per year * number of years=rise over 5 years)
+            slope_sub<-if_else(sub_slope>vals$sd, "↑", if_else(sub_slope< c(-vals$sd), "↓","→"))
+            
+            add_sub<-data.frame(mean_sel=mean_sub,
+                                slope_sel=slope_sub)
+            sub_list[[i]]<-add_sub
+            
+          }
+          
+          add_sel_df<-do.call("rbind",sub_list)
+          val_df<-cbind(val_df, add_sel_df)
+          
+          val_df$mean<-as.character(val_df$mean)
+          val_df$sd<-as.character(val_df$sd)
+          
+          new_table<-val_df %>% select("Sub_Indicator"=subnm,"Historical_Mean"=mean, "Historical_SD"=sd, "Last 5_Mean"=mean_sym, "Last 5_Slope"=slope_sym, "Selected_Mean"=mean_sel, "Selected_Slope"=slope_sel) %>%
+            group_by(Sub_Indicator) %>% pivot_longer(cols = -c("Sub_Indicator"))
+          
+          
+          new_table <- new_table %>% pivot_wider(names_from = name, values_from = value)
+          new_table[,2:3]<-lapply(new_table[,2:3], function(x) {round(as.numeric(x),2)})
+          rownames(new_table)<-new_table$Sub_Indicator
+          
+          gt(new_table, rowname_col = "Sub_Indicator", groupname_col = NA) %>%
+            tab_spanner_delim(delim = "_") %>%
+            tab_stubhead(label = "Sub Indicator") %>%
+            tab_header(title = "Trends in Mean & Slope") %>%
+            tab_options(table.border.top.color = "#3498db",
+                        table.border.bottom.color = "#3498db",
+                        table.border.left.color = "#3498db",
+                        table.border.right.color = "#3498db",
+                        table.border.top.width = 5,
+                        table.border.bottom.width = 5,
+                        table.border.left.width = 5,
+                        table.border.right.width = 5,
+                        table.border.left.style = "solid",
+                        table.border.right.style = "solid",) %>%
+            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %>%
+            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %>%
+            tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %>%
+            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %>%
+            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %>%
+            tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
+        }
+        
+        
+      } else {
+        
+        ###Table stuff
+        if (ncol(df_dat)<5.5) {
+          new_table<-data.frame(val=c(round(val_df$mean,2), round(val_df$sd,2), val_df$mean_sym, val_df$slope_sym),
+                                metric=c("Historical_Mean","Historical_SD","Last 5_Mean", "Last 5_Slope"))
+          
+          new_table <- new_table %>% pivot_wider(names_from = metric, values_from = val)
+          
+          gt(new_table) %>%
+            tab_spanner_delim(delim = "_") %>%
+            tab_stubhead(label = "Sub Indicator") %>%
+            tab_header(title = "Trends in Mean & Slope") %>%
+            tab_options(table.border.top.color = "#3498db",
+                        table.border.bottom.color = "#3498db",
+                        table.border.left.color = "#3498db",
+                        table.border.right.color = "#3498db",
+                        table.border.top.width = 5,
+                        table.border.bottom.width = 5,
+                        table.border.left.width = 5,
+                        table.border.right.width = 5,
+                        table.border.left.style = "solid",
+                        table.border.right.style = "solid",) %>%
+            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %>%
+            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %>%
+            tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %>%
+            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %>%
+            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %>%
+            tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
+          
+        } else {
+          val_df$mean<-as.character(val_df$mean)
+          val_df$sd<-as.character(val_df$sd)
+          
+          new_table<-val_df %>% select("Sub_Indicator"=subnm,"Historical_Mean"=mean, "Historical_SD"=sd, "Last 5_Mean"=mean_sym, "Last 5_Slope"=slope_sym) %>%
+            group_by(Sub_Indicator) %>% pivot_longer(cols = -c("Sub_Indicator"))
+          
+          
+          new_table <- new_table %>% pivot_wider(names_from = name, values_from = value)
+          new_table[,2:3]<-lapply(new_table[,2:3], function(x) {round(as.numeric(x),2)})
+          rownames(new_table)<-new_table$Sub_Indicator
+          
+          gt(new_table, rowname_col = "Sub_Indicator", groupname_col = NA) %>%
+            tab_spanner_delim(delim = "_") %>%
+            tab_stubhead(label = "Sub Indicator") %>%
+            tab_header(title = "Trends in Mean & Slope") %>%
+            tab_options(table.border.top.color = "#3498db",
+                        table.border.bottom.color = "#3498db",
+                        table.border.left.color = "#3498db",
+                        table.border.right.color = "#3498db",
+                        table.border.top.width = 5,
+                        table.border.bottom.width = 5,
+                        table.border.left.width = 5,
+                        table.border.right.width = 5,
+                        table.border.left.style = "solid",
+                        table.border.right.style = "solid",) %>%
+            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %>%
+            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %>%
+            tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %>%
+            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %>%
+            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %>%
+            tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
+          
+        }
+        
+      }
+    })
+    
+    
+    
+    
+  })
+  
+  
+  
+  
+  
+}
+
+shinyApp(ui, server)
+
+
 ```
 
-```{r}
-#| content: valuebox
-#| title: "Backpack Value"
-#| icon: backpack
-#| color: secondary
-
-list(
-  value= 464
-)
-```
-
-```{r}
-#| component: valuebox
-
-list(
-  title= "Coffee Value",
-  value= 8,
-  color= "#17d1a6",
-  icon= "cup-hot"
-)
-```
-
-<!-- ::: {.card title="Text"} -->
-<!-- Text above code chunk shows in its own card so you can position it wherever needed. -->
-
-<!-- You can **edit** this text as you *would* normally in the visual editor. -->
-
-<!-- This dashboard function is supposed to be the continuation of "flexdashboard" (and bs_lib?) in quarto. -->
-<!-- ::: -->
-
-## Row
-
-### Column 1 {.tabset}
-
-```{r}
-#| title: Plot 1
-#| fig-cap: Plot for sepal length X width
-
-p1<-ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width))+
-  geom_point(aes(color=Species))+
-  theme_bw()
-
-
-ggplotly(p1)
-```
-
-```{r}
-#| title: Plot 2
-#| fig-cap: Plot for petal length X width
-
-p2<-ggplot(iris, aes(x=Petal.Length, y=Petal.Width))+
-  geom_point(aes(fill=Species), shape=21)+
-  theme_bw()+ theme(plot.background = element_blank(),
-                    panel.background = element_blank(),
-                    legend.background = element_blank())
-
-ggplotly(p2) %>%
-  layout(plot_bgcolor  = "transparent",
-           paper_bgcolor = "transparent",
-           fig_bgcolor   = "transparent")
-```
-
-### Column 2
-
-```{r}
-#| title: AOML Location
-#| padding: 0px
-leaflet() %>%
-  addTiles() %>%
-  setView(lat=25.73472, lng=-80.16229, zoom=14) %>% 
-  # addProviderTiles("Stadia.StamenTerrain") %>%
-  addMarkers(lng=-80.16229, lat=25.73472, popup="<b>NOAA</b><br>AOML")
-```
-
-# Category Page
-
-## Same Row
-
-::: {.card title="Plot 1"}
-```{r}
-
-p3<-ggplot(cars, aes(x=speed, y=dist))+
-  geom_point(color="navy")
-
-ggplotly(p3)
-```
-
-Add text to the same card as a figure.
-:::
-
-```{r}
-#| title: Plot 2
-
-p4<-ggplot(cars, aes(x=speed, y=dist))+
-  geom_bar(fill="navy", stat="identity")
-
-ggplotly(p4)
-```
-
-## Separate Row
-
-```{r}
-#| title: Plot 3
-p5<-ggplot(cars, aes(x=speed, y=dist))+
-  geom_line(color="navy")
-
-ggplotly(p5)
-```
-
-# Other
-
-##  {.sidebar}
-
-It appears that when you add a sidebar to a page it switches the orientation to columns. Since the sidebar is a column. The opposite may be true for toolbars (untested).
-
-This sidebar is often used for putting shiny inputs (e.g. sliders, selections) into. <br> <https://quarto.org/docs/dashboards/interactivity/shiny-r.html>
-
-## Table
-
-```{r}
-
-title="Data Table Title"
-cat("title=",title)
-
-knitr::kable(iris)
-```
-
-## Figs
-
-```{r}
-#| layout-ncol: 1
-p3<-ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width))+
-  geom_point(aes(color=Species))+
-  theme_bw()
-
-ggplotly(p3)
-
-p4<-ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width))+
-  geom_bar(aes(fill=Species), stat="identity")+
-  theme_bw()
-
-ggplotly(p4)
-```
-
-# References
-
-## Text Row
-
-::: {.card title="Icons"}
-There are many places where you can add icons. Here is the link to the list of Bootstrap Icons. <br> <https://icons.getbootstrap.com/> <br> There are other packages you can load in and call icons from (e.g. favicon).
-:::
-
-::: {.card title="YouTube Walkthrough"}
-Here is the [video](https://youtu.be/_VGJIPRGTy4?si=8JwG_44h_UTontwb) from Posit of an introduction to Dashboards. <br>
-:::
