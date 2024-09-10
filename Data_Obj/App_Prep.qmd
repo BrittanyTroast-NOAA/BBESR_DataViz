@@ -24,7 +24,7 @@ ves_deal<-read.csv("Data_CSV/VesselsFishing_SeafoodDealers.csv", header=F)
 # rsl<-read.csv("Data_CSV/GI_RSL.csv", header=F)
 unemploy<-read.csv("Data_CSV/unemployment.csv", header=F)
 precip<-read.csv("Data_CSV/LA Precip.csv", header=F)
-airtemps<-read.csv("Data_CSV/LA All Temps.csv", header=F)
+airtemps<-read.csv("Data_CSV/LA Avg Temps.csv", header=F)
 
 
 ```
