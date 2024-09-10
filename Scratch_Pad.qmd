@@ -31,8 +31,35 @@ full_minmax<-do.call("rbind", minmax_li)
 final_minmax<-data.frame(min=min(full_minmax$min), max=max(full_minmax$max))
 
 ```
-Between Years
+
+
+Input SubCategories
 ```{r}
-crab$vals
+#Old
+selectInput("data", label = h2(HTML("<b>Choose Indicator:</b>"), style = "font-size:22px;"),
+                             choices = c("Oil Spills",
+                                         "Nuisance Aquatic Vegetation",
+                                         "Red Drum",
+                                         "Blue Crab Catch",
+                                         "Brown Pelican",
+                                         "Oyster Catch",
+                                         "Percent Small Business",
+                                         "Vessels Fishing & Seafood Dealers"))
+
+#New
+selectInput("data", label = h2(HTML("<b>Choose Indicator:</b>"), style = "font-size:22px;"),
+                             choices = lsit(
+                               'Drivers' = list("Oil Spills"),
+                               'Pressures'=list("Oil Spills","Nuisance Aquatic Vegetation"),
+                               'States'=list("Red Drum","Brown Pelican"),
+                               'Human Activities'=list("Blue Crab Catch","Oyster Catch","Vessels Fishing & Seafood Dealers"),
+                               'Human Dimensions'=list("Percent Small Business")
+                             ))
+
+?selectInput()
+
+?list()
+
+
 ```
 

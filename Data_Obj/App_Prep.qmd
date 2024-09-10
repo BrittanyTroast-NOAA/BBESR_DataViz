@@ -19,12 +19,17 @@ oilspill<-read.csv("Data_CSV/OilSpills.csv", header=F)
 oyster<-read.csv("Data_CSV/oyster_cat.csv", header=F)
 sml_bus<-read.csv("Data_CSV/per_small_busi.csv", header=F)
 red_drum<-read.csv("Data_CSV/Red_Drum.csv", header=F)
-sst<-read.csv("Data_CSV/sst_raw.csv", header=F)
+sst<-read.csv("Data_CSV/sst_anom.csv", header=F)
 ves_deal<-read.csv("Data_CSV/VesselsFishing_SeafoodDealers.csv", header=F)
+# rsl<-read.csv("Data_CSV/GI_RSL.csv", header=F)
+unemploy<-read.csv("Data_CSV/unemployment.csv", header=F)
+precip<-read.csv("Data_CSV/LA Precip.csv", header=F)
+airtemps<-read.csv("Data_CSV/LA All Temps.csv", header=F)
+
 
 ```
 
-## Reference Stuff
+## Reference Stuff (NO EVAL)
 
 All Functions for making data
 ```{r, eval=F}
@@ -718,6 +723,12 @@ oystercat_li<-data_prep_fn(oyster)
 persmbusi_li<-data_prep_fn(sml_bus)
 rdrum_li<-data_prep_fn(red_drum)
 vesfish_li<-data_prep_fn(ves_deal)
+sst_li<-data_prep_fn(sst)
+# rsl_li<-data_prep_fn(rsl)
+unemploy_li<-data_prep_fn(unemploy)
+precip_li<-data_prep_fn(precip)
+airtemps_li<-data_prep_fn(airtemps)
+
 
 #save files as RDS
 saveRDS(blcrab_li, "blcrab_li.rds")
@@ -728,6 +739,11 @@ saveRDS(oystercat_li, "oystercat_li.rds")
 saveRDS(persmbusi_li, "persmbusi_li.rds")
 saveRDS(rdrum_li, "rdrum_li.rds")
 saveRDS(vesfish_li, "vesfish_li.rds")
+saveRDS(sst_li, "sst_li.rds")
+saveRDS(unemploy_li, "unemploy_li_li.rds")
+saveRDS(precip_li, "precip_li.rds")
+saveRDS(airtemps_li, "airtemps_li.rds")
+
 
 #save files as R
 dput(blcrab_li, "Data_R/blcrab_li.r")
@@ -738,6 +754,10 @@ dput(oystercat_li, "Data_R/oystercat_li.r")
 dput(persmbusi_li, "Data_R/persmbusi_li.r")
 dput(rdrum_li, "Data_R/rdrum_li.r")
 dput(vesfish_li, "Data_R/vesfish_li.r")
+dput(sst_li, "Data_R/sst_li.r")
+dput(unemploy_li, "Data_R/unemploy_li_li.r")
+dput(precip_li, "Data_R/precip_li.r")
+dput(airtemps_li, "Data_R/airtemps_li.r")
 
 ```
 

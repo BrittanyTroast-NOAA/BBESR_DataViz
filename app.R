@@ -11,21 +11,22 @@ ui <- fluidPage(
   
   sidebarLayout(
     sidebarPanel(selectInput("data", label = h2(HTML("<b>Choose Indicator:</b>"), style = "font-size:22px;"),
-                             choices = c("Oil Spills",
-                                         "Nuisance Aquatic Vegetation",
-                                         "Red Drum",
-                                         "Blue Crab Catch",
-                                         "Brown Pelican",
-                                         "Oyster Catch",
-                                         "Percent Small Business",
-                                         "Vessels Fishing & Seafood Dealers")),
+                             choices = list(
+                               'Drivers' = list("Oil Spills","Vessels Fishing & Seafood Dealers"),
+                               'Pressures'=list("Nuisance Aquatic Vegetation","c"),
+                               'States'=list("Red Drum","Brown Pelican"),
+                               'Human Activities'=list("Blue Crab Catch","Oyster Catch"),
+                               'Human Dimensions'=list("Percent Small Business","a")
+                             )),
                  sliderInput("yearSlider", "Year Range:", min = 1971, max = 2022, value= c(1971, 2022), sep=""),
                  tags$style("#yearSlider .irs-grid-text {font-size: 25px}"),
                  actionButton("goButton", HTML("<b>Go</b>"), style='font-size:150%'),
                  actionButton("reset", HTML("<b>Reset</b>"), style='font-size:150%'),
                  width = 2),
-    mainPanel(plotlyOutput("plot", height = '120%'),
-              
+
+    mainPanel(
+      plotlyOutput("plot", height = '120%'),
+
               fluidRow(
                 column(4,
                        tableOutput("gt_table")),
@@ -46,7 +47,7 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   
-  ###FUNCTIONS####
+  ####FUNCTIONS####
   # Plot from RDS object
   plot_fn_obj<-function(df_obj) {
     df_obj$data <- subset(df_obj$data, df_obj$data$year>= isolate(input$yearSlider[1]) & df_obj$data$year<= isolate(input$yearSlider[2]))
