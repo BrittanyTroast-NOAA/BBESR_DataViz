@@ -12,11 +12,11 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(selectInput("data", label = h2(HTML("<b>Choose Indicator:</b>"), style = "font-size:22px;"),
                              choices = list(
-                               'Drivers' = list("Oil Spills","Vessels Fishing & Seafood Dealers"),
-                               'Pressures'=list("Nuisance Aquatic Vegetation","c"),
+                               'Drivers' = list("Sea Surface Temperature", "Precipitation","Air Temperature"),
+                               'Pressures'=list("Oil Spills", "Nuisance Aquatic Vegetation"),
                                'States'=list("Red Drum","Brown Pelican"),
-                               'Human Activities'=list("Blue Crab Catch","Oyster Catch"),
-                               'Human Dimensions'=list("Percent Small Business","a")
+                               'Human Activities'=list("Blue Crab Catch","Oyster Catch", "Seafood Dealers & Vessels Fishing"),
+                               'Human Dimensions'=list("Percent Small Business","Unemployment")
                              )),
                  sliderInput("yearSlider", "Year Range:", min = 1971, max = 2022, value= c(1971, 2022), sep=""),
                  tags$style("#yearSlider .irs-grid-text {font-size: 25px}"),
@@ -111,7 +111,11 @@ server <- function(input, output, session) {
     brpeli="Brown Pelican",
     oystercat="Oyster Catch",
     persmbusi="Percent Small Business",
-    vesfish="Vessels Fishing & Seafood Dealers"
+    vesfish="Vessels Fishing & Seafood Dealers",
+    sst="Sea Surface Temperature",
+    unemploy="Unemployment",
+    precip="Precipitation",
+    airtemps="Air Temperature"
   ))
   dat_shrt_nms<-tibble::rownames_to_column(dat_shrt_nms)
   colnames(dat_shrt_nms)<-c("short", "long")
