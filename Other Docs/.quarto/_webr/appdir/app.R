@@ -1,0 +1,39 @@
+library(shiny)
+
+ui <- fluidPage(
+  titlePanel("Hello Shiny!"),
+  h3("Data URL"),
+  verbatimTextOutput("urlText"),
+  h3("Working Directory"),
+  verbatimTextOutput("workingDirectory"),
+  h3("File System Information"),
+  verbatimTextOutput("fileSystem"),
+  h3("Downloaded Data by Relative URL"),
+  verbatimTextOutput("retrievedData")
+)
+
+server <- function(input, output, session) {
+  
+  data_url <- "https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/brpeli_li.r"
+  
+  output$urlText <- renderText({
+    data_url
+  })
+  
+  output$fileSystem <- renderPrint({
+    list.files()
+  })
+
+  output$workingDirectory <- renderPrint({
+    getwd()
+  })
+
+  output$retrievedData <- renderPrint({
+    dat<-source(url(data_url))
+    dat$value$data
+  })
+  
+}
+
+# Create Shiny app ----
+shinyApp(ui = ui, server = server)

@@ -1,7 +1,10 @@
 project:
   type: website
   output-dir: docs
-
+  render: 
+    - "*.qmd"
+    - "!/Other Docs/"
+    - "!/Data_Obj"
 website:
   title: "BB ESR Visualization"
   navbar:

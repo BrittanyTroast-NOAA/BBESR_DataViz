@@ -63,3 +63,52 @@ selectInput("data", label = h2(HTML("<b>Choose Indicator:</b>"), style = "font-s
 
 ```
 
+ifelse ggplot layer
+```{r}
+doub<-vesfish_li$data
+quad<-unemploy_li$data
+
+dat_df<-doub
+dat_df<-quad
+
+ggplot(dat_df, aes(x=year, y=value))+
+  facet_wrap(~subnm, ncol = ifelse(length(unique(dat_df$subnm))<4, 1, 2))+
+  geom_line()
+```
+
+Compare two indicators
+
+- combine data
+- get data for each indicator
+- add ind name to column for id
+- figure out if can plot in same graph or sep
+- normalize and change color based on indicator to show on same graph
+```{r}
+library(tidyverse)
+library(plotly)
+
+
+a_dat<-nav_li$data
+b_dat<-airtemps_li$data
+
+a_dat$scaled<-scale(a_dat$value)
+b_dat$scaled<-scale(b_dat$value)
+
+a_dat$indicator<-"NAV"
+b_dat$indicator<-"AirTemps"
+
+ab_dat<-as.data.frame(rbind(cbind(a_dat$year, a_dat$scaled, a_dat$indicator), cbind(b_dat$year, b_dat$scaled, b_dat$indicator)))
+colnames(ab_dat)<-c("year", "scaled", "indicator")
+ab_dat[,1:2]<-lapply(ab_dat[,1:2], as.numeric)
+
+p<-ggplot(ab_dat, aes(x=year, y=scaled))+
+  geom_line(aes(color=indicator), lwd=1)+
+  geom_hline(yintercept = 0, color="black", lwd=0.5)+
+  scale_color_manual(values = c("blue", "red"))+
+  labs(x="Year", y="Scaled Value", color="Selected Indicators")+
+  theme_bw() + theme(legend.position = "bottom")
+
+ggplotly(p) %>%
+  layout(legend=list(y=1.1,x=0.5, xanchor="center", yanchor="center", orientation="h"))
+```
+
