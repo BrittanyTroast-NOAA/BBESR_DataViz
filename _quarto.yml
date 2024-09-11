@@ -13,6 +13,8 @@ website:
         text: Home
       - href: Test_App.qmd
         text: Plot Data
+      - href: ShinyLive_in_Doc.qmd
+        text: ShinyLive Doc
       - href: Dashboard_Test.qmd
         text: Visualize Indicator
       - href: Compare_Test.qmd
