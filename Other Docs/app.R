@@ -23,11 +23,11 @@ ui <- fluidPage(
                              )),
                  selectInput("data2", label = h2(HTML("<b>Compare Indicator:</b>"), style = "font-size:22px;"),
                              choices = list("",
-                               'Drivers' = list("Precipitation","Air Temperature"),
-                               'Pressures'=list("Oil Spills", "Nuisance Aquatic Vegetation"),
-                               'States'=list("Red Drum","Brown Pelican"),
-                               'Human Activities'=list("Blue Crab Catch","Oyster Catch", "Seafood Dealers & Vessels Fishing"),
-                               'Human Dimensions'=list("Percent Small Business","Unemployment")
+                                            'Drivers' = list("Precipitation","Air Temperature"),
+                                            'Pressures'=list("Oil Spills", "Nuisance Aquatic Vegetation"),
+                                            'States'=list("Red Drum","Brown Pelican"),
+                                            'Human Activities'=list("Blue Crab Catch","Oyster Catch", "Seafood Dealers & Vessels Fishing"),
+                                            'Human Dimensions'=list("Percent Small Business","Unemployment")
                              )),
                  sliderInput("yearSlider", "Year Range:", min = 1800, max = 2024, value= c(1800, 2024), sep=""),
                  tags$style("#yearSlider .irs-grid-text {font-size: 25px}"),
@@ -37,26 +37,26 @@ ui <- fluidPage(
     #Main
     navset_card_tab(
       nav_panel("Graph",
-       plotlyOutput("plot", height = '120%')),
-
+                plotlyOutput("plot", height = '120%')),
+      
       nav_panel("Summary",
-
-               tableOutput("gt_table"),
-
-               htmlOutput("plain_header"),
-               htmlOutput("plain_text"),
-               tags$style("#plain_text {font-size:20px;margin-bottom: 25px;margin-top: 15px;}"),
-               tags$style("#plain_header {font-size:24px;margin-top: 25px;}")),
+                
+                tableOutput("gt_table"),
+                
+                htmlOutput("plain_header"),
+                htmlOutput("plain_text"),
+                tags$style("#plain_text {font-size:20px;margin-bottom: 25px;margin-top: 15px;}"),
+                tags$style("#plain_header {font-size:24px;margin-top: 25px;}")),
       
       nav_panel("Compare Indicators",
                 uiOutput("message_or_plot")
       )
-
+      
+      
+    ) #sidePan
+    
+  ) #sideLay
   
-  ) #sidePan
- 
- ) #sideLay
- 
 ) #flpage
 
 server <- function(input, output, session) {
