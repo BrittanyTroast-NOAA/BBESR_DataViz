@@ -7,7 +7,10 @@ format:
     - icon: patch-question-fill
       text: "Quarto Doc"
       href: https://quarto.org/docs/dashboards/
-# theme: quartz
+    resources: 
+    - shinylive-sw.js  # Required to publish the shinylive service worker
+filters:
+  - shinylive
 ---
 
 
@@ -29,10 +32,8 @@ library(plotly)
 library(gt)
 library(tidyr)
 library(dplyr)
-library(shinyjs)
 
 ui <- fluidPage(
-  useShinyjs(),
   #Sidebar
   sidebarLayout(
     sidebarPanel(selectInput("data", label = h2(HTML("<b>Choose Indicator:</b>"), style = "font-size:22px;"),
@@ -168,10 +169,7 @@ server <- function(input, output, session) {
   dat2<-reactive({dat_vl2()$value})
   
   ####CUSTOM SLIDER####
-  observe({
-    shinyjs::click("goButton")
-  })
-  
+
   observeEvent(input$data, {
     selected_data<- dat()$data
     updateSliderInput(session, "yearSlider",
