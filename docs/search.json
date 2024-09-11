@@ -1,16 +1,16 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "BB ESR Viz Intro",
-    "section": "",
-    "text": "Update renv\nThings I should put here\n\nGeneral info about the BB ESR\nPictures of front of it\nLink to the ESR\nExecutive Summary?\nTest to see if things change…again"
-  },
-  {
     "objectID": "Test_App.html",
     "href": "Test_App.html",
     "title": "Indicator",
     "section": "",
     "text": "Random Quart Document\nCould be used for intro.\n\n\nTest how plotly plot works\nHere we can write about an indicator (maybe for key findings and executive summary) and show plot."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "BB ESR Viz Intro",
+    "section": "",
+    "text": "Update renv\nThings I should put here\n\nGeneral info about the BB ESR\nPictures of front of it\nLink to the ESR\nExecutive Summary?\nTest to see if things change…again"
   }
 ]

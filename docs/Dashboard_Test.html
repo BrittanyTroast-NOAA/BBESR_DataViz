@@ -164,47 +164,61 @@ library(plotly)
 library(gt)
 library(tidyr)
 library(dplyr)
+library(shinyjs)
 
 ui &lt;- fluidPage(
-  
+  useShinyjs(),
+  #Sidebar
   sidebarLayout(
     sidebarPanel(selectInput("data", label = h2(HTML("&lt;b&gt;Choose Indicator:&lt;/b&gt;"), style = "font-size:22px;"),
-                             choices = c("Oil Spills",
-                                         "Nuisance Aquatic Vegetation",
-                                         "Red Drum",
-                                         "Blue Crab Catch",
-                                         "Brown Pelican",
-                                         "Oyster Catch",
-                                         "Percent Small Business",
-                                         "Vessels Fishing &amp; Seafood Dealers")),
-                 sliderInput("yearSlider", "Year Range:", min = 1971, max = 2022, value= c(1971, 2022), sep=""),
+                             choices = list(
+                               'Drivers' = list("Precipitation","Air Temperature"),
+                               'Pressures'=list("Oil Spills", "Nuisance Aquatic Vegetation"),
+                               'States'=list("Red Drum","Brown Pelican"),
+                               'Human Activities'=list("Blue Crab Catch","Oyster Catch", "Seafood Dealers &amp; Vessels Fishing"),
+                               'Human Dimensions'=list("Percent Small Business","Unemployment")
+                             )),
+                 selectInput("data2", label = h2(HTML("&lt;b&gt;Compare Indicator:&lt;/b&gt;"), style = "font-size:22px;"),
+                             choices = list("",
+                               'Drivers' = list("Precipitation","Air Temperature"),
+                               'Pressures'=list("Oil Spills", "Nuisance Aquatic Vegetation"),
+                               'States'=list("Red Drum","Brown Pelican"),
+                               'Human Activities'=list("Blue Crab Catch","Oyster Catch", "Seafood Dealers &amp; Vessels Fishing"),
+                               'Human Dimensions'=list("Percent Small Business","Unemployment")
+                             )),
+                 sliderInput("yearSlider", "Year Range:", min = 1800, max = 2024, value= c(1800, 2024), sep=""),
                  tags$style("#yearSlider .irs-grid-text {font-size: 25px}"),
                  actionButton("goButton", HTML("&lt;b&gt;Go&lt;/b&gt;"), style='font-size:150%'),
                  actionButton("reset", HTML("&lt;b&gt;Reset&lt;/b&gt;"), style='font-size:150%'),
                  width = 2),
-    mainPanel(plotlyOutput("plot", height = '120%'),
-              
-              fluidRow(
-                column(4,
-                       tableOutput("gt_table")),
-                column(8,
-                       htmlOutput("plain_header"),
-                       htmlOutput("plain_text"),
-                       tags$style("#plain_text {font-size:20px;margin-bottom: 25px;margin-top: 15px;}"),
-                       tags$style("#plain_header {font-size:24px;margin-top: 25px;}")),
-                width = 10),
-    position = c("left"),
-    fluid = TRUE
+    #Main
+    navset_card_tab(
+      nav_panel("Graph",
+       plotlyOutput("plot", height = '120%')),
+
+      nav_panel("Summary",
+
+               tableOutput("gt_table"),
+
+               htmlOutput("plain_header"),
+               htmlOutput("plain_text"),
+               tags$style("#plain_text {font-size:20px;margin-bottom: 25px;margin-top: 15px;}"),
+               tags$style("#plain_header {font-size:24px;margin-top: 25px;}")),
+      
+      nav_panel("Compare Indicators",
+                uiOutput("message_or_plot")
+      )
+
   
- )
+  ) #sidePan
  
-  )
+ ) #sideLay
  
-)
+) #flpage
 
 server &lt;- function(input, output, session) {
   
-  ###FUNCTIONS####
+  ####FUNCTIONS####
   # Plot from RDS object
   plot_fn_obj&lt;-function(df_obj) {
     df_obj$data &lt;- subset(df_obj$data, df_obj$data$year&gt;= isolate(input$yearSlider[1]) &amp; df_obj$data$year&lt;= isolate(input$yearSlider[2]))
@@ -236,7 +250,7 @@ server &lt;- function(input, output, session) {
       #facet plot
       
       plot_sec&lt;-ggplot(data=df_obj$data, aes(x=year, y=value))+
-        facet_wrap(~subnm, ncol=1, scales = "free_y")+
+        facet_wrap(~subnm, ncol=ifelse(length(unique(df_obj$data$subnm))&lt;4,1,2), scales = "free_y")+
         geom_ribbon(data=df_obj$pos, aes(group=subnm,ymax=max, ymin=mean),fill="#7FFF7F")+
         geom_ribbon(data=df_obj$neg, aes(group=subnm,ymax=mean, ymin=min), fill="#FF7F7F")+
         geom_rect(data=merge(df_obj$data,df_obj$vals), aes(xmin=min(df_obj$data$year),xmax=max(df_obj$data$year),ymin=mean-sd, ymax=mean+sd), fill="white")+
@@ -268,24 +282,37 @@ server &lt;- function(input, output, session) {
     brpeli="Brown Pelican",
     oystercat="Oyster Catch",
     persmbusi="Percent Small Business",
-    vesfish="Vessels Fishing &amp; Seafood Dealers"
+    vesfish="Seafood Dealers &amp; Vessels Fishing",
+    unemploy="Unemployment",
+    precip="Precipitation",
+    airtemps="Air Temperature"
   ))
   dat_shrt_nms&lt;-tibble::rownames_to_column(dat_shrt_nms)
   colnames(dat_shrt_nms)&lt;-c("short", "long")
   
+  #Data 1
   shrt_nm&lt;-reactive({dat_shrt_nms$short[dat_shrt_nms$long==input$data]})
   data_url &lt;-reactive({paste0("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/",shrt_nm(),"_li.r")})
   dat_vl&lt;-reactive({source(url(data_url()))})
   dat&lt;-reactive({dat_vl()$value})
   
+  #Data 2
+  shrt_nm2&lt;-reactive({dat_shrt_nms$short[dat_shrt_nms$long==input$data2]})
+  data_url2 &lt;-reactive({paste0("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/",shrt_nm2(),"_li.r")})
+  dat_vl2&lt;-reactive({source(url(data_url2()))})
+  dat2&lt;-reactive({dat_vl2()$value})
   
   ####CUSTOM SLIDER####
+  observe({
+    shinyjs::click("goButton")
+  })
+  
   observeEvent(input$data, {
     selected_data&lt;- dat()$data
     updateSliderInput(session, "yearSlider",
                       min = min(selected_data$year),
                       max= max(selected_data$year),
-                      value=c(min(selected_data$year), max(selected_data$year)))
+                      value=c(min(selected_data$year), max(selected_data$year)), step=1)
   })
   
   observeEvent(input$reset,{
@@ -305,6 +332,54 @@ server &lt;- function(input, output, session) {
       plotly_gg&lt;-ggplotly(plot_gg)
       plotly_gg
       
+    })
+    
+    ####OutputSwtich####
+    output$message_or_plot&lt;- renderUI({
+      
+      if(input$data2 == ""){
+        return(h2("Please choose a second indicator from the 'Compare Indicator' dropdown"))
+      } else {
+        plotlyOutput("compare", height = '120%')
+      }
+      
+    })
+    
+    ####Compare Plot####
+    output$compare&lt;-renderPlotly({
+      
+      dat1_df&lt;-dat()
+      dat2_df&lt;-dat2()
+      
+      df_pick1&lt;-dat1_df$data
+      df_pick2&lt;-dat2_df$data
+      
+      a_dat &lt;- subset(df_pick1, df_pick1$year&gt;= isolate(input$yearSlider[1]) &amp; df_pick1$year&lt;= isolate(input$yearSlider[2]))
+      b_dat &lt;- subset(df_pick2, df_pick2$year&gt;= isolate(input$yearSlider[1]) &amp; df_pick2$year&lt;= isolate(input$yearSlider[2]))
+      
+      a_dat$scaled&lt;-scale(a_dat$value)
+      b_dat$scaled&lt;-scale(b_dat$value)
+      
+      a_dat$indicator&lt;-input$data
+      b_dat$indicator&lt;-input$data2
+      
+      ab_dat&lt;-as.data.frame(rbind(cbind(a_dat$year, a_dat$scaled, a_dat$indicator), cbind(b_dat$year, b_dat$scaled, b_dat$indicator)))
+      colnames(ab_dat)&lt;-c("year", "scaled", "indicator")
+      ab_dat[,1:2]&lt;-lapply(ab_dat[,1:2], as.numeric)
+      
+      p&lt;-ggplot(ab_dat, aes(x=year, y=scaled))+
+        geom_hline(yintercept = 0, color="gray50", lwd=0.5, lty="dashed")+
+        geom_line(aes(color=indicator), lwd=1)+
+        scale_color_manual(values = c("blue", "red"))+
+        labs(x="Year", y="Scaled Value", color="Selected Indicators")+
+        theme_bw() + theme(legend.position = "bottom")
+      
+      ggplotly(p) %&gt;%
+        layout(legend=list(y=1.1,x=0.5, xanchor="center", yanchor="center", orientation="h"))
+    })
+    
+    output$nocompare&lt;-renderText({
+      "Please select and indicator to compare from the 'Compare Indicator' dropdown."
     })
     
     ####TABLE#####
