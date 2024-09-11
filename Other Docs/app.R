@@ -7,6 +7,7 @@ library(gt)
 library(tidyr)
 library(dplyr)
 library(shinyjs)
+library(bslib)
 
 ui <- fluidPage(
   useShinyjs(),

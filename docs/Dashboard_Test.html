@@ -164,8 +164,11 @@ library(plotly)
 library(gt)
 library(tidyr)
 library(dplyr)
+library(shinyjs)
+library(bslib)
 
 ui &lt;- fluidPage(
+  useShinyjs(),
   #Sidebar
   sidebarLayout(
     sidebarPanel(selectInput("data", label = h2(HTML("&lt;b&gt;Choose Indicator:&lt;/b&gt;"), style = "font-size:22px;"),
@@ -301,7 +304,10 @@ server &lt;- function(input, output, session) {
   dat2&lt;-reactive({dat_vl2()$value})
   
   ####CUSTOM SLIDER####
-
+  observe({
+    shinyjs::click("goButton")
+  })
+  
   observeEvent(input$data, {
     selected_data&lt;- dat()$data
     updateSliderInput(session, "yearSlider",

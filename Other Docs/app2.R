@@ -1,29 +1,3 @@
----
-title: "Browse Interactive Indicator Data"
-format: 
-  dashboard:
-    nav-buttons: 
-    - github
-    - icon: patch-question-fill
-      text: "Quarto Doc"
-      href: https://quarto.org/docs/dashboards/
-    resources: 
-    - shinylive-sw.js  # Required to publish the shinylive service worker
-filters:
-  - shinylive
----
-
-
-<!-- Can have leading content not contained in a card above all other cards that will appear on every page. -->
-
-# Data Viz
-
-## Row
-
-```{shinylive-r}
-#| standalone: true
-#| viewerHeight: 1000
-
 ######START APP######
 
 library(shiny)
@@ -33,10 +7,8 @@ library(gt)
 library(tidyr)
 library(dplyr)
 library(shinyjs)
-library(bslib)
 
 ui <- fluidPage(
-  useShinyjs(),
   #Sidebar
   sidebarLayout(
     sidebarPanel(selectInput("data", label = h2(HTML("<b>Choose Indicator:</b>"), style = "font-size:22px;"),
@@ -49,11 +21,11 @@ ui <- fluidPage(
                              )),
                  selectInput("data2", label = h2(HTML("<b>Compare Indicator:</b>"), style = "font-size:22px;"),
                              choices = list("",
-                               'Drivers' = list("Precipitation","Air Temperature"),
-                               'Pressures'=list("Oil Spills", "Nuisance Aquatic Vegetation"),
-                               'States'=list("Red Drum","Brown Pelican"),
-                               'Human Activities'=list("Blue Crab Catch","Oyster Catch", "Seafood Dealers & Vessels Fishing"),
-                               'Human Dimensions'=list("Percent Small Business","Unemployment")
+                                            'Drivers' = list("Precipitation","Air Temperature"),
+                                            'Pressures'=list("Oil Spills", "Nuisance Aquatic Vegetation"),
+                                            'States'=list("Red Drum","Brown Pelican"),
+                                            'Human Activities'=list("Blue Crab Catch","Oyster Catch", "Seafood Dealers & Vessels Fishing"),
+                                            'Human Dimensions'=list("Percent Small Business","Unemployment")
                              )),
                  sliderInput("yearSlider", "Year Range:", min = 1800, max = 2024, value= c(1800, 2024), sep=""),
                  tags$style("#yearSlider .irs-grid-text {font-size: 25px}"),
@@ -61,28 +33,26 @@ ui <- fluidPage(
                  actionButton("reset", HTML("<b>Reset</b>"), style='font-size:150%'),
                  width = 2),
     #Main
-    navset_card_tab(
-      nav_panel("Graph",
-       plotlyOutput("plot", height = '120%')),
+    mainPanel(
 
-      nav_panel("Summary",
-
-               tableOutput("gt_table"),
-
-               htmlOutput("plain_header"),
-               htmlOutput("plain_text"),
-               tags$style("#plain_text {font-size:20px;margin-bottom: 25px;margin-top: 15px;}"),
-               tags$style("#plain_header {font-size:24px;margin-top: 25px;}")),
+                plotlyOutput("plot", height = '120%'),
       
-      nav_panel("Compare Indicators",
-                uiOutput("message_or_plot")
-      )
 
+                tableOutput("gt_table"),
+                
+                htmlOutput("plain_header"),
+                htmlOutput("plain_text"),
+                tags$style("#plain_text {font-size:20px;margin-bottom: 25px;margin-top: 15px;}"),
+                tags$style("#plain_header {font-size:24px;margin-top: 25px;}"),
+      
+                uiOutput("message_or_plot")
+
+      
+      
+    ) #sidePan
+    
+  ) #sideLay
   
-  ) #sidePan
- 
- ) #sideLay
- 
 ) #flpage
 
 server <- function(input, output, session) {
@@ -542,5 +512,3 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
-```
-
