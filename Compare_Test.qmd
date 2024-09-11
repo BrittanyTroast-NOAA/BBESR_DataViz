@@ -1,3 +1,27 @@
+---
+title: "Compare_Test"
+format: 
+  dashboard:
+    nav-buttons: 
+    - github
+    - icon: patch-question-fill
+      text: "Quarto Doc"
+      href: https://quarto.org/docs/dashboards/
+    resources: 
+    - shinylive-sw.js  # Required to publish the shinylive service worker
+filters:
+  - shinylive
+---
+
+# Compare Indicators
+
+## Row
+
+```{shinylive-r}
+#| standalone: true
+#| viewerHeight: 1000
+
+
 ######START APP######
 
 library(shiny)
@@ -218,3 +242,6 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
+
+```
+

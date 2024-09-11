@@ -14,7 +14,10 @@ website:
       - href: Test_App.qmd
         text: Plot Data
       - href: Dashboard_Test.qmd
-        text: Dashboard
+        text: Visualize Indicator
+      - href: Compare_Test.qmd
+        text: Compare Indicators
+        
     tools:
       - icon: github
         href: https://github.com/BrittanyTroast-NOAA/BBESR_DataViz

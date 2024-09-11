@@ -47,14 +47,6 @@ ui <- fluidPage(
                                'Human Activities'=list("Blue Crab Catch","Oyster Catch", "Seafood Dealers & Vessels Fishing"),
                                'Human Dimensions'=list("Percent Small Business","Unemployment")
                              )),
-                 selectInput("data2", label = h2(HTML("<b>Compare Indicator:</b>"), style = "font-size:22px;"),
-                             choices = list("",
-                                            'Drivers' = list("Precipitation","Air Temperature"),
-                                            'Pressures'=list("Oil Spills", "Nuisance Aquatic Vegetation"),
-                                            'States'=list("Red Drum","Brown Pelican"),
-                                            'Human Activities'=list("Blue Crab Catch","Oyster Catch", "Seafood Dealers & Vessels Fishing"),
-                                            'Human Dimensions'=list("Percent Small Business","Unemployment")
-                             )),
                  sliderInput("yearSlider", "Year Range:", min = 1800, max = 2024, value= c(1800, 2024), sep=""),
                  tags$style("#yearSlider .irs-grid-text {font-size: 25px}"),
                  actionButton("goButton", HTML("<b>Go</b>"), style='font-size:150%'),
@@ -162,12 +154,7 @@ server <- function(input, output, session) {
   dat_vl<-reactive({source(url(data_url()))})
   dat<-reactive({dat_vl()$value})
   
-  #Data 2
-  shrt_nm2<-reactive({dat_shrt_nms$short[dat_shrt_nms$long==input$data2]})
-  data_url2 <-reactive({paste0("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/",shrt_nm2(),"_li.r")})
-  dat_vl2<-reactive({source(url(data_url2()))})
-  dat2<-reactive({dat_vl2()$value})
-  
+
   ####CUSTOM SLIDER####
   observe({
     shinyjs::click("goButton")
@@ -200,54 +187,8 @@ server <- function(input, output, session) {
       
     })
     
-    ####OutputSwtich####
-    output$message_or_plot<- renderUI({
-      
-      if(input$data2 == ""){
-        return(h2("Please choose a second indicator from the 'Compare Indicator' dropdown"))
-      } else {
-        plotlyOutput("compare", height = '120%')
-      }
-      
-    })
-    
-    ####Compare Plot####
-    output$compare<-renderPlotly({
-      
-      dat1_df<-dat()
-      dat2_df<-dat2()
-      
-      df_pick1<-dat1_df$data
-      df_pick2<-dat2_df$data
-      
-      a_dat <- subset(df_pick1, df_pick1$year>= isolate(input$yearSlider[1]) & df_pick1$year<= isolate(input$yearSlider[2]))
-      b_dat <- subset(df_pick2, df_pick2$year>= isolate(input$yearSlider[1]) & df_pick2$year<= isolate(input$yearSlider[2]))
-      
-      a_dat$scaled<-scale(a_dat$value)
-      b_dat$scaled<-scale(b_dat$value)
-      
-      a_dat$indicator<-input$data
-      b_dat$indicator<-input$data2
-      
-      ab_dat<-as.data.frame(rbind(cbind(a_dat$year, a_dat$scaled, a_dat$indicator), cbind(b_dat$year, b_dat$scaled, b_dat$indicator)))
-      colnames(ab_dat)<-c("year", "scaled", "indicator")
-      ab_dat[,1:2]<-lapply(ab_dat[,1:2], as.numeric)
-      
-      p<-ggplot(ab_dat, aes(x=year, y=scaled))+
-        geom_hline(yintercept = 0, color="gray50", lwd=0.5, lty="dashed")+
-        geom_line(aes(color=indicator), lwd=1)+
-        scale_color_manual(values = c("blue", "red"))+
-        labs(x="Year", y="Scaled Value", color="Selected Indicators")+
-        theme_bw() + theme(legend.position = "bottom")
-      
-      ggplotly(p) %>%
-        layout(legend=list(y=1.1,x=0.5, xanchor="center", yanchor="center", orientation="h"))
-    })
-    
-    output$nocompare<-renderText({
-      "Please select and indicator to compare from the 'Compare Indicator' dropdown."
-    })
-    
+
+
     ####TABLE#####
     output$gt_table<- render_gt({
       df_pick <- dat()
