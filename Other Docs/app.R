@@ -206,19 +206,43 @@ server <- function(input, output, session) {
       a_dat$indicator<-input$data
       b_dat$indicator<-input$data2
       
-      ab_dat<-as.data.frame(rbind(cbind(a_dat$year, a_dat$scaled, a_dat$indicator), cbind(b_dat$year, b_dat$scaled, b_dat$indicator)))
-      colnames(ab_dat)<-c("year", "scaled", "indicator")
-      ab_dat[,1:2]<-lapply(ab_dat[,1:2], as.numeric)
+      if(!"subnm" %in% colnames(a_dat)) {
+        a_dat$subnm<-a_dat$indicator
+      }
       
-      p<-ggplot(ab_dat, aes(x=year, y=scaled))+
-        geom_hline(yintercept = 0, color="gray50", lwd=0.5, lty="dashed")+
-        geom_line(aes(color=indicator), lwd=1)+
-        scale_color_manual(values = c("blue", "red"))+
-        labs(x="Year", y="Scaled Value", color="Selected Indicators")+
-        theme_bw() + theme(legend.position = "bottom")
+      if(!"subnm" %in% colnames(b_dat)) {
+        b_dat$subnm<-b_dat$indicator
+      }
+      
+      a_dat<-select(a_dat, year, scaled, indicator, subnm)
+      b_dat<-select(b_dat, year, scaled, indicator, subnm)
+      
+      ab_dat<-rbind(a_dat, b_dat)
+      ab_dat$subnm<-factor(ab_dat$subnm, levels = unique((ab_dat$subnm)))
+      
+      if(length(unique(ab_dat$subnm))<2.5) {       
+        
+        p<-ggplot(ab_dat, aes(x=year, y=scaled))+
+          geom_hline(yintercept = 0, color="gray50", lwd=0.5, lty="dashed")+
+          geom_line(aes(color=indicator), lwd=1)+
+          scale_color_manual(values = c("blue", "red"))+
+          labs(x="Year", y="Scaled Value", color="Selected Indicators")+
+          theme_bw() + theme(legend.position = "bottom")        
+        
+      } else {
+        
+        p<-ggplot(ab_dat, aes(x=year, y=scaled))+
+          geom_hline(yintercept = 0, color="gray50", lwd=0.5, lty="dashed")+
+          geom_line(aes(color=indicator, lty=subnm), lwd=1)+
+          scale_color_manual(values = c("blue", "red"))+
+          labs(x="Year", y="Scaled Value", color="Selected Indicators", lty="Sub Group")+
+          theme_bw() + theme(legend.position = "bottom")
+        
+      }
+      
       
       ggplotly(p) %>%
-        layout(legend=list(y=1.1,x=0.5, xanchor="center", yanchor="center", orientation="h"))
+        layout(legend=list(y=1.2,x=0.5, xanchor="center", yanchor="center", orientation="h"))
     })
     
     output$nocompare<-renderText({

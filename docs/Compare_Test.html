@@ -110,10 +110,6 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Plot Data</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./ShinyLive_in_Doc.html"> 
-<span class="menu-text">ShinyLive Doc</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="./Dashboard_Test.html"> 
 <span class="menu-text">Visualize Indicator</span></a>
   </li>  
@@ -358,19 +354,43 @@ server &lt;- function(input, output, session) {
       a_dat$indicator&lt;-input$data
       b_dat$indicator&lt;-input$data2
       
-      ab_dat&lt;-as.data.frame(rbind(cbind(a_dat$year, a_dat$scaled, a_dat$indicator), cbind(b_dat$year, b_dat$scaled, b_dat$indicator)))
-      colnames(ab_dat)&lt;-c("year", "scaled", "indicator")
-      ab_dat[,1:2]&lt;-lapply(ab_dat[,1:2], as.numeric)
+      if(!"subnm" %in% colnames(a_dat)) {
+        a_dat$subnm&lt;-a_dat$indicator
+      }
       
-      p&lt;-ggplot(ab_dat, aes(x=year, y=scaled))+
-        geom_hline(yintercept = 0, color="gray50", lwd=0.5, lty="dashed")+
-        geom_line(aes(color=indicator), lwd=1)+
-        scale_color_manual(values = c("blue", "red"))+
-        labs(x="Year", y="Scaled Value", color="Selected Indicators")+
-        theme_bw() + theme(legend.position = "bottom")
+      if(!"subnm" %in% colnames(b_dat)) {
+        b_dat$subnm&lt;-b_dat$indicator
+      }
+      
+      a_dat&lt;-select(a_dat, year, scaled, indicator, subnm)
+      b_dat&lt;-select(b_dat, year, scaled, indicator, subnm)
+      
+      ab_dat&lt;-rbind(a_dat, b_dat)
+      ab_dat$subnm&lt;-factor(ab_dat$subnm, levels = unique((ab_dat$subnm)))
+      
+      if(length(unique(ab_dat$subnm))&lt;2.5) {       
+        
+        p&lt;-ggplot(ab_dat, aes(x=year, y=scaled))+
+          geom_hline(yintercept = 0, color="gray50", lwd=0.5, lty="dashed")+
+          geom_line(aes(color=indicator), lwd=1)+
+          scale_color_manual(values = c("blue", "red"))+
+          labs(x="Year", y="Scaled Value", color="Selected Indicators")+
+          theme_bw() + theme(legend.position = "bottom")        
+        
+      } else {
+        
+        p&lt;-ggplot(ab_dat, aes(x=year, y=scaled))+
+          geom_hline(yintercept = 0, color="gray50", lwd=0.5, lty="dashed")+
+          geom_line(aes(color=indicator, lty=subnm), lwd=1)+
+          scale_color_manual(values = c("blue", "red"))+
+          labs(x="Year", y="Scaled Value", color="Selected Indicators", lty="Sub Group")+
+          theme_bw() + theme(legend.position = "bottom")
+        
+      }
+      
       
       ggplotly(p) %&gt;%
-        layout(legend=list(y=1.1,x=0.5, xanchor="center", yanchor="center", orientation="h"))
+        layout(legend=list(y=1.2,x=0.5, xanchor="center", yanchor="center", orientation="h"))
     })
     
     output$nocompare&lt;-renderText({

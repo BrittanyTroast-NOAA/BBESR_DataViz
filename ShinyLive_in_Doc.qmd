@@ -12,11 +12,13 @@ filters:
 
 ---
 
+
 Is this any faster?
 
 ```{shinylive-r}
 #| standalone: true
-#| viewerHeight: 1000
+#| viewerHeight: 800
+#| viewerWidth: 1200
 
 
 ######START APP######
