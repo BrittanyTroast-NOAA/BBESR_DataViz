@@ -55,6 +55,8 @@ ui <- fluidPage(
     #Main
     mainPanel(
                 plotlyOutput("plot", height = '120%'),
+                textOutput("figcap"),
+                tags$style(type="text/css","#figcap {font-size:22px; text-align: center; margin-right: 300px; margin-left: 300px;}"),
       
 
                 tableOutput("gt_table"),
@@ -187,6 +189,12 @@ server <- function(input, output, session) {
       
     })
     
+    ####FIG CAPTION####
+    output$figcap<- renderText({
+      figcap_df<-read.csv("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Ind_Fig_Caption.csv")
+      
+      text<-figcap_df$cap[figcap_df$ind== shrt_nm()]
+    })
 
 
     ####TABLE#####

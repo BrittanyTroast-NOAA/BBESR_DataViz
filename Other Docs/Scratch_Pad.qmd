@@ -143,5 +143,8 @@ Short name list
     precip="Precipitation",
     airtemps="Air Temperature"
   ))
+
+figcap_df<-read.csv("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Ind_Fig_Caption.csv")
+
 ```
 

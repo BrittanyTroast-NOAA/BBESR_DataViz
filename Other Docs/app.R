@@ -37,7 +37,10 @@ ui <- fluidPage(
     #Main
     navset_card_tab(
       nav_panel("Graph",
-                plotlyOutput("plot", height = '120%')),
+                plotlyOutput("plot", height = '120%'),
+                textOutput("figcap"),
+                tags$style(type="text/css","#figcap {font-size:22px; text-align: center; margin-right: 300px; margin-left: 300px;}")),
+
       
       nav_panel("Summary",
                 
@@ -175,6 +178,13 @@ server <- function(input, output, session) {
       plotly_gg<-ggplotly(plot_gg)
       plotly_gg
       
+    })
+    
+    ####FIG CAPTION####
+    output$figcap<- renderText({
+      figcap_df<-read.csv("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Ind_Fig_Caption.csv")
+      
+      text<-figcap_df$cap[figcap_df$ind== shrt_nm()]
     })
     
     ####OutputSwtich####
