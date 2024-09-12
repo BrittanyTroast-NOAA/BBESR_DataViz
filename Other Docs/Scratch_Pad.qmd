@@ -128,3 +128,20 @@ ggplotly(p) %>%
   layout(legend=list(y=1.1,x=0.5, xanchor="center", yanchor="center", orientation="h"))
 ```
 
+Short name list
+```{r}
+  dat_shrt_nms<-data.frame(c(
+    oilsp="Oil Spills",
+    nav="Nuisance Aquatic Vegetation",
+    rdrum="Red Drum",
+    blcrab="Blue Crab Catch",
+    brpeli="Brown Pelican",
+    oystercat="Oyster Catch",
+    persmbusi="Percent Small Business",
+    vesfish="Seafood Dealers & Vessels Fishing",
+    unemploy="Unemployment",
+    precip="Precipitation",
+    airtemps="Air Temperature"
+  ))
+```
+
