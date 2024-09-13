@@ -148,3 +148,21 @@ figcap_df<-read.csv("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR
 
 ```
 
+Fix facet axis name plotly
+```{r}
+library(tidyverse)
+library(plotly)
+library(tidyr)
+
+crab<-readRDS("../Data_Obj/blcrab_li.rds")
+oyster<-readRDS("../Data_Obj/oystercat_li.rds")
+sml_bus<-readRDS("../Data_Obj/persmbusi_li.rds")
+red_drum<-readRDS("../Data_Obj/rdrum_li.rds")
+
+plot_fn_obj_doc(red_drum)
+
+ggplot(crab$data, aes(x=year, y=value))+
+  facet_wrap(~subnm)+
+  geom_line()
+```
+

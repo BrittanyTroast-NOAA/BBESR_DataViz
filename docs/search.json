@@ -2,9 +2,9 @@
   {
     "objectID": "Test_App.html",
     "href": "Test_App.html",
-    "title": "Indicator",
+    "title": "Quarto Document with Interactive Plots",
     "section": "",
-    "text": "Random Quart Document\nCould be used for intro.\n\n\nTest how plotly plot works\nHere we can write about an indicator (maybe for key findings and executive summary) and show plot."
+    "text": "Simple way to host results\nCreating quarto documnents that can be hosted as public websites can be a quick an easy way to create an online presence while still adding increased functionality past a static PDF page with little extra effort.\n\n\nTest how plotly plot works\nHere we can write about an indicator (maybe for key findings and executive summary) and show plot.\n\n\nWarning: The `switch` argument of `facet_wrap()` is deprecated as of ggplot2 2.2.0.\nℹ Please use the `strip.position` argument instead."
   },
   {
     "objectID": "index.html",

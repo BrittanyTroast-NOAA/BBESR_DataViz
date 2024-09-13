@@ -1,6 +1,6 @@
 indicator,Blue Crab Catch & Revenue,Blue Crab Catch
 units,Dollars (millions),Kilograms (millions)
-extent,Blue Crab Revenue,Blue Crab Catch
+extent,Revenue (million $),Catch (million kg)
 2000,4.80311865,3.284310599
 2001,4.95408436,2.955123057
 2002,6.436146015,4.822119102

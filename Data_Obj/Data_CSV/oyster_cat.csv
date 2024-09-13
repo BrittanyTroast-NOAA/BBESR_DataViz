@@ -1,6 +1,6 @@
 indicator,Oyster Catch & Revenue,Oyster Catch
 units,Dollars (millions,Kilograms (millions)
-extent,Oyster Revenue,Oyster Catch
+extent,Revenue (million $),Catch (million kg)
 2000,6.93757826,1.260933067
 2001,4.78575086,0.90550951
 2002,2.26308092,0.416402256

@@ -1,6 +1,6 @@
 indicator,Red Drum,Red Drum,Red Drum
 units,Average CPUE,Average CPUE,Average CPUE
-extent,Gill,Seine,Trammel
+extent,Gill (CPUE),Seine (CPUE),Trammel (CPUE)
 1985,1,1,14
 1986,1.461538462,2.583333333,2
 1987,2.363636364,5.862068966,4.666666667
