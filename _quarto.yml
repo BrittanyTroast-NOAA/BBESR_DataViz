@@ -11,11 +11,11 @@ website:
     left: 
       - href: index.qmd
         text: Home
-      - href: Test_App.qmd
-        text: Plot Data
-      - href: Dashboard_Test.qmd
-        text: Visualize Indicator
-      - href: Compare_Test.qmd
+      - href: Page_ex.qmd
+        text: Example Document
+      - href: Indicator_Ex.qmd
+        text: Visualize Indicators
+      - href: Compare_Ex.qmd
         text: Compare Indicators
         
     tools:
