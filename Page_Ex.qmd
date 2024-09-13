@@ -5,6 +5,7 @@ format:
     echo: false
     toc: true
     toc-location: left
+    page-layout: full
 lightbox: true
 
 ---

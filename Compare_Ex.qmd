@@ -1,5 +1,5 @@
 ---
-title: "Compare_Test"
+title: "Compare Indicators"
 format: 
   dashboard:
     resources: 
@@ -8,7 +8,6 @@ filters:
   - shinylive
 ---
 
-# Compare Indicators
 
 ## Row
 
