@@ -2,11 +2,6 @@
 title: "Compare_Test"
 format: 
   dashboard:
-    nav-buttons: 
-    - github
-    - icon: patch-question-fill
-      text: "Quarto Doc"
-      href: https://quarto.org/docs/dashboards/
     resources: 
     - shinylive-sw.js  # Required to publish the shinylive service worker
 filters:

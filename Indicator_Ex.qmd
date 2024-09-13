@@ -2,19 +2,11 @@
 title: "Browse Interactive Indicator Data"
 format: 
   dashboard:
-    nav-buttons: 
-    - github
-    - icon: patch-question-fill
-      text: "Quarto Doc"
-      href: https://quarto.org/docs/dashboards/
     resources: 
     - shinylive-sw.js  # Required to publish the shinylive service worker
 filters:
   - shinylive
 ---
-
-
-<!-- Can have leading content not contained in a card above all other cards that will appear on every page. -->
 
 # Data Viz
 
@@ -59,14 +51,19 @@ ui <- fluidPage(
                 tags$style(type="text/css","#figcap {font-size:20px; text-align: center; }"),
       
 
-                tableOutput("gt_table"),
-                
-                htmlOutput("plain_header"),
-                htmlOutput("plain_text"),
-                tags$style("#plain_text {font-size:20px;margin-bottom: 25px;margin-top: 15px;}"),
-                tags$style("#plain_header {font-size:24px;margin-top: 25px;}"),
-      
-                uiOutput("message_or_plot")
+                fluidRow(
+                column(4,
+                       tableOutput("gt_table")),
+                column(8,
+                       htmlOutput("plain_header"),
+                       htmlOutput("plain_text"),
+                       tags$style("#plain_text {font-size:20px;margin-bottom: 25px;margin-top: 15px;}"),
+                       tags$style("#plain_header {font-size:24px;margin-top: 25px;}")),
+                width = 10),
+    position = c("left"),
+    fluid = TRUE
+  
+ )
 
       
       

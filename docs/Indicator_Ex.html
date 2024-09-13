@@ -118,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Compare Indicators</span></a>
   </li>  
 </ul>
-          <div class="quarto-dashboard-links"><a class="quarto-dashboard-link" href="https://github.com/BrittanyTroast-NOAA/BBESR_DataViz/" title="GitHub"><i class="bi bi-github"></i></a><a class="quarto-dashboard-link" href="https://quarto.org/docs/dashboards/"><i class="bi bi-patch-question-fill"></i><span class="quarto-dashboard-link-text">Quarto Doc</span></a></div></div> <!-- /navcollapse -->
+          </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
     <a href="https://github.com/BrittanyTroast-NOAA/BBESR_DataViz" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
 </div>
@@ -149,7 +149,6 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
 <!-- main -->
 
-<!-- Can have leading content not contained in a card above all other cards that will appear on every page. -->
 <div class="bslib-grid-item html-fill-item tab-content bslib-grid" data-layout="fill" style="display: grid; grid-template-rows: minmax(3em, 1fr); grid-auto-columns: minmax(0, 1fr);">
 <div id="data-viz" class="dashboard-page tab-pane show active html-fill-item html-fill-container" data-orientation="rows" aria-labelledby="tab-data-viz">
 <div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, max-content); grid-auto-columns: minmax(0, 1fr);">
@@ -195,14 +194,19 @@ ui &lt;- fluidPage(
                 tags$style(type="text/css","#figcap {font-size:20px; text-align: center; }"),
       
 
-                tableOutput("gt_table"),
-                
-                htmlOutput("plain_header"),
-                htmlOutput("plain_text"),
-                tags$style("#plain_text {font-size:20px;margin-bottom: 25px;margin-top: 15px;}"),
-                tags$style("#plain_header {font-size:24px;margin-top: 25px;}"),
-      
-                uiOutput("message_or_plot")
+                fluidRow(
+                column(4,
+                       tableOutput("gt_table")),
+                column(8,
+                       htmlOutput("plain_header"),
+                       htmlOutput("plain_text"),
+                       tags$style("#plain_text {font-size:20px;margin-bottom: 25px;margin-top: 15px;}"),
+                       tags$style("#plain_header {font-size:24px;margin-top: 25px;}")),
+                width = 10),
+    position = c("left"),
+    fluid = TRUE
+  
+ )
 
       
       
