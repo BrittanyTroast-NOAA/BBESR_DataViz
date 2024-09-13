@@ -1,20 +1,3 @@
----
-title: "Browse Interactive Indicator Data"
-format: 
-  dashboard:
-    resources: 
-    - shinylive-sw.js  # Required to publish the shinylive service worker
-filters:
-  - shinylive
----
-
-
-## Row
-
-```{shinylive-r}
-#| standalone: true
-#| viewerHeight: 800
-
 ######START APP######
 
 library(shiny)
@@ -45,29 +28,29 @@ ui <- fluidPage(
                  width = 2),
     #Main
     mainPanel(
-                plotlyOutput("plot", height = '120%'),
-                textOutput("figcap"),
-                tags$style(type="text/css","#figcap {font-size:20px; text-align: center; }"),
+      plotlyOutput("plot", height = '120%'),
+      textOutput("figcap"),
+      tags$style(type="text/css","#figcap {font-size:20px; text-align: center; }"),
       
-
-                fluidRow(
-                column(4,
-                       tableOutput("gt_table")),
-                column(8,
-                       htmlOutput("plain_header"),
-                       htmlOutput("plain_text"),
-                       tags$style("#plain_text {font-size:20px;margin-bottom: 25px;margin-top: 15px;}"),
-                       tags$style("#plain_header {font-size:24px;margin-top: 25px;}")),
-                width = 10),
-    position = c("left"),
-    fluid = TRUE
-  
-  
       
-    ) #sidePan
+      fluidRow(
+        column(4,
+               tableOutput("gt_table")),
+        column(8,
+               htmlOutput("plain_header"),
+               htmlOutput("plain_text"),
+               tags$style("#plain_text {font-size:20px;margin-bottom: 25px;margin-top: 15px;}"),
+               tags$style("#plain_header {font-size:24px;margin-top: 25px;}")),
+        width = 10),
+      position = c("left"),
+      fluid = TRUE
+      
     
-  ) #sideLay
+    
+  ) #sidePan
   
+) #sideLay
+
 ) #flpage
 
 server <- function(input, output, session) {
@@ -125,26 +108,26 @@ server <- function(input, output, session) {
       }
       plot_sec} else {
         plot_sec<-ggplot(data=df_obj$data, aes(x=year, y=value))+
-        facet_wrap(~subnm, scales = "free_y", ncol=ifelse(length(unique(df_obj$data$subnm))<4,1,2))+
-        geom_ribbon(data=df_obj$pos, aes(group=subnm,ymax=max, ymin=mean),fill="#7FFF7F")+
-        geom_ribbon(data=df_obj$neg, aes(group=subnm,ymax=mean, ymin=min), fill="#FF7F7F")+
-        geom_rect(data=merge(df_obj$data,df_obj$vals), aes(xmin=min(df_obj$data$year),xmax=max(df_obj$data$year),ymin=mean-sd, ymax=mean+sd), fill="white")+
-        geom_hline(aes(yintercept=mean), lty="dashed",data=df_obj$vals)+
-        geom_hline(aes(yintercept=mean+sd),data=df_obj$vals)+
-        geom_hline(aes(yintercept=mean-sd),data=df_obj$vals)+
-        geom_line(aes(group=1), lwd=0.75)+
-        labs(x="Year", y=NULL, title = df_obj$labs[1,2])+
-        theme_bw()+theme(strip.background = element_blank(),
-                         strip.text = element_text(face="bold"),
-                         title = element_text(size=14, face = "bold"),
-                         strip.placement = "outside")
-      
-      if (max(df_obj$data$year)-min(df_obj$data$year)>20) {
-        plot_sec<-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),5))
-      } else {
-        # plot_sec<-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),2))
-      }
-      plot_sec
+          facet_wrap(~subnm, scales = "free_y", ncol=ifelse(length(unique(df_obj$data$subnm))<4,1,2))+
+          geom_ribbon(data=df_obj$pos, aes(group=subnm,ymax=max, ymin=mean),fill="#7FFF7F")+
+          geom_ribbon(data=df_obj$neg, aes(group=subnm,ymax=mean, ymin=min), fill="#FF7F7F")+
+          geom_rect(data=merge(df_obj$data,df_obj$vals), aes(xmin=min(df_obj$data$year),xmax=max(df_obj$data$year),ymin=mean-sd, ymax=mean+sd), fill="white")+
+          geom_hline(aes(yintercept=mean), lty="dashed",data=df_obj$vals)+
+          geom_hline(aes(yintercept=mean+sd),data=df_obj$vals)+
+          geom_hline(aes(yintercept=mean-sd),data=df_obj$vals)+
+          geom_line(aes(group=1), lwd=0.75)+
+          labs(x="Year", y=NULL, title = df_obj$labs[1,2])+
+          theme_bw()+theme(strip.background = element_blank(),
+                           strip.text = element_text(face="bold"),
+                           title = element_text(size=14, face = "bold"),
+                           strip.placement = "outside")
+        
+        if (max(df_obj$data$year)-min(df_obj$data$year)>20) {
+          plot_sec<-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),5))
+        } else {
+          # plot_sec<-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),2))
+        }
+        plot_sec
       }
       
     }
@@ -173,7 +156,7 @@ server <- function(input, output, session) {
   dat_vl<-reactive({source(url(data_url()))})
   dat<-reactive({dat_vl()$value})
   
-
+  
   ####CUSTOM SLIDER####
   observe({
     shinyjs::click("goButton")
@@ -212,8 +195,8 @@ server <- function(input, output, session) {
       
       text<-figcap_df$cap[figcap_df$ind== shrt_nm()]
     })
-
-
+    
+    
     ####TABLE#####
     output$gt_table<- render_gt({
       df_pick <- dat()
@@ -505,5 +488,3 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
-```
-
