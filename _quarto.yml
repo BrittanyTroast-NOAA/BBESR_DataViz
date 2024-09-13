@@ -11,7 +11,7 @@ website:
     left: 
       - href: index.qmd
         text: Home
-      - href: Page_ex.qmd
+      - href: Page_Ex.qmd
         text: Example Document
       - href: Indicator_Ex.qmd
         text: Visualize Indicators
