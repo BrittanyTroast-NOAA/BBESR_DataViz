@@ -3,13 +3,6 @@ title: "BB ESR Viz Intro"
 format: html
 ---
 
-Update renv 
+### This is an experimental demonstration of interactive tools used to display information from Ecosystem Status Reports using the soon to be published Barataria Basin, Louisiana ESR. Results are preliminary and will be final after proper peer review.
 
-Things I should put here
-
-- General info about the BB ESR
-- Pictures of front of it
-- Link to the ESR
-- Executive Summary?
-
-- Test to see if things change...again
+![](Three Logos.png){fig-align="center"}

@@ -158,11 +158,16 @@ crab<-readRDS("../Data_Obj/blcrab_li.rds")
 oyster<-readRDS("../Data_Obj/oystercat_li.rds")
 sml_bus<-readRDS("../Data_Obj/persmbusi_li.rds")
 red_drum<-readRDS("../Data_Obj/rdrum_li.rds")
+ves_deal<-readRDS("Data_Obj/vesfish_li.rds")
+precip<-readRDS("../Data_Obj/precip_li.rds")
 
-plot_fn_obj_doc(red_drum)
+# plot_fn_obj_doc(red_drum)
+
+ggplotly(plot_fn_obj_doc(precip))
 
 ggplot(crab$data, aes(x=year, y=value))+
-  facet_wrap(~subnm)+
-  geom_line()
+  facet_grid(subnm~.)+
+  geom_line()+
+  labs(y=c("a", "b"))
 ```
 

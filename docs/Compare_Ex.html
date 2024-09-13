@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Browse Interactive Indicator Data – BB ESR Visualization</title>
+<title>Compare_Test – BB ESR Visualization</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -106,15 +106,15 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./Test_App.html"> 
+    <a class="nav-link" href="./Test_App.qmd"> 
 <span class="menu-text">Plot Data</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./Dashboard_Test.html" aria-current="page"> 
+    <a class="nav-link" href="./Dashboard_Test.qmd"> 
 <span class="menu-text">Visualize Indicator</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./Compare_Test.html"> 
+    <a class="nav-link" href="./Compare_Test.qmd"> 
 <span class="menu-text">Compare Indicators</span></a>
   </li>  
 </ul>
@@ -135,12 +135,12 @@ ul.task-list li input[type="checkbox"] {
     <div class="navbar-brand-container">       
 
       <div class="navbar-title">
-        <div class="navbar-title-text"><a href="#">Browse Interactive Indicator Data</a></div>
+        <div class="navbar-title-text"><a href="#">Compare_Test</a></div>
         
         
       </div>
     </div>
-<div id="dashboard-collapse" class="navbar-collapse collapse"><ul class="navbar-nav navbar-nav-scroll me-auto" role="tablist"><li class="nav-item" role="presentation"><a id="tab-data-viz" class="nav-link active" data-bs-toggle="tab" role="tab" data-bs-target="#data-viz" data-scrolling="false" href="#data-viz" aria-controls="data-viz" aria-selected="true"><span class="nav-link-text">Data Viz</span></a></li></ul></div></div>
+<div id="dashboard-collapse" class="navbar-collapse collapse"><ul class="navbar-nav navbar-nav-scroll me-auto" role="tablist"><li class="nav-item" role="presentation"><a id="tab-compare-indicators" class="nav-link active" data-bs-toggle="tab" role="tab" data-bs-target="#compare-indicators" data-scrolling="false" href="#compare-indicators" aria-controls="compare-indicators" aria-selected="true"><span class="nav-link-text">Compare Indicators</span></a></li></ul></div></div>
 </nav>
 </header></header>
 <!-- content -->
@@ -149,16 +149,16 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
 <!-- main -->
 
-<!-- Can have leading content not contained in a card above all other cards that will appear on every page. -->
 <div class="bslib-grid-item html-fill-item tab-content bslib-grid" data-layout="fill" style="display: grid; grid-template-rows: minmax(3em, 1fr); grid-auto-columns: minmax(0, 1fr);">
-<div id="data-viz" class="dashboard-page tab-pane show active html-fill-item html-fill-container" data-orientation="rows" aria-labelledby="tab-data-viz">
+<div id="compare-indicators" class="dashboard-page tab-pane show active html-fill-item html-fill-container" data-orientation="rows" aria-labelledby="tab-compare-indicators">
 <div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, max-content); grid-auto-columns: minmax(0, 1fr);">
 <div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-columns: minmax(3em, 1fr);
 grid-auto-rows: minmax(0, 1fr);">
 <div class="card html-fill-item html-fill-container bslib-card" data-fill="false" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
 <div class="card-body html-fill-item html-fill-container">
 <pre class="shinylive-r" data-engine="r"><code>#| standalone: true
-#| viewerHeight: 800
+#| viewerHeight: 1000
+
 
 ######START APP######
 
@@ -183,6 +183,14 @@ ui &lt;- fluidPage(
                                'Human Activities'=list("Blue Crab Catch","Oyster Catch", "Seafood Dealers &amp; Vessels Fishing"),
                                'Human Dimensions'=list("Percent Small Business","Unemployment")
                              )),
+                 selectInput("data2", label = h2(HTML("&lt;b&gt;Compare Indicator:&lt;/b&gt;"), style = "font-size:22px;"),
+                             choices = list("",
+                                            'Drivers' = list("Precipitation","Air Temperature"),
+                                            'Pressures'=list("Oil Spills", "Nuisance Aquatic Vegetation"),
+                                            'States'=list("Red Drum","Brown Pelican"),
+                                            'Human Activities'=list("Blue Crab Catch","Oyster Catch", "Seafood Dealers &amp; Vessels Fishing"),
+                                            'Human Dimensions'=list("Percent Small Business","Unemployment")
+                             )),
                  sliderInput("yearSlider", "Year Range:", min = 1800, max = 2024, value= c(1800, 2024), sep=""),
                  tags$style("#yearSlider .irs-grid-text {font-size: 25px}"),
                  actionButton("goButton", HTML("&lt;b&gt;Go&lt;/b&gt;"), style='font-size:150%'),
@@ -190,20 +198,7 @@ ui &lt;- fluidPage(
                  width = 2),
     #Main
     mainPanel(
-                plotlyOutput("plot", height = '120%'),
-                textOutput("figcap"),
-                tags$style(type="text/css","#figcap {font-size:20px; text-align: center; }"),
-      
-
-                tableOutput("gt_table"),
-                
-                htmlOutput("plain_header"),
-                htmlOutput("plain_text"),
-                tags$style("#plain_text {font-size:20px;margin-bottom: 25px;margin-top: 15px;}"),
-                tags$style("#plain_header {font-size:24px;margin-top: 25px;}"),
-      
                 uiOutput("message_or_plot")
-
       
       
     ) #sidePan
@@ -245,8 +240,7 @@ server &lt;- function(input, output, session) {
     } else {
       #facet plot
       
-      if(length(unique(df_obj$data$subnm))&gt;3.5)
-      {plot_sec&lt;-ggplot(data=df_obj$data, aes(x=year, y=value))+
+      plot_sec&lt;-ggplot(data=df_obj$data, aes(x=year, y=value))+
         facet_wrap(~subnm, ncol=ifelse(length(unique(df_obj$data$subnm))&lt;4,1,2), scales = "free_y")+
         geom_ribbon(data=df_obj$pos, aes(group=subnm,ymax=max, ymin=mean),fill="#7FFF7F")+
         geom_ribbon(data=df_obj$neg, aes(group=subnm,ymax=mean, ymin=min), fill="#FF7F7F")+
@@ -265,29 +259,7 @@ server &lt;- function(input, output, session) {
       } else {
         # plot_sec&lt;-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),2))
       }
-      plot_sec} else {
-        plot_sec&lt;-ggplot(data=df_obj$data, aes(x=year, y=value))+
-        facet_wrap(~subnm, ncol=ifelse(length(unique(df_obj$data$subnm))&lt;4,1,2), scales = "free_y", switch = "y", labeller = label_wrap_gen(multi_line = T, width = 14))+
-        geom_ribbon(data=df_obj$pos, aes(group=subnm,ymax=max, ymin=mean),fill="#7FFF7F")+
-        geom_ribbon(data=df_obj$neg, aes(group=subnm,ymax=mean, ymin=min), fill="#FF7F7F")+
-        geom_rect(data=merge(df_obj$data,df_obj$vals), aes(xmin=min(df_obj$data$year),xmax=max(df_obj$data$year),ymin=mean-sd, ymax=mean+sd), fill="white")+
-        geom_hline(aes(yintercept=mean), lty="dashed",data=df_obj$vals)+
-        geom_hline(aes(yintercept=mean+sd),data=df_obj$vals)+
-        geom_hline(aes(yintercept=mean-sd),data=df_obj$vals)+
-        geom_line(aes(group=1), lwd=0.75)+
-        labs(x="Year", y=NULL, title = df_obj$labs[1,2])+
-        theme_bw()+theme(strip.background = element_blank(),
-                         strip.text = element_text(face="bold"),
-                         title = element_text(size=14, face = "bold"),
-                         strip.placement = "outside")
-      
-      if (max(df_obj$data$year)-min(df_obj$data$year)&gt;20) {
-        plot_sec&lt;-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),5))
-      } else {
-        # plot_sec&lt;-plot_sec+scale_x_continuous(breaks = seq(min(df_obj$data$year),max(df_obj$data$year),2))
-      }
       plot_sec
-      }
       
     }
   }
@@ -315,7 +287,12 @@ server &lt;- function(input, output, session) {
   dat_vl&lt;-reactive({source(url(data_url()))})
   dat&lt;-reactive({dat_vl()$value})
   
-
+  #Data 2
+  shrt_nm2&lt;-reactive({dat_shrt_nms$short[dat_shrt_nms$long==input$data2]})
+  data_url2 &lt;-reactive({paste0("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Data_Obj/Data_R/",shrt_nm2(),"_li.r")})
+  dat_vl2&lt;-reactive({source(url(data_url2()))})
+  dat2&lt;-reactive({dat_vl2()$value})
+  
   ####CUSTOM SLIDER####
   observe({
     shinyjs::click("goButton")
@@ -348,305 +325,86 @@ server &lt;- function(input, output, session) {
       
     })
     
-    ####FIG CAPTION####
-    output$figcap&lt;- renderText({
-      figcap_df&lt;-read.csv("https://raw.githubusercontent.com/BrittanyTroast-NOAA/BBESR_DataViz/main/Ind_Fig_Caption.csv")
+    ####OutputSwtich####
+    output$message_or_plot&lt;- renderUI({
       
-      text&lt;-figcap_df$cap[figcap_df$ind== shrt_nm()]
+      if(input$data2 == ""){
+        return(h2("Please choose a second indicator from the 'Compare Indicator' dropdown"))
+      } else {
+        plotlyOutput("compare", height = '120%')
+      }
+      
     })
-
-
-    ####TABLE#####
-    output$gt_table&lt;- render_gt({
-      df_pick &lt;- dat()
-      df_dat&lt;-df_pick$data
-      val_df&lt;-df_pick$vals
+    
+    ####Compare Plot####
+    output$compare&lt;-renderPlotly({
       
-      sel_dat&lt;-df_dat[df_dat$year&gt;= isolate(input$yearSlider[1]) &amp; df_dat$year&lt;= isolate(input$yearSlider[2]),]
+      dat1_df&lt;-dat()
+      dat2_df&lt;-dat2()
       
-      if (nrow(sel_dat)&gt;3) {
-        if (ncol(df_dat)&lt;5.5) {
-          #Mean Trend
-          sel_dat_mean&lt;-mean(sel_dat$value) # mean value last 5 years
-          mean_sel&lt;-if_else(sel_dat_mean&gt;val_df$mean+val_df$sd, "+", if_else(sel_dat_mean&lt;val_df$mean-val_df$sd, "-","●")) #qualify mean trend
-          
-          #Slope Trend
-          lmout&lt;-summary(lm(sel_dat$value~sel_dat$year))
-          sel_slope&lt;-coef(lmout)[2,1] * length(unique(sel_dat$year)) #multiply by years in the trend (slope per year * number of years=rise over 5 years)
-          slope_sel&lt;-if_else(sel_slope&gt;val_df$sd, "↑", if_else(sel_slope&lt; c(-val_df$sd), "↓","→"))
-          
-          ###Table stuff
-          new_table&lt;-data.frame(val=c(round(val_df$mean,2), round(val_df$sd,2), val_df$mean_sym, val_df$slope_sym, mean_sel, slope_sel),
-                                metric=c("Historical_Mean","Historical_SD","Last 5_Mean", "Last 5_Slope","Selected_Mean", "Selected_Slope"))
-          
-          new_table &lt;- new_table %&gt;% pivot_wider(names_from = metric, values_from = val)
-          
-          gt(new_table) %&gt;%
-            tab_spanner_delim(delim = "_") %&gt;%
-            tab_stubhead(label = "Sub Indicator") %&gt;%
-            tab_header(title = "Trends in Mean &amp; Slope") %&gt;%
-            tab_options(table.border.top.color = "#3498db",
-                        table.border.bottom.color = "#3498db",
-                        table.border.left.color = "#3498db",
-                        table.border.right.color = "#3498db",
-                        table.border.top.width = 5,
-                        table.border.bottom.width = 5,
-                        table.border.left.width = 5,
-                        table.border.right.width = 5,
-                        table.border.left.style = "solid",
-                        table.border.right.style = "solid",) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
-        } else {
-          #Selected Multi Sub
-          
-          sub_list&lt;-list()
-          subs&lt;-unique(df_dat$subnm)
-          for (i in 1:length(subs)){
-            sub_df&lt;-sel_dat[sel_dat$subnm==subs[i],]
-            vals&lt;-val_df[val_df$subnm==subs[i],]
-            sub_dat_mean&lt;-mean(sub_df$value) # mean value last 5 years
-            mean_sub&lt;-if_else(sub_dat_mean&gt;vals$mean+vals$sd, "+", if_else(sub_dat_mean&lt;vals$mean-vals$sd, "-","●")) #qualify mean trend
-            
-            #Slope Trend
-            lmout&lt;-summary(lm(sub_df$value~sub_df$year))
-            sub_slope&lt;-coef(lmout)[2,1] * length(unique(sub_df$year)) #multiply by years in the trend (slope per year * number of years=rise over 5 years)
-            slope_sub&lt;-if_else(sub_slope&gt;vals$sd, "↑", if_else(sub_slope&lt; c(-vals$sd), "↓","→"))
-            
-            add_sub&lt;-data.frame(mean_sel=mean_sub,
-                                slope_sel=slope_sub)
-            sub_list[[i]]&lt;-add_sub
-            
-          }
-          
-          add_sel_df&lt;-do.call("rbind",sub_list)
-          val_df&lt;-cbind(val_df, add_sel_df)
-          
-          val_df$mean&lt;-as.character(val_df$mean)
-          val_df$sd&lt;-as.character(val_df$sd)
-          
-          new_table&lt;-val_df %&gt;% select("Sub_Indicator"=subnm,"Historical_Mean"=mean, "Historical_SD"=sd, "Last 5_Mean"=mean_sym, "Last 5_Slope"=slope_sym, "Selected_Mean"=mean_sel, "Selected_Slope"=slope_sel) %&gt;%
-            group_by(Sub_Indicator) %&gt;% pivot_longer(cols = -c("Sub_Indicator"))
-          
-          
-          new_table &lt;- new_table %&gt;% pivot_wider(names_from = name, values_from = value)
-          new_table[,2:3]&lt;-lapply(new_table[,2:3], function(x) {round(as.numeric(x),2)})
-          rownames(new_table)&lt;-new_table$Sub_Indicator
-          
-          gt(new_table, rowname_col = "Sub_Indicator", groupname_col = NA) %&gt;%
-            tab_spanner_delim(delim = "_") %&gt;%
-            tab_stubhead(label = "Sub Indicator") %&gt;%
-            tab_header(title = "Trends in Mean &amp; Slope") %&gt;%
-            tab_options(table.border.top.color = "#3498db",
-                        table.border.bottom.color = "#3498db",
-                        table.border.left.color = "#3498db",
-                        table.border.right.color = "#3498db",
-                        table.border.top.width = 5,
-                        table.border.bottom.width = 5,
-                        table.border.left.width = 5,
-                        table.border.right.width = 5,
-                        table.border.left.style = "solid",
-                        table.border.right.style = "solid",) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
-        }
+      df_pick1&lt;-dat1_df$data
+      df_pick2&lt;-dat2_df$data
+      
+      a_dat &lt;- subset(df_pick1, df_pick1$year&gt;= isolate(input$yearSlider[1]) &amp; df_pick1$year&lt;= isolate(input$yearSlider[2]))
+      b_dat &lt;- subset(df_pick2, df_pick2$year&gt;= isolate(input$yearSlider[1]) &amp; df_pick2$year&lt;= isolate(input$yearSlider[2]))
+      
+      a_dat$scaled&lt;-scale(a_dat$value)
+      b_dat$scaled&lt;-scale(b_dat$value)
+      
+      a_dat$indicator&lt;-input$data
+      b_dat$indicator&lt;-input$data2
+      
+      if(!"subnm" %in% colnames(a_dat)) {
+        a_dat$subnm&lt;-a_dat$indicator
+      }
+      
+      if(!"subnm" %in% colnames(b_dat)) {
+        b_dat$subnm&lt;-b_dat$indicator
+      }
+      
+      a_dat&lt;-select(a_dat, year, scaled, indicator, subnm)
+      b_dat&lt;-select(b_dat, year, scaled, indicator, subnm)
+      
+      ab_dat&lt;-rbind(a_dat, b_dat)
+      ab_dat$subnm&lt;-factor(ab_dat$subnm, levels = unique((ab_dat$subnm)))
+      
+      if(length(unique(ab_dat$subnm))&lt;2.5) {       
         
+        p&lt;-ggplot(ab_dat, aes(x=year, y=scaled))+
+          geom_hline(yintercept = 0, color="gray50", lwd=0.5, lty="dashed")+
+          geom_line(aes(color=indicator), lwd=1)+
+          scale_color_manual(values = c("blue", "red"))+
+          labs(x="Year", y="Scaled Value", color="Selected Indicators")+
+          theme_bw() + theme(legend.position = "bottom")        
         
       } else {
         
-        ###Table stuff
-        if (ncol(df_dat)&lt;5.5) {
-          new_table&lt;-data.frame(val=c(round(val_df$mean,2), round(val_df$sd,2), val_df$mean_sym, val_df$slope_sym),
-                                metric=c("Historical_Mean","Historical_SD","Last 5_Mean", "Last 5_Slope"))
-          
-          new_table &lt;- new_table %&gt;% pivot_wider(names_from = metric, values_from = val)
-          
-          gt(new_table) %&gt;%
-            tab_spanner_delim(delim = "_") %&gt;%
-            tab_stubhead(label = "Sub Indicator") %&gt;%
-            tab_header(title = "Trends in Mean &amp; Slope") %&gt;%
-            tab_options(table.border.top.color = "#3498db",
-                        table.border.bottom.color = "#3498db",
-                        table.border.left.color = "#3498db",
-                        table.border.right.color = "#3498db",
-                        table.border.top.width = 5,
-                        table.border.bottom.width = 5,
-                        table.border.left.width = 5,
-                        table.border.right.width = 5,
-                        table.border.left.style = "solid",
-                        table.border.right.style = "solid",) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
-          
-        } else {
-          val_df$mean&lt;-as.character(val_df$mean)
-          val_df$sd&lt;-as.character(val_df$sd)
-          
-          new_table&lt;-val_df %&gt;% select("Sub_Indicator"=subnm,"Historical_Mean"=mean, "Historical_SD"=sd, "Last 5_Mean"=mean_sym, "Last 5_Slope"=slope_sym) %&gt;%
-            group_by(Sub_Indicator) %&gt;% pivot_longer(cols = -c("Sub_Indicator"))
-          
-          
-          new_table &lt;- new_table %&gt;% pivot_wider(names_from = name, values_from = value)
-          new_table[,2:3]&lt;-lapply(new_table[,2:3], function(x) {round(as.numeric(x),2)})
-          rownames(new_table)&lt;-new_table$Sub_Indicator
-          
-          gt(new_table, rowname_col = "Sub_Indicator", groupname_col = NA) %&gt;%
-            tab_spanner_delim(delim = "_") %&gt;%
-            tab_stubhead(label = "Sub Indicator") %&gt;%
-            tab_header(title = "Trends in Mean &amp; Slope") %&gt;%
-            tab_options(table.border.top.color = "#3498db",
-                        table.border.bottom.color = "#3498db",
-                        table.border.left.color = "#3498db",
-                        table.border.right.color = "#3498db",
-                        table.border.top.width = 5,
-                        table.border.bottom.width = 5,
-                        table.border.left.width = 5,
-                        table.border.right.width = 5,
-                        table.border.left.style = "solid",
-                        table.border.right.style = "solid",) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_body()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_stubhead()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18), weight = "bold", color="#2c3e50"),locations = cells_stub()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(18)),locations = cells_column_labels()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(20), weight = "bold", color="#2c3e50"),locations = cells_column_spanners()) %&gt;%
-            tab_style(style = cell_text(align = "center", size=px(24), color="#3498db", weight = "bold"),locations = cells_title())
-          
-        }
+        p&lt;-ggplot(ab_dat, aes(x=year, y=scaled))+
+          geom_hline(yintercept = 0, color="gray50", lwd=0.5, lty="dashed")+
+          geom_line(aes(color=indicator, lty=subnm), lwd=1)+
+          scale_color_manual(values = c("blue", "red"))+
+          labs(x="Year", y="Scaled Value", color="Selected Indicators", lty="Sub Group")+
+          theme_bw() + theme(legend.position = "bottom")
         
       }
-    })
-    
-    
-    #####Plain Text#####
-    output$plain_header&lt;- renderText({
-      plain_header&lt;-paste0("&lt;b&gt;&lt;u&gt;Summary&lt;/b&gt;&lt;/u&gt;")
-    })
-    
-    ####PLAIN TEXT####
-    output$plain_text&lt;-renderText({
-      df_pick &lt;- dat()
-      df_dat&lt;-df_pick$data
-      val_df&lt;-df_pick$vals
-      df_lab&lt;-df_pick$labs
-      sel_dat&lt;-df_dat[df_dat$year&gt;= isolate(input$yearSlider[1]) &amp; df_dat$year&lt;= isolate(input$yearSlider[2]),]
       
       
-      if (nrow(sel_dat)&lt;3) {
-        ###Not selected no subs
-        if (ncol(df_dat)&lt;5.5) {
-          text&lt;-paste0("The &lt;b&gt;",df_lab[1,2] ,"&lt;/b&gt; indicator has a historical mean of &lt;u&gt;&lt;b&gt;", round(val_df$mean[1],2),"&lt;/u&gt;&lt;/b&gt; ±&lt;u&gt;&lt;b&gt;",round(val_df$sd[1],2)  ,"&lt;/u&gt;&lt;/b&gt; and trends for the last five years of data show mean values &lt;b&gt;&lt;u&gt;",val_df$mean_word, "&lt;/b&gt;&lt;/u&gt; 1 standard deviation from the historical mean and &lt;u&gt;&lt;b&gt;",val_df$slope_word, "&lt;/u&gt;&lt;/b&gt; trend in slope.")
-        } else {
-          ###Not slected subs
-          val_df$mean&lt;-as.character(val_df$mean)
-          val_df$sd&lt;-as.character(val_df$sd)
-          
-          new_table&lt;-val_df %&gt;% select(subnm, mean,  sd,  mean_sym,  slope_sym) %&gt;% 
-            group_by(subnm) %&gt;% pivot_longer(cols = -c(subnm))
-          
-          val_df$mean&lt;-as.numeric(val_df$mean)
-          val_df$sd&lt;-as.numeric(val_df$sd)
-          
-          
-          text&lt;-paste0("The &lt;b&gt;",df_lab[1,2] ,"&lt;/b&gt; indicator for the &lt;u&gt;&lt;b&gt;", val_df$subnm[1],"&lt;/u&gt;&lt;/b&gt; sub indicator has a historical mean of &lt;u&gt;&lt;b&gt;", round(val_df$mean[1],2),"&lt;/u&gt;&lt;/b&gt; ±&lt;u&gt;&lt;b&gt;",round(val_df$sd[1],2)  ,"&lt;/u&gt;&lt;/b&gt; and trends for the last five years of data show mean values &lt;b&gt;&lt;u&gt;",val_df$mean_word[1], "&lt;/b&gt;&lt;/u&gt; 1 standard deviation from the historical mean and &lt;u&gt;&lt;b&gt;",val_df$slope_word[1], "&lt;/u&gt;&lt;/b&gt; trend in slope.")
-          
-          text_li&lt;-list()
-          for (i in 2:length(val_df$subnm)) {
-            subtext&lt;-paste0("The &lt;u&gt;&lt;b&gt;",val_df$subnm[i], "&lt;/u&gt;&lt;/b&gt; sub index historical mean is &lt;u&gt;&lt;b&gt;",round(val_df$mean[i],2),"&lt;/u&gt;&lt;/b&gt;±&lt;u&gt;&lt;b&gt;",round(val_df$sd[i],2),"&lt;/u&gt;&lt;/b&gt; and trends from the last five years of data show mean values&lt;u&gt;&lt;b&gt;",val_df$mean_word[i],"&lt;/u&gt;&lt;/b&gt; 1 standard deviation from the historical mean and &lt;u&gt;&lt;b&gt;",val_df$slope_word[i], "&lt;/u&gt;&lt;/b&gt; trend in slope.") 
-            text_li[[i]]&lt;-subtext
-          }
-          subs_text&lt;-do.call("paste", text_li)
-          paste(text,subs_text)
-        }
-        
-        
-      } else {
-        if (ncol(df_dat)&lt;5.5) {
-          
-          #Selected no subs
-          #Mean Trend
-          sel_dat_mean&lt;-mean(sel_dat$value) # mean value last 5 years
-          mean_sel_word&lt;-if_else(sel_dat_mean&gt;val_df$mean+val_df$sd, "greater", if_else(sel_dat_mean&lt;val_df$mean-val_df$sd, "below","within")) #qualify mean trend
-          
-          #Slope Trend
-          lmout&lt;-summary(lm(sel_dat$value~sel_dat$year))
-          sel_slope&lt;-coef(lmout)[2,1] * length(unique(sel_dat$year)) #multiply by years in the trend (slope per year * number of years=rise over 5 years)
-          slope_sel_word&lt;-if_else(sel_slope&gt;val_df$sd, "an increasing", if_else(sel_slope&lt; c(-val_df$sd), "a decreasing","a stable"))
-          
-          range&lt;-range(sel_dat$year)
-          
-          text&lt;-paste0("The &lt;b&gt;",df_lab[1,2] ,"&lt;/b&gt; indicator has a historical mean of &lt;u&gt;&lt;b&gt;", round(val_df$mean[1],2),"&lt;/u&gt;&lt;/b&gt; ±&lt;u&gt;&lt;b&gt;",round(val_df$sd[1],2)  ,"&lt;/u&gt;&lt;/b&gt; and trends for the last five years of data show mean values &lt;b&gt;&lt;u&gt;",val_df$mean_word, "&lt;/u&gt;&lt;/b&gt; 1 standard deviation from the historical mean and &lt;b&gt;&lt;u&gt;",val_df$slope_word, "&lt;/b&gt;&lt;/u&gt; trend in slope. The trends in the selected years of data &lt;b&gt;(",range[1],"-",range[2],")&lt;/b&gt; show mean values &lt;b&gt;&lt;u&gt;", mean_sel_word,"&lt;/b&gt;&lt;/u&gt; 1 standard deviation from the historical mean and &lt;b&gt;&lt;u&gt;",slope_sel_word, "&lt;/b&gt;&lt;/u&gt; trend in slope.")
-          
-          
-        } else {
-          ###Selected w subs
-          sub_list&lt;-list()
-          subs&lt;-unique(df_dat$subnm)
-          for (i in 1:length(subs)){
-            sub_df&lt;-sel_dat[sel_dat$subnm==subs[i],]
-            vals&lt;-val_df[val_df$subnm==subs[i],]
-            sub_dat_mean&lt;-mean(sub_df$value) # mean value last 5 years
-            mean_sub&lt;-if_else(sub_dat_mean&gt;vals$mean+vals$sd, "greater", if_else(sub_dat_mean&lt;vals$mean-vals$sd, "below","within")) #qualify mean trend
-            
-            #Slope Trend
-            lmout&lt;-summary(lm(sub_df$value~sub_df$year))
-            sub_slope&lt;-coef(lmout)[2,1] * length(unique(sub_df$year)) #multiply by years in the trend (slope per year * number of years=rise over 5 years)
-            slope_sub&lt;-if_else(sub_slope&gt;vals$sd, "an increasing", if_else(sub_slope&lt; c(-vals$sd), "a decreasing","a stable"))
-            
-            add_sub&lt;-data.frame(mean_sel=mean_sub,
-                                slope_sel=slope_sub)
-            sub_list[[i]]&lt;-add_sub
-            
-          }
-          add_sel_df&lt;-do.call("rbind",sub_list)
-          val_df&lt;-cbind(val_df, add_sel_df)
-          
-          val_df$mean&lt;-as.character(val_df$mean)
-          val_df$sd&lt;-as.character(val_df$sd)
-          
-          val_df&lt;-val_df %&gt;% select(subnm,mean, sd, mean_word, slope_word, mean_sel, slope_sel)
-          val_df$mean&lt;-as.numeric(val_df$mean)
-          val_df$sd&lt;-as.numeric(val_df$sd)
-          
-          range&lt;-range(sel_dat$year)
-          
-          text&lt;-paste0("The &lt;b&gt;",df_lab[1,2] ,"&lt;/b&gt; indicator for the &lt;u&gt;&lt;b&gt;", val_df$subnm[1],"&lt;/u&gt;&lt;/b&gt; sub indicator has a historical mean of &lt;u&gt;&lt;b&gt;", round(val_df$mean[1],2),"&lt;/u&gt;&lt;/b&gt; ±&lt;u&gt;&lt;b&gt;",round(val_df$sd[1],2)  ,"&lt;/u&gt;&lt;/b&gt; and trends for the last five years of data show mean values &lt;b&gt;&lt;u&gt;",val_df$mean_word[1], "&lt;/b&gt;&lt;/u&gt; 1 standard deviation from the historical mean and &lt;u&gt;&lt;b&gt;",val_df$slope_word[1], "&lt;/u&gt;&lt;/b&gt; trend in slope. The trends in the selected years of data &lt;b&gt;(",range[1],"-",range[2],")&lt;/b&gt; show mean values &lt;b&gt;&lt;u&gt;", val_df$mean_sel[1],"&lt;/b&gt;&lt;/u&gt; 1 standard deviation from the historical mean and &lt;b&gt;&lt;u&gt;",val_df$slope_sel[1], "&lt;/b&gt;&lt;/u&gt; trend in slope.")
-          
-          text_li&lt;-list()
-          for (i in 2:length(val_df$subnm)) {
-            subtext&lt;-paste0("The &lt;u&gt;&lt;b&gt;",val_df$subnm[i], "&lt;/u&gt;&lt;/b&gt; sub index historical mean is &lt;u&gt;&lt;b&gt;",round(val_df$mean[i],2)," &lt;/u&gt;&lt;/b&gt;±&lt;u&gt;&lt;b&gt;",round(val_df$sd[i],2),"&lt;/u&gt;&lt;/b&gt; and trends from the last five years of data show mean values &lt;u&gt;&lt;b&gt;",val_df$mean_word[i],"&lt;/u&gt;&lt;/b&gt; 1 standard deviation from the historical mean and &lt;u&gt;&lt;b&gt;",val_df$slope_word[i], "&lt;/u&gt;&lt;/b&gt; trend in slope. The trends in the selected years of data show mean values &lt;b&gt;&lt;u&gt;", val_df$mean_sel[i],"&lt;/b&gt;&lt;/u&gt; 1 standard deviation from the historical mean and &lt;b&gt;&lt;u&gt;",val_df$slope_sel[i], "&lt;/b&gt;&lt;/u&gt; trend in slope.") 
-            text_li[[i]]&lt;-subtext
-          }
-          subs_text&lt;-do.call("paste", text_li)
-          paste(text,subs_text)
-          
-        }
-        
-        
-      }
+      ggplotly(p) %&gt;%
+        layout(legend=list(y=1.2,x=0.5, xanchor="center", yanchor="center", orientation="h"))
     })
     
+    output$nocompare&lt;-renderText({
+      "Please select and indicator to compare from the 'Compare Indicator' dropdown."
+    })
     
-    
-    
-    
+
     
   })
   
 }
 
-shinyApp(ui, server)</code></pre>
+shinyApp(ui, server)
+</code></pre>
 </div>
 <bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
     <template>Expand</template>
