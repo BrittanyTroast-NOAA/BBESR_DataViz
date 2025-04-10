@@ -1,0 +1,37 @@
+---
+title: "Creating_New_Legends"
+format: html
+---
+
+```{r}
+library(tidyverse)
+```
+
+Fig. 4.8-2
+```{r}
+fake_dat<-data.frame("Heavy"=rnorm(10),
+                     "Light"=rnorm(10),
+                     "Moderate"=rnorm(10),
+                     'Very Light'=rnorm(10))
+
+fake_dat<-data.frame(year=rep(1:10, 4),
+           extent=rep(c("Heavy","Light","Moderate","Very Light"), 10),
+           numbers=rnorm(40))
+
+plot<-ggplot(fake_dat, aes(x=year, y=numbers))+
+  geom_line(aes(color=extent))+
+  labs(color="Max Oiling Extent")+
+  scale_color_manual(values = c("#9B100C","#A65F57", "#FFD0AD", "#FFF7E9"))+
+  theme_bw()+theme(legend.title = element_text(face="bold"), 
+                   legend.background = element_rect(fill=alpha("white",0.65)),
+                   panel.background = element_blank(),
+                   plot.background = element_rect(fill="blue"))
+
+library(ggpubr)
+
+leg<-get_legend(plot)
+legend<-as_ggplot(leg)
+
+ggsave("leg_test.png", bg="transparent")
+```
+
